@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -33,4 +34,12 @@ public class Member extends UuidEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
+    @Builder
+    private Member(String nickname, String email, String provider, String profileImage, boolean isDeleted) {
+        this.nickname = nickname;
+        this.email = email;
+        this.provider = provider;
+        this.profileImage = profileImage;
+        this.isDeleted = isDeleted;
+    }
 }
