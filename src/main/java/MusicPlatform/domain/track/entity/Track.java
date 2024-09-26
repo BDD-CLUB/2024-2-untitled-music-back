@@ -1,4 +1,4 @@
-package MusicPlatform.domain.track;
+package MusicPlatform.domain.track.entity;
 
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.profile.Profile;
@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -24,6 +25,8 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE track SET is_deleted = true where id = ?")
 public class Track extends UuidEntity {
 
+    //todo: 앨범 내 노래 순서 설정?
+
     @Column(nullable = false)
     private String title;
 
@@ -37,9 +40,18 @@ public class Track extends UuidEntity {
     private Album album;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Profile_ID", nullable = false)
+    // @JoinColumn(name = "Profile_ID", nullable = false) // todo: 인가 구현 이후 주석 해제
     private Profile profile;
 
     @Column(nullable = false)
     private boolean isDeleted;
+
+    @Builder
+    private Track(String title, String lyric, String song_url, Album album, Profile profile) {
+        this.title = title;
+        this.lyric = lyric;
+        this.song_url = song_url;
+        this.album = album;
+        this.profile = profile;
+    }
 }
