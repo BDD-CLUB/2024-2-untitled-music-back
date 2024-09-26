@@ -4,6 +4,8 @@ import static MusicPlatform.global.error.BusinessError.NOT_FOUND_TRACK;
 
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.album.service.AlbumService;
+import MusicPlatform.domain.artist.entity.Artist;
+import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
@@ -22,6 +24,7 @@ public class TrackService {
 
     private final TrackRepository trackRepository;
     private final AlbumService albumService;
+    private final ArtistService artistService;
 
 
     @Transactional(readOnly = true)
@@ -44,7 +47,7 @@ public class TrackService {
 
         trackRepository.save(track);
     }
-    
+
     @Transactional(readOnly = true)
     public TrackResponseDto getTrack(String uuid) {
         Track track = getByUuid(uuid);
@@ -52,7 +55,11 @@ public class TrackService {
     }
 
     @Transactional(readOnly = true)
-    public List<TrackResponseDto> getAllByArtist(String uuid) {
-
+    public List<TrackResponseDto> getAllByArtist(String artistUuid) {
+        Artist artist = artistService.findByUuid(artistUuid);
+        List<Track> tracks = trackRepository.findAllByArtist(artist);
+        return tracks.stream()
+                .map(TrackResponseDto::from)
+                .toList();
     }
 }

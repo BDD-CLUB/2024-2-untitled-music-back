@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum BusinessError {
+    //Artist
+    NOT_FOUND_ARTIST(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),
+
     //Album
     NOT_FOUND_ALBUM(HttpStatus.NOT_FOUND, "앨범을 찾을 수 없습니다."),
 

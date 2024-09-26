@@ -3,6 +3,7 @@ package MusicPlatform.domain.track.controller;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
 import MusicPlatform.domain.track.service.TrackService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,12 @@ public class TrackController {
     @GetMapping("/track/{uuid}")
     public ResponseEntity<TrackResponseDto> getByUuid(@PathVariable String uuid) {
         TrackResponseDto responseDto = trackService.getTrack(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/artist/{uuid}/track")
+    public ResponseEntity<List<TrackResponseDto>> getAllByArtist(@PathVariable String uuid) {
+        List<TrackResponseDto> responseDto = trackService.getAllByArtist(uuid);
         return ResponseEntity.ok(responseDto);
     }
 }
