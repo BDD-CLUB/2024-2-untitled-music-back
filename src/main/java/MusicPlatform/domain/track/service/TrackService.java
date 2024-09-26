@@ -9,6 +9,7 @@ import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
+import MusicPlatform.domain.track.repository.dto.request.TrackUpdateRequestDto;
 import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import java.util.List;
@@ -61,5 +62,11 @@ public class TrackService {
         return tracks.stream()
                 .map(TrackResponseDto::from)
                 .toList();
+    }
+
+    public void updateByUuid(TrackUpdateRequestDto requestDto, String uuid) {
+        //todo: 인가 필요
+        Track track = getByUuid(uuid);
+        track.update(requestDto.title(), requestDto.lyric());
     }
 }

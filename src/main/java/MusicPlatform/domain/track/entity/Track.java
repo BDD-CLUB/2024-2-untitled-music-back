@@ -63,4 +63,9 @@ public class Track extends UuidEntity {
     public Artist getArtist() {
         return this.profile.getArtist();
     }
+
+    public void update(String title, String lyric) {
+        this.title = title;
+        this.lyric = lyric;
+    }
 }
