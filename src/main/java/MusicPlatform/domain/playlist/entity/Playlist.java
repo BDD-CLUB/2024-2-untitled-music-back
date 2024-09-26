@@ -1,5 +1,5 @@
 package MusicPlatform.domain.playlist.entity;
-import MusicPlatform.domain.member.entity.Member;
+import MusicPlatform.domain.artist.entity.Artist;
 
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
@@ -32,8 +32,8 @@ public class Playlist extends UuidEntity {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID", nullable = true)
-    private Member member;
+    @JoinColumn(name = "ARTIST_ID", nullable = true)
+    private Artist artist;
 
     @Column(nullable = false)
     private boolean isDeleted;

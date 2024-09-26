@@ -1,6 +1,7 @@
 package MusicPlatform.domain.track;
 
 import MusicPlatform.domain.album.entity.Album;
+import MusicPlatform.domain.profile.Profile;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +35,10 @@ public class Track extends UuidEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ALBUM_ID", nullable = false)
     private Album album;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Profile_ID", nullable = false)
+    private Profile profile;
 
     @Column(nullable = false)
     private boolean isDeleted;
