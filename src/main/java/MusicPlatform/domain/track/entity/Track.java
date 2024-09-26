@@ -1,6 +1,7 @@
 package MusicPlatform.domain.track.entity;
 
 import MusicPlatform.domain.album.entity.Album;
+import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.profile.Profile;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
@@ -53,5 +54,13 @@ public class Track extends UuidEntity {
         this.song_url = song_url;
         this.album = album;
         this.profile = profile;
+    }
+
+    public String getAlbumArt() {
+        return this.album.getArtImage();
+    }
+
+    public Artist getArtist() {
+        return this.profile.getArtist();
     }
 }

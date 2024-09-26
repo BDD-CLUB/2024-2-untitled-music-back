@@ -1,10 +1,14 @@
 package MusicPlatform.domain.track.service;
 
+import static MusicPlatform.global.error.BusinessError.NOT_FOUND_TRACK;
+
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.album.service.AlbumService;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
+import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
+import MusicPlatform.global.error.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,11 @@ public class TrackService {
 
     private final TrackRepository trackRepository;
     private final AlbumService albumService;
+
+    private Track getByUuid(String uuid) {
+        return trackRepository.findByUuid(uuid).orElseThrow(() ->
+                new BusinessException(NOT_FOUND_TRACK));
+    }
 
     public void save(TrackRequestDto requestDto, MultipartFile file, String albumUuid) {
         Album album = albumService.getByUuid(albumUuid);
@@ -31,5 +40,10 @@ public class TrackService {
                 .build();
 
         trackRepository.save(track);
+    }
+
+    public TrackResponseDto getTrack(String uuid) {
+        Track track = getByUuid(uuid);
+        return TrackResponseDto.from(track);
     }
 }
