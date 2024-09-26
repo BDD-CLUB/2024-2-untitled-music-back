@@ -9,6 +9,7 @@ import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
 import MusicPlatform.global.error.BusinessException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,9 @@ public class TrackService {
     private final TrackRepository trackRepository;
     private final AlbumService albumService;
 
-    private Track getByUuid(String uuid) {
+
+    @Transactional(readOnly = true)
+    public Track getByUuid(String uuid) {
         return trackRepository.findByUuid(uuid).orElseThrow(() ->
                 new BusinessException(NOT_FOUND_TRACK));
     }
@@ -41,9 +44,15 @@ public class TrackService {
 
         trackRepository.save(track);
     }
-
+    
+    @Transactional(readOnly = true)
     public TrackResponseDto getTrack(String uuid) {
         Track track = getByUuid(uuid);
         return TrackResponseDto.from(track);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TrackResponseDto> getAllByArtist(String uuid) {
+
     }
 }
