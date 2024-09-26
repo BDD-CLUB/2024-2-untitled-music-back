@@ -69,4 +69,11 @@ public class TrackService {
         Track track = getByUuid(uuid);
         track.update(requestDto.title(), requestDto.lyric());
     }
+
+    public void deleteByUuid(String uuid) {
+        //todo: 인가 필요
+        Track track = getByUuid(uuid);
+        trackRepository.delete(track);
+        //s3에 업로드된 파일도 삭제해야하는가? (복구 불가?)
+    }
 }

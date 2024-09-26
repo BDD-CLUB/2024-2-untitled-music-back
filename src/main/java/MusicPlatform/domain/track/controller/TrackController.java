@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,20 +26,13 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping
 @RequiredArgsConstructor
 public class TrackController {
-    /**
-     *  트랙 업로드
-     *  트랙 조회
-     *  특정 회원의 트랙 목록 조회
-     *  트랙 수정 (이후 인가 추가)
-     *  트랙 삭제 (이후 인가 추가)
-     */
 
     private final TrackService trackService;
 
     @PostMapping("album/{uuid}/track")
     public ResponseEntity<Void> uploadTrack(@RequestPart @Valid TrackRequestDto requestDto,
-                                              @RequestPart(required = false) final MultipartFile file,
-                                              @PathVariable String uuid) {
+                                            @RequestPart(required = false) final MultipartFile file,
+                                            @PathVariable String uuid) {
         trackService.save(requestDto, file, uuid);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -56,9 +50,15 @@ public class TrackController {
     }
 
     @PatchMapping("/track/{uuid}")
-    public ResponseEntity<Void> updateByUuid( @RequestBody @Valid TrackUpdateRequestDto requestDto,
-                                              @PathVariable String uuid) {
-       trackService.updateByUuid(requestDto, uuid);
+    public ResponseEntity<Void> updateByUuid(@RequestBody @Valid TrackUpdateRequestDto requestDto,
+                                             @PathVariable String uuid) {
+        trackService.updateByUuid(requestDto, uuid);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/track/{uuid}")
+    public ResponseEntity<Void> deleteByUuid(@PathVariable String uuid) {
+        trackService.deleteByUuid(uuid);
         return ResponseEntity.noContent().build();
     }
 }
