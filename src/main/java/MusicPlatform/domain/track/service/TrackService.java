@@ -16,7 +16,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -34,7 +33,7 @@ public class TrackService {
                 new BusinessException(NOT_FOUND_TRACK));
     }
 
-    public void save(TrackRequestDto requestDto, MultipartFile file, String albumUuid) {
+    public void save(TrackRequestDto requestDto, String albumUuid) {
         Album album = albumService.getByUuid(albumUuid);
 
         // String songUrl = s3Service.uploadToS3(); //todo:  s3 파일 업로드 구현
