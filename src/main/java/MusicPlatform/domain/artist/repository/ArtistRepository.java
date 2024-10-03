@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
     Optional<Artist> findByUuid(String uuid);
+
+    Artist findByEmail(String email);
 }
