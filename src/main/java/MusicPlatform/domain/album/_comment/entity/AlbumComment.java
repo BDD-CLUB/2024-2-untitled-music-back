@@ -1,7 +1,7 @@
 package MusicPlatform.domain.album._comment.entity;
 
 import MusicPlatform.domain.album.entity.Album;
-import MusicPlatform.domain.member.entity.Member;
+import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,8 +32,8 @@ public class AlbumComment extends UuidEntity {
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID", nullable = false)
-    private Member member;
+    @JoinColumn(name = "ARTIST_ID", nullable = false)
+    private Artist artist;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ALBUM_ID", nullable = false)

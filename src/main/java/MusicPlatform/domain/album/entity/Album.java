@@ -1,6 +1,6 @@
 package MusicPlatform.domain.album.entity;
 
-import MusicPlatform.domain.artist.entity.Artist;
+import MusicPlatform.domain.profile.Profile;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,8 +36,8 @@ public class Album extends UuidEntity {
     private LocalDate releaseDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ARTIST_ID", nullable = false)
-    private Artist artist;
+    @JoinColumn(name = "Profile_ID", nullable = false)
+    private Profile profile;
 
     @Column(nullable = false)
     private boolean isDeleted;

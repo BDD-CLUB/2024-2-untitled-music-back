@@ -1,6 +1,6 @@
 package MusicPlatform.domain.oauth2.service;
 
-import MusicPlatform.domain.member.service.MemberService;
+import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.oauth2.entity.GoogleUser;
 import MusicPlatform.domain.oauth2.entity.ProviderUser;
 import jakarta.transaction.Transactional;
@@ -19,14 +19,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OAuth2UserService extends DefaultOAuth2UserService {
 
-    private final MemberService memberService;
+    private final ArtistService artistService;
 
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         ClientRegistration clientRegistration = userRequest.getClientRegistration();
         OAuth2User oAuth2User = super.loadUser(userRequest); //사용자 정보 반환
         ProviderUser providerUser = providerUser(clientRegistration, oAuth2User);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        memberService.register(registrationId, providerUser);
+        artistService.register(registrationId, providerUser);
         log.info("회원가입 = " + providerUser.getUsername());
 
         return oAuth2User;

@@ -2,7 +2,7 @@ package MusicPlatform.domain.album._like.entity;
 
 
 import MusicPlatform.domain.album.entity.Album;
-import MusicPlatform.domain.member.entity.Member;
+import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,8 +24,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AlbumLike extends UuidEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID", nullable = false)
-    private Member member;
+    @JoinColumn(name = "ARTIST_ID", nullable = false)
+    private Artist artist;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ALBUM_ID", nullable = false)

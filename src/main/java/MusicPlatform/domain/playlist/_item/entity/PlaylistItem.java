@@ -1,7 +1,7 @@
 package MusicPlatform.domain.playlist._item.entity;
 
 import MusicPlatform.domain.playlist.entity.Playlist;
-import MusicPlatform.domain.track.Track;
+import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
