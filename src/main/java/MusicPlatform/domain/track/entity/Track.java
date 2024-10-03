@@ -2,7 +2,7 @@ package MusicPlatform.domain.track.entity;
 
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.artist.entity.Artist;
-import MusicPlatform.domain.profile.Profile;
+import MusicPlatform.domain.profile.entity.Profile;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

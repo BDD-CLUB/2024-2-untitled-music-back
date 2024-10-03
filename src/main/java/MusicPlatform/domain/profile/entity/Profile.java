@@ -1,4 +1,4 @@
-package MusicPlatform.domain.profile;
+package MusicPlatform.domain.profile.entity;
 
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.global.entity.UuidEntity;
@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -36,4 +37,13 @@ public class Profile extends UuidEntity {
 
     @Column(nullable = false)
     private boolean isDeleted;
+
+    @Builder
+    private Profile(String name, String profileImage, Artist artist, boolean isMain) {
+        this.name = name;
+        this.profileImage = profileImage;
+        this.artist = artist;
+        this.isMain = isMain;
+        this.isDeleted = false;
+    }
 }
