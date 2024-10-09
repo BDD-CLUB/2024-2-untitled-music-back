@@ -30,3 +30,11 @@ cors:
   allow:
     origins: http://localhost:3000
     methods: GET, POST, PUT, DELETE, PATCH, OPTION
+
+jwt:
+  expiration_time: 604800000 #1000*60*60*24*7; 7일
+  secret: eBDrkWz9FExzSvLdyybd7isbt0X11nxy
+
+cookie:
+  domain: localhost
+  max-age: 604800  # 60*60*24*7, 7일
