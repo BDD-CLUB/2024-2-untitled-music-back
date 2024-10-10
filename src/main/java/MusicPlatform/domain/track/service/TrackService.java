@@ -10,7 +10,7 @@ import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.repository.dto.request.TrackUpdateRequestDto;
-import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
+import MusicPlatform.domain.track.repository.dto.response.TrackGetResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +21,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class TrackService {
-
     private final TrackRepository trackRepository;
     private final AlbumService albumService;
     private final ArtistService artistService;
-
 
     @Transactional(readOnly = true)
     public Track getByUuid(String uuid) {
         return trackRepository.findByUuid(uuid).orElseThrow(() ->
                 new BusinessException(NOT_FOUND_TRACK));
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<Track> getAllByAlbum(Album album) {
+        return trackRepository.findAllByAlbum(album);
     }
 
     public void save(TrackRequestDto requestDto, String albumUuid) {
@@ -49,17 +53,18 @@ public class TrackService {
     }
 
     @Transactional(readOnly = true)
-    public TrackResponseDto getTrack(String uuid) {
+    public TrackGetResponseDto getTrack(String uuid) {
         Track track = getByUuid(uuid);
-        return TrackResponseDto.from(track);
+        return TrackGetResponseDto.from(track);
     }
 
+    @Deprecated // 앨범의 getAllByArtist로 대체한다.
     @Transactional(readOnly = true)
-    public List<TrackResponseDto> getAllByArtist(String artistUuid) {
+    public List<TrackGetResponseDto> getAllByArtist(String artistUuid) {
         Artist artist = artistService.findByUuid(artistUuid);
         List<Track> tracks = trackRepository.findAllByArtist(artist);
         return tracks.stream()
-                .map(TrackResponseDto::from)
+                .map(TrackGetResponseDto::from)
                 .toList();
     }
 

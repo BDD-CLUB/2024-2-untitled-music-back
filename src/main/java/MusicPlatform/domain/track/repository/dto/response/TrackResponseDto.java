@@ -10,9 +10,7 @@ public record TrackResponseDto(
         String uuid,
         String title,
         String lyric,
-        String artUrl,
-        AlbumResponseDto album,
-        ArtistResponseDto artist
+        String artUrl
 ) {
     public static TrackResponseDto from(Track track) {
         return TrackResponseDto.builder()
@@ -20,8 +18,6 @@ public record TrackResponseDto(
                 .title(track.getTitle())
                 .lyric(track.getLyric())
                 .artUrl(track.getAlbumArt())
-                .album(AlbumResponseDto.from(track.getAlbum()))
-                .artist(ArtistResponseDto.from(track.getArtist()))
                 .build();
     }
 }
