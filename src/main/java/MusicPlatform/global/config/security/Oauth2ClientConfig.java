@@ -21,7 +21,7 @@ public class Oauth2ClientConfig {
     @Bean
     SecurityFilterChain securityFilterChane(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests ->
-                requests.requestMatchers("/").permitAll()
+                requests.requestMatchers("/**", "/api-docs/**", "/swagger-ui/**").permitAll()
         );
 
         http.csrf(AbstractHttpConfigurer::disable);
