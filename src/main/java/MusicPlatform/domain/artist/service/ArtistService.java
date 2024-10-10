@@ -25,19 +25,21 @@ public class ArtistService {
                 new BusinessException(NOT_FOUND_ARTIST));
     }
 
-    public void register(String registrationId, ProviderUser providerUser) {
-        if (artistRepository.findByEmail(providerUser.getEmail()) != null) { // 이미 가입한 회원 검증
-            return;
+    public Artist register(String registrationId, ProviderUser providerUser) {
+        Artist existArtist = artistRepository.findByEmail(providerUser.getEmail());
+        if (existArtist != null) { // 이미 가입한 회원 검증
+            return existArtist;
         }
 
         Artist artist = Artist.builder()
                 .email(providerUser.getEmail())
-                .name(providerUser.getUsername())
+                .name(providerUser.getName())
                 .provider(registrationId)
-                .artistImage("") //todo 기본 이미지 등록
+                .artistImage(providerUser.getPicture()) //todo 기본 이미지 등록
                 .build();
 
         artistRepository.save(artist);
         profileService.createProfile(artist);
+        return artist;
     }
 }

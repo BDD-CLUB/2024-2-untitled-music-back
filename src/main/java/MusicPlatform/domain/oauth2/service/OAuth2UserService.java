@@ -1,5 +1,6 @@
 package MusicPlatform.domain.oauth2.service;
 
+import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.oauth2.entity.GoogleUser;
 import MusicPlatform.domain.oauth2.entity.ProviderUser;
@@ -26,10 +27,10 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest); //사용자 정보 반환
         ProviderUser providerUser = providerUser(clientRegistration, oAuth2User);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        artistService.register(registrationId, providerUser);
-        log.info("회원가입 = " + providerUser.getUsername());
-
-        return oAuth2User;
+        Artist artist = artistService.register(registrationId, providerUser);
+        log.info("회원가입 = " + providerUser.getName());
+        providerUser.setUuid(artist.getUuid());
+        return providerUser;
     }
 
     private ProviderUser providerUser(ClientRegistration clientRegistration, OAuth2User oAuth2User) {

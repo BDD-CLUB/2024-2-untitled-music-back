@@ -1,5 +1,8 @@
 package MusicPlatform.global.handler;
 
+import MusicPlatform.domain.oauth2.adapter.AuthenticationAdapter;
+import MusicPlatform.domain.oauth2.service.CookieService;
+import MusicPlatform.global.provider.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -16,18 +19,25 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Transactional
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
+    private final CookieService cookieService;
     private final String authServer = "http://localhost:3000";
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
+        AuthenticationAdapter authenticationAdapter = (AuthenticationAdapter) authentication.getPrincipal();
+
+        String uuid = authenticationAdapter.getUuid();
+
+        cookieService.authenticate(uuid, response);
+
         String url = UriComponentsBuilder.fromUriString(authServer)
                 .path("")
                 .build()
                 .toUriString();
-        log.info("로그인 성공 LoginSuccessHandler-redirectUrl = " + url);
+
         response.sendRedirect(url);
     }
 }
