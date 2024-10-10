@@ -2,6 +2,7 @@ package MusicPlatform.domain.track.controller;
 
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.repository.dto.request.TrackUpdateRequestDto;
+import MusicPlatform.domain.track.repository.dto.response.TrackGetResponseDto;
 import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
 import MusicPlatform.domain.track.service.TrackService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +32,7 @@ public class TrackController {
     private final TrackService trackService;
 
     @Operation(summary = "트랙 업로드")
-    @PostMapping(value = "album/{uuid}/track")
+    @PostMapping(value = "/album/{uuid}/track")
     public ResponseEntity<Void> uploadTrack(@ModelAttribute @Valid TrackRequestDto requestDto,
                                             @PathVariable String uuid) {
         trackService.save(requestDto, uuid);
@@ -40,15 +41,16 @@ public class TrackController {
 
     @Operation(summary = "트랙 조회")
     @GetMapping("/track/{uuid}")
-    public ResponseEntity<TrackResponseDto> getByUuid(@PathVariable String uuid) {
-        TrackResponseDto responseDto = trackService.getTrack(uuid);
+    public ResponseEntity<TrackGetResponseDto> getByUuid(@PathVariable String uuid) {
+        TrackGetResponseDto responseDto = trackService.getTrack(uuid);
         return ResponseEntity.ok(responseDto);
     }
 
+    @Deprecated
     @Operation(summary = "특정 아티스트의 트랙 목록 조회")
     @GetMapping("/artist/{uuid}/track")
-    public ResponseEntity<List<TrackResponseDto>> getAllByArtist(@PathVariable String uuid) {
-        List<TrackResponseDto> responseDto = trackService.getAllByArtist(uuid);
+    public ResponseEntity<List<TrackGetResponseDto>> getAllByArtist(@PathVariable String uuid) {
+        List<TrackGetResponseDto> responseDto = trackService.getAllByArtist(uuid);
         return ResponseEntity.ok(responseDto);
     }
 
