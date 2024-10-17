@@ -75,12 +75,12 @@ jobs:
         run: |
           echo '${{ secrets.APPLICATION_YML }}' > application.yml
           echo '${{ secrets.APPLICATION_DEV_YML }}' >> application-dev.yml
-      
-      - name: Check MySQL Container Status
-        run: docker ps
 
       - name: Start Containers
         run: docker compose -p soundflyer up -d
+
+      - name: Check MySQL Container Status
+        run: docker ps
 
       - name: Gradle Build & Test
         uses: gradle/gradle-build-action@v2
