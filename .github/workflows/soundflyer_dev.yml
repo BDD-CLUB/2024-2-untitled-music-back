@@ -76,8 +76,8 @@ jobs:
           echo '${{ secrets.APPLICATION_YML }}' > application.yml
           echo '${{ secrets.APPLICATION_DEV_YML }}' >> application-dev.yml
       
-      - name: Verify application.yml
-        run: cat ./src/main/resources/application.yml
+      - name: Check MySQL Container Status
+        run: docker ps
 
       - name: Start Containers
         run: docker compose -p soundflyer up -d
