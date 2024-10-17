@@ -76,11 +76,21 @@ jobs:
           echo '${{ secrets.APPLICATION_YML }}' > application.yml
           echo '${{ secrets.APPLICATION_DEV_YML }}' >> application-dev.yml
 
+      - name: Check application.yml
+        run: ls -al
+      
+      - name: Check application.yml
+        working-directory: ./src/main/resources
+        run: ls -al
+
       - name: Start Containers
         run: docker compose -p soundflyer up -d
 
       - name: Check MySQL Container Status
         run: docker ps
+
+      - name : check logs
+        run: docker logs soundflyer-db
 
       - name: Gradle Build & Test
         uses: gradle/gradle-build-action@v2
