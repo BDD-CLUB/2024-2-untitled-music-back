@@ -18,11 +18,11 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACTION_SUBMODULE_TOKEN }}
+      # - name: Checkout
+      #   uses: actions/checkout@v4
+      #   with:
+      #     submodules: recursive
+      #     token: ${{ secrets.ACTION_SUBMODULE_TOKEN }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
