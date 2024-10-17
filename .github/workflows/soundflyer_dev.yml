@@ -18,14 +18,12 @@ jobs:
       contents: read
 
     steps:
-		    # 서브모듈을 포함한 코드 가져옴
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACTION_SUBMODULE_TOKEN }}
 
-				# AWS 리소스에 접근하기 위한 자격증명
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -75,7 +73,6 @@ jobs:
       - name: Start Containers
         run: docker compose -p soundflyer up -d
 
-				# Gradle 빌드 및 테스트
       - name: Gradle Build & Test
         uses: gradle/gradle-build-action@v2
         with:
