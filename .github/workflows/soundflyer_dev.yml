@@ -71,9 +71,8 @@ jobs:
           echo '${{ secrets.DOCKER_COMPOSE }}' >> docker-compose.yml
 
       - name: Create application.yml
+        working-directory: ./src/main/resources
         run: |
-          mkdir -p ./src/main/resources
-          cd ./src/main/resources
           echo '${{ secrets.APPLICATION_YML }}' > application.yml
           echo '${{ secrets.APPLICATION_DEV_YML }}' >> application-dev.yml
 
