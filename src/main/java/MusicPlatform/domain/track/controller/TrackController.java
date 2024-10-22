@@ -1,5 +1,7 @@
 package MusicPlatform.domain.track.controller;
 
+import MusicPlatform.domain.album.entity.Album;
+import MusicPlatform.domain.album.service.AlbumService;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.repository.dto.request.TrackUpdateRequestDto;
 import MusicPlatform.domain.track.repository.dto.response.TrackGetResponseDto;
@@ -30,12 +32,14 @@ import jakarta.validation.Valid;
 public class TrackController {
 
     private final TrackService trackService;
+    private final AlbumService albumService;
 
     @Operation(summary = "트랙 업로드")
     @PostMapping(value = "/album/{uuid}/track")
     public ResponseEntity<Void> uploadTrack(@ModelAttribute @Valid TrackRequestDto requestDto,
                                             @PathVariable String uuid) {
-        trackService.save(requestDto, uuid);
+        Album album = albumService.getByUuid(uuid);
+        trackService.save(requestDto, album);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

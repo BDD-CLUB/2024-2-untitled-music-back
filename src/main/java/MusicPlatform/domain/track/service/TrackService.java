@@ -3,7 +3,6 @@ package MusicPlatform.domain.track.service;
 import static MusicPlatform.global.error.BusinessError.NOT_FOUND_TRACK;
 
 import MusicPlatform.domain.album.entity.Album;
-import MusicPlatform.domain.album.service.AlbumService;
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.track.entity.Track;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TrackService {
     private final TrackRepository trackRepository;
-    private final AlbumService albumService;
     private final ArtistService artistService;
 
     @Transactional(readOnly = true)
@@ -37,9 +35,7 @@ public class TrackService {
         return trackRepository.findAllByAlbum(album);
     }
 
-    public void save(TrackRequestDto requestDto, String albumUuid) {
-        Album album = albumService.getByUuid(albumUuid);
-
+    public void save(TrackRequestDto requestDto, Album album) {
         // String songUrl = s3Service.uploadToS3(); //todo:  s3 파일 업로드 구현
         Track track = Track.builder()
                 .title(requestDto.title())
