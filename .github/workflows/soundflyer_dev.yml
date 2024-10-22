@@ -127,4 +127,4 @@ jobs:
           script: |
             cd ~/soundflyer-infra/deploy 
             chmod +x ./deploy_back.sh                 
-            sudo ./deploy_back.sh ${GITHUB_SHA::8} dev 
+            sudo -E ./deploy_back.sh ${GITHUB_SHA::8} dev 
