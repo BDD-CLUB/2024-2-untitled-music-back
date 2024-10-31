@@ -12,10 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class CookieService {
+    // @Value("${cookie.domain}")
+    // private String domain;
     @Value("${cookie.max-age}")
     private int maxAge;
-    @Value("${cookie.domain}")
-    private String domain;
     private final JwtProvider jwtProvider;
 
     public Cookie makeAccessTokenCookie(String token) {
@@ -31,7 +31,7 @@ public class CookieService {
         //cookie.setSecure(true); // HTTPS에서만 쿠키가 전송되도록 설정
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setDomain(domain);
+        //cookie.setDomain(domain); //특정 호스트에 대해서만 쿠키 부여
         cookie.setMaxAge(maxAge);
         return cookie;
     }
