@@ -33,11 +33,18 @@ public class CookieService {
         cookie.setPath("/");
         //cookie.setDomain(domain); //특정 호스트에 대해서만 쿠키 부여
         cookie.setMaxAge(maxAge);
+
         return cookie;
     }
 
     public void authenticate(String uuid, HttpServletResponse response) {
         String accessToken = jwtProvider.createToken(uuid);
+
+        // same site 설정 //todo: 백엔드 프론트 도메인 통일
+        Cookie cookie = this.makeAccessTokenCookie(accessToken);
+        response.addHeader("Set-Cookie", String.format("%s=%s; Max-Age=%d; Path=/; HttpOnly; Secure; SameSite=None",
+                cookie.getName(), cookie.getValue(), cookie.getMaxAge()));
+
         response.addCookie(this.makeAccessTokenCookie(accessToken));
         log.info("토큰 저장 = " + accessToken);
     }
