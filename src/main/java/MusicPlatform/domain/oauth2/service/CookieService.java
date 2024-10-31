@@ -28,7 +28,7 @@ public class CookieService {
 
     private Cookie makeCookie(String key, String value, int maxAge) {
         Cookie cookie = new Cookie(key, value);
-        //cookie.setSecure(true); // HTTPS에서만 쿠키가 전송되도록 설정
+        cookie.setSecure(true); // HTTPS에서만 쿠키가 전송되도록 설정
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         //cookie.setDomain(domain); //특정 호스트에 대해서만 쿠키 부여
