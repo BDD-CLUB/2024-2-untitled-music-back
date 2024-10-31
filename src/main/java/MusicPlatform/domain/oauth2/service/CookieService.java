@@ -39,12 +39,7 @@ public class CookieService {
 
     public void authenticate(String uuid, HttpServletResponse response) {
         String accessToken = jwtProvider.createToken(uuid);
-
-        // same site 설정 //todo: 백엔드 프론트 도메인 통일
-        Cookie cookie = this.makeAccessTokenCookie(accessToken);
-        response.addHeader("Set-Cookie", String.format("%s=%s; Max-Age=%d; Path=/; HttpOnly; Secure; SameSite=None",
-                cookie.getName(), cookie.getValue(), cookie.getMaxAge()));
-        // response.addCookie(this.makeAccessTokenCookie(accessToken));
+        response.addCookie(this.makeAccessTokenCookie(accessToken));
         
         log.info("쿠키 저장 = " + response.getHeader("Set-Cookie"));
     }

@@ -34,12 +34,12 @@ cors:
 
 jwt:
   expiration_time: 604800000 #1000*60*60*24*7; 7일
-  secret: eBDrkWz9FExzSvLdyybd7isbt0X11nxy
+  secret: -
 
 cookie:
   domain: localhost
   max-age: 604800  # 60*60*24*7, 7일
-  
+
 # swagger
 springdoc:
   packages-to-scan: MusicPlatform
@@ -53,3 +53,12 @@ springdoc:
     path: /api-docs
   cache:
     disabled: true
+
+
+# 서로 다른 도메인 간 cookie 설정
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
