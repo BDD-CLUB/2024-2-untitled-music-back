@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final CookieService cookieService;
-    private final String authServer = "http://localhost:3000";
+    private final String authServer = "https://untitled-a.vercel.app";
 
 
     @Override
