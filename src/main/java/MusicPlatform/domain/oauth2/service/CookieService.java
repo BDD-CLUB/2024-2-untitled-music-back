@@ -44,8 +44,8 @@ public class CookieService {
         Cookie cookie = this.makeAccessTokenCookie(accessToken);
         response.addHeader("Set-Cookie", String.format("%s=%s; Max-Age=%d; Path=/; HttpOnly; Secure; SameSite=None",
                 cookie.getName(), cookie.getValue(), cookie.getMaxAge()));
-
-        response.addCookie(this.makeAccessTokenCookie(accessToken));
-        log.info("토큰 저장 = " + accessToken);
+        // response.addCookie(this.makeAccessTokenCookie(accessToken));
+        
+        log.info("쿠키 저장 = " + cookie);
     }
 }
