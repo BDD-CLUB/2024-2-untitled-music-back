@@ -37,5 +37,6 @@ public class CookieService {
     public void authenticate(String uuid, HttpServletResponse response) {
         String accessToken = jwtProvider.createToken(uuid);
         response.addCookie(this.makeAccessTokenCookie(accessToken));
+        log.info("토큰 저장 = " + accessToken);
     }
 }
