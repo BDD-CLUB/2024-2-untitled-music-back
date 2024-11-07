@@ -16,6 +16,7 @@ spring:
             client-secret: -
             scope: profile, email
 
+
   datasource:
     url: jdbc:mysql://localhost:3306/music
     username: root
@@ -54,11 +55,6 @@ springdoc:
   cache:
     disabled: true
 
-
-# 서로 다른 도메인 간 cookie 설정
 server:
-  servlet:
-    session:
-      cookie:
-        same-site: none
-        secure: true
+  front: https://soundforest.kro.kr
+  error: https://soundforest.kro.kr/error

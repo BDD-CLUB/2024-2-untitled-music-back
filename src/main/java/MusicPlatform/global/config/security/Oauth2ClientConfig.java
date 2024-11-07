@@ -3,6 +3,7 @@ package MusicPlatform.global.config.security;
 import MusicPlatform.domain.oauth2.service.OAuth2UserService;
 import MusicPlatform.global.handler.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +19,9 @@ public class Oauth2ClientConfig {
     private final OAuth2UserService oAuth2UserService;
     private final LoginSuccessHandler loginSuccessHandler;
 
+    @Value(value = "${server.error}")
+    private String errorPage;
+
     @Bean
     SecurityFilterChain securityFilterChane(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests ->
@@ -31,7 +35,7 @@ public class Oauth2ClientConfig {
                 .userInfoEndpoint(userInfoEndpointConfig ->
                         userInfoEndpointConfig.userService(oAuth2UserService))
                 .successHandler(loginSuccessHandler)
-                .failureUrl("http://localhost:3000")
+                .failureUrl(errorPage)
         );
 
         return http.build();
