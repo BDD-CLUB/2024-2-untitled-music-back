@@ -19,7 +19,7 @@ public class Oauth2ClientConfig {
     private final OAuth2UserService oAuth2UserService;
     private final LoginSuccessHandler loginSuccessHandler;
 
-    @Value(value = "${server.error}")
+    @Value(value = "${server.error-page}")
     private String errorPage;
 
     @Bean

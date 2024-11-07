@@ -57,4 +57,4 @@ springdoc:
 
 server:
   front: https://soundforest.kro.kr
-  error: https://soundforest.kro.kr/error
+  error-page: https://soundforest.kro.kr/error
