@@ -55,6 +55,19 @@ springdoc:
   cache:
     disabled: true
 
+# aws
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: soundflyer
+    stack:
+      auto: false
+    credentials:
+      access-key: -
+      secret-key: -
+
 server:
   front: https://soundforest.kro.kr
   error-page: https://soundforest.kro.kr/error
