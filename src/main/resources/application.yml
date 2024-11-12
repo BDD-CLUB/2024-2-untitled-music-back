@@ -47,7 +47,7 @@ springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
-    path: swagger-ui.html
+    path: /swagger-ui
     tags-sorter: alpha
     operations-sorter: alpha
   api-docs:
@@ -57,4 +57,6 @@ springdoc:
 
 server:
   front: https://soundforest.kro.kr
+  api: https://soundforest.kro.kr/v1
   error-page: https://soundforest.kro.kr/error
+  
