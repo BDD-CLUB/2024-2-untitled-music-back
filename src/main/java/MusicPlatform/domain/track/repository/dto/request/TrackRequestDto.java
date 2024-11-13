@@ -11,6 +11,7 @@ public record TrackRequestDto(
         @Nullable
         String lyric,
 
-         MultipartFile TrackFile
+        @NotBlank
+        String TrackFile
 ) {
 }
