@@ -5,7 +5,6 @@ import MusicPlatform.domain.album.service.AlbumService;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.repository.dto.request.TrackUpdateRequestDto;
 import MusicPlatform.domain.track.repository.dto.response.TrackGetResponseDto;
-import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
 import MusicPlatform.domain.track.service.TrackService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +34,7 @@ public class TrackController {
 
     @Operation(summary = "트랙 업로드")
     @PostMapping(value = "/album/{uuid}/track")
-    public ResponseEntity<Void> uploadTrack(@ModelAttribute @Valid TrackRequestDto requestDto,
+    public ResponseEntity<Void> uploadTrack(@RequestBody @Valid TrackRequestDto requestDto,
                                             @PathVariable String uuid) {
         Album album = albumService.getByUuid(uuid);
         trackService.save(requestDto, album);
