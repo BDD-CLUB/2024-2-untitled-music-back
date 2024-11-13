@@ -1,0 +1,87 @@
+name: githubCI
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  deploy_development:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      #   with:
+      #     submodules: recursive
+      #     token: ${{ secrets.ACTION_SUBMODULE_TOKEN }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Create Cache Docker Image Directory
+        run: mkdir -p ~/db-docker-image
+
+      - name: Cache DB Docker Image
+        id: db-docker-image
+        uses: actions/cache@v3
+        with:
+          path: ~/db-docker-image
+          key: db-docker-image-${{ runner.os }}
+
+      - name: Pull DB Image From ECR
+        if: steps.db-docker-image.outputs.cache-hit != 'true'
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker pull $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }}
+          docker save -o \
+            ~/db-docker-image/soundflyer-db.tar \
+            $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }}
+
+      - name: Create Docker Env File
+        # working-directory: ./docker 
+        run: |
+          echo '${{ secrets.DOCKER_ENV }}' >> .env
+          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
+
+      - name: Create Docker Compose File
+        run: |
+          echo '${{ secrets.DOCKER_COMPOSE }}' >> docker-compose.yml
+
+      - name: Create application.yml
+        working-directory: ./src/main/resources
+        run: |
+          echo '${{ secrets.APPLICATION_YML }}' > application.yml
+          echo '${{ secrets.APPLICATION_DEV_YML }}' >> application-dev.yml
+
+      - name: Start Containers
+        run: docker compose -p soundflyer up -d
+
+      - name : check logs
+        run: docker logs soundflyer-db
+
+      - name: Gradle Build & Test
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 8.5
+          arguments: build
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'ref/heads/develop' }}
+      - run: ls build/libs
