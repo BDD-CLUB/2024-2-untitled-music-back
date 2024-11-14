@@ -2,6 +2,8 @@ package MusicPlatform.domain.s3.controller;
 
 import MusicPlatform.domain.s3.service.S3ImageService;
 import MusicPlatform.domain.s3.service.S3MusicService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,17 +17,20 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/upload")
+@Tag(name = "S3 업로드 (S3)")
 public class S3Controller {
 
     private final S3ImageService s3ImageService;
     private final S3MusicService s3MusicService;
 
+    @Operation(summary = "S3 이미지 업로드")
     @PostMapping("/images")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
         String url = s3ImageService.uploadFile(file);
         return ResponseEntity.status(HttpStatus.CREATED).body(url);
     }
 
+    @Operation(summary = "S3 음악 업로드")
     @PostMapping("/musics")
     public ResponseEntity<String> uploadFile(@RequestParam MultipartFile file) throws IOException {
         String url = s3MusicService.uploadFile(file);
