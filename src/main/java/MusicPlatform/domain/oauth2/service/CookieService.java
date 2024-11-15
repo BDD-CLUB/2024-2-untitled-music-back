@@ -1,5 +1,6 @@
 package MusicPlatform.domain.oauth2.service;
 
+import MusicPlatform.domain.artist.entity.Role;
 import MusicPlatform.global.provider.JwtProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,8 +38,8 @@ public class CookieService {
         return cookie;
     }
 
-    public void authenticate(String uuid, HttpServletResponse response) {
-        String accessToken = jwtProvider.createToken(uuid);
+    public void authenticate(String uuid, Role role, HttpServletResponse response) {
+        String accessToken = jwtProvider.createToken(uuid, role);
         response.addCookie(this.makeAccessTokenCookie(accessToken));
         
         log.info("쿠키 저장 = " + response.getHeader("Set-Cookie"));

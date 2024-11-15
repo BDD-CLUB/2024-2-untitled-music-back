@@ -1,5 +1,6 @@
 package MusicPlatform.domain.oauth2.entity;
 
+import MusicPlatform.domain.artist.entity.Role;
 import MusicPlatform.domain.oauth2.adapter.AuthenticationAdapter;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -7,6 +8,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public class GoogleUser extends OAuth2ProviderUser implements AuthenticationAdapter {
 
     private String uuid;
+    private Role role;
 
     public GoogleUser(OAuth2User oAuth2User, ClientRegistration clientRegistration) {
         super(oAuth2User.getAttributes(), oAuth2User, clientRegistration);
@@ -35,5 +37,10 @@ public class GoogleUser extends OAuth2ProviderUser implements AuthenticationAdap
     @Override
     public String getUuid() {
         return this.uuid;
+    }
+
+    @Override
+    public Role getRole() {
+        return this.role;
     }
 }
