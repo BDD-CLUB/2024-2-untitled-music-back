@@ -62,4 +62,9 @@ public abstract class OAuth2ProviderUser implements ProviderUser, Authentication
     public String getUuid() {
         return this.uuid;
     }
+
+    @Override
+    public String toString() {
+        return this.uuid;
+    }
 }
