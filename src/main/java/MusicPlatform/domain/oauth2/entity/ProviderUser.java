@@ -7,6 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public interface ProviderUser extends OAuth2User {
+
+    String getUuid();
+    void setUuid(String uuid);
     String getId();
     String getName();
     String getPassword();
@@ -16,6 +19,5 @@ public interface ProviderUser extends OAuth2User {
 
     List<? extends GrantedAuthority> getAuthorities();
     Map<String, Object> getAttributes();
-    void setUuid(String uuid);
 
 }
