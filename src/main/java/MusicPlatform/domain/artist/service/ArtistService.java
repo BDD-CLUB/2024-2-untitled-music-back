@@ -4,13 +4,17 @@ import static MusicPlatform.global.error.BusinessError.NOT_FOUND_ARTIST;
 
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.repository.ArtistRepository;
+import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import MusicPlatform.domain.oauth2.entity.ProviderUser;
 import MusicPlatform.domain.profile.service.ProfileService;
 import MusicPlatform.global.error.BusinessException;
+import MusicPlatform.global.helper.AuthorizationHelper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ public class ArtistService {
 
     private final ArtistRepository artistRepository;
     private final ProfileService profileService;
+    private final AuthorizationHelper authorizationHelper;
 
     @Transactional(readOnly = true)
     public Artist findByUuid(String uuid) {
@@ -41,5 +46,12 @@ public class ArtistService {
         artistRepository.save(artist);
         profileService.createProfile(artist);
         return artist;
+    }
+
+    public ArtistResponseDto getMyInfo() {
+        String uuid = authorizationHelper.getMyUuid();
+        log.info("uuid = " + uuid);
+        Artist artist = findByUuid(uuid);
+        return ArtistResponseDto.from(artist);
     }
 }
