@@ -35,7 +35,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String uuid = authenticationAdapter.getUuid();
         Role role = authenticationAdapter.getRole();
 
-        cookieService.authenticate(uuid, response);
+        cookieService.authenticate(uuid, role, response);
 
         String url = UriComponentsBuilder.fromUriString(domain)
                 .path("")

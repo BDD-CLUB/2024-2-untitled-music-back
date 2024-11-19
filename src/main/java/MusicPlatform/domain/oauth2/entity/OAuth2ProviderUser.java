@@ -1,5 +1,7 @@
 package MusicPlatform.domain.oauth2.entity;
 
+import MusicPlatform.domain.artist.entity.Role;
+import MusicPlatform.domain.oauth2.adapter.AuthenticationAdapter;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -11,7 +13,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 /**
  * 모든 서비스 제공자가 동일하게 제공하는 속성들
  */
-public abstract class OAuth2ProviderUser implements ProviderUser {
+public abstract class OAuth2ProviderUser implements ProviderUser, AuthenticationAdapter {
+
+    private String uuid;
+    private Role role;
 
     private final Map<String, Object> attributes;
     private final OAuth2User oAuth2User;
@@ -41,13 +46,36 @@ public abstract class OAuth2ProviderUser implements ProviderUser {
 
     @Override
     public List<? extends GrantedAuthority> getAuthorities() {
-        return oAuth2User.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
-                .toList();
+        return List.of(new SimpleGrantedAuthority(this.role.name()));
     }
 
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
+    }
+
+    @Override
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    @Override
+    public String getUuid() {
+        return this.uuid;
+    }
+
+    @Override
+    public String toString() {
+        return this.uuid;
+    }
+
+    @Override
+    public Role getRole() {
+        return this.role;
+    }
+
+    @Override
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

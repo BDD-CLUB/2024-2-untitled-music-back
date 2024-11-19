@@ -3,6 +3,8 @@ package MusicPlatform.domain.artist.entity;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,15 +33,20 @@ public class Artist extends UuidEntity {
     @Column(nullable = false)
     private String artistImage;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @Column(nullable = false)
     private boolean isDeleted;
 
     @Builder
-    private Artist(String name, String email, String provider, String artistImage) {
+    private Artist(String name, String email, String provider, String artistImage, Role role) {
         this.name = name;
         this.email = email;
         this.provider = provider;
         this.artistImage = artistImage;
+        this.role = role;
         this.isDeleted = false;
     }
 }
