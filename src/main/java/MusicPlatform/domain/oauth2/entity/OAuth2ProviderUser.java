@@ -1,5 +1,6 @@
 package MusicPlatform.domain.oauth2.entity;
 
+import MusicPlatform.domain.artist.entity.Role;
 import MusicPlatform.domain.oauth2.adapter.AuthenticationAdapter;
 import java.util.List;
 import java.util.Map;
@@ -14,10 +15,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
  */
 public abstract class OAuth2ProviderUser implements ProviderUser, AuthenticationAdapter {
 
+    private String uuid;
+    private Role role;
+
     private final Map<String, Object> attributes;
     private final OAuth2User oAuth2User;
     private final ClientRegistration clientRegistration;
-    private String uuid;
 
     public OAuth2ProviderUser(Map<String, Object> attributes, OAuth2User oAuth2User,
                               ClientRegistration clientRegistration) {
@@ -43,9 +46,7 @@ public abstract class OAuth2ProviderUser implements ProviderUser, Authentication
 
     @Override
     public List<? extends GrantedAuthority> getAuthorities() {
-        return oAuth2User.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
-                .toList();
+        return List.of(new SimpleGrantedAuthority(this.role.name()));
     }
 
     @Override
@@ -66,5 +67,15 @@ public abstract class OAuth2ProviderUser implements ProviderUser, Authentication
     @Override
     public String toString() {
         return this.uuid;
+    }
+
+    @Override
+    public Role getRole() {
+        return this.role;
+    }
+
+    @Override
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

@@ -1,5 +1,6 @@
 package MusicPlatform.global.handler;
 
+import MusicPlatform.domain.artist.entity.Role;
 import MusicPlatform.domain.oauth2.adapter.AuthenticationAdapter;
 import MusicPlatform.domain.oauth2.service.CookieService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,8 +33,9 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         AuthenticationAdapter authenticationAdapter = (AuthenticationAdapter) authentication.getPrincipal();
 
         String uuid = authenticationAdapter.getUuid();
+        Role role = authenticationAdapter.getRole();
 
-        cookieService.authenticate(uuid, response);
+        cookieService.authenticate(uuid, role, response);
 
         String url = UriComponentsBuilder.fromUriString(domain)
                 .path("")

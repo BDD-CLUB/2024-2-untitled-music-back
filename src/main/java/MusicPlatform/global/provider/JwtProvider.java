@@ -1,5 +1,6 @@
 package MusicPlatform.global.provider;
 
+import MusicPlatform.domain.artist.entity.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,13 +22,14 @@ public class JwtProvider {
     @Value("${jwt.secret}")
     private String SECRET;
 
-    public String createToken(String uuid) {
+    public String createToken(String uuid, Role role) {
         Claims claims = Jwts.claims();
-        claims.put("uuid", uuid);
+        claims.put("role", role);
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValidity = now.plusSeconds(ACCESS_TOKEN_EXP_TIME);
 
         return Jwts.builder()
+                .setSubject(uuid)
                 .setClaims(claims)
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(tokenValidity.toInstant()))

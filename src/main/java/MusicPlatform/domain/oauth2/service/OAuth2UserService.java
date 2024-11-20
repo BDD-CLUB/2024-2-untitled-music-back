@@ -27,9 +27,10 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest); //사용자 정보 반환
         ProviderUser providerUser = providerUser(clientRegistration, oAuth2User);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        Artist artist = artistService.register(registrationId, providerUser);
+        Artist artist = artistService.registerOrReturn(registrationId, providerUser);
         log.info("회원가입 = " + providerUser.getName());
         providerUser.setUuid(artist.getUuid());
+        providerUser.setRole(artist.getRole());
         return providerUser;
     }
 

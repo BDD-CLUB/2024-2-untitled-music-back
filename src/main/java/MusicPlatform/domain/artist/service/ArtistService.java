@@ -1,5 +1,6 @@
 package MusicPlatform.domain.artist.service;
 
+import static MusicPlatform.domain.artist.entity.Role.ROLE_USER;
 import static MusicPlatform.global.error.BusinessError.NOT_FOUND_ARTIST;
 
 import MusicPlatform.domain.artist.entity.Artist;
@@ -30,7 +31,7 @@ public class ArtistService {
                 new BusinessException(NOT_FOUND_ARTIST));
     }
 
-    public Artist register(String registrationId, ProviderUser providerUser) {
+    public Artist registerOrReturn(String registrationId, ProviderUser providerUser) {
         Artist existArtist = artistRepository.findByEmail(providerUser.getEmail());
         if (existArtist != null) { // 이미 가입한 회원 검증
             return existArtist;
@@ -41,6 +42,7 @@ public class ArtistService {
                 .name(providerUser.getName())
                 .provider(registrationId)
                 .artistImage(providerUser.getPicture()) //todo 기본 이미지 등록
+                .role(ROLE_USER)
                 .build();
 
         artistRepository.save(artist);
