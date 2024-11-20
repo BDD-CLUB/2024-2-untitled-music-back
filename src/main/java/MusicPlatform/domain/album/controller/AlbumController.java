@@ -29,11 +29,18 @@ public class AlbumController {
 
     private final AlbumService albumService;
 
-    @PostMapping("/album")
     @Operation(summary = "앨범 업로드")
+    @PostMapping("/album")
     public ResponseEntity<Void> uploadAlbum(@RequestBody @Valid AlbumRequestDto requestDto) {
         albumService.save(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(summary = "엘범 목록 조회")
+    @GetMapping("/album")
+    public ResponseEntity<List<AlbumGetResponseDto>> getAll() {
+        List<AlbumGetResponseDto> responseDto = albumService.getAll();
+        return ResponseEntity.ok(responseDto);
     }
 
     @Operation(summary = "엘범 조회")
