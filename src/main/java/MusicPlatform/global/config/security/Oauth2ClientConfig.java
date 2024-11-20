@@ -3,6 +3,7 @@ package MusicPlatform.global.config.security;
 import MusicPlatform.domain.oauth2.service.OAuth2UserService;
 import MusicPlatform.global.handler.LoginSuccessHandler;
 import MusicPlatform.global.handler.OauthAccessDeniedHandler;
+import MusicPlatform.global.handler.OauthAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ public class Oauth2ClientConfig {
     private final OAuth2UserService oAuth2UserService;
     private final LoginSuccessHandler loginSuccessHandler;
     private final OauthAccessDeniedHandler oauthAccessDeniedHandler;
+    private final OauthAuthenticationEntryPoint oauthAuthenticationEntryPoint;
 
     @Value(value = "${server.error-page}")
     private String errorPage;
@@ -43,6 +45,7 @@ public class Oauth2ClientConfig {
 
         http.exceptionHandling(exception -> exception
                 .accessDeniedHandler(oauthAccessDeniedHandler)
+                .authenticationEntryPoint(oauthAuthenticationEntryPoint)
         );
 
         return http.build();
