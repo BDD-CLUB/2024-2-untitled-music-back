@@ -18,6 +18,10 @@ import MusicPlatform.global.error.BusinessException;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +56,14 @@ public class AlbumService {
         return convertToDto(album);
     }
 
+    @Transactional(readOnly = true)
+    public List<AlbumGetResponseDto> getAll(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").ascending());
+        Page<Album> albums = albumRepository.findAll(pageable);
+        return albums.getContent().stream().map(this::convertToDto).toList();
+    }
+
+    @Deprecated
     @Transactional(readOnly = true)
     public List<AlbumGetResponseDto> getAll() {
         List<Album> albums = albumRepository.findAll();

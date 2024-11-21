@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,8 +39,10 @@ public class AlbumController {
 
     @Operation(summary = "엘범 목록 조회")
     @GetMapping("/album")
-    public ResponseEntity<List<AlbumGetResponseDto>> getAll() {
-        List<AlbumGetResponseDto> responseDto = albumService.getAll();
+    public ResponseEntity<List<AlbumGetResponseDto>> getAll(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+        List<AlbumGetResponseDto> responseDto = albumService.getAll(pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
