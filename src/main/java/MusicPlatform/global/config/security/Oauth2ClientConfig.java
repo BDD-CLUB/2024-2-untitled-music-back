@@ -1,6 +1,7 @@
 package MusicPlatform.global.config.security;
 
 import MusicPlatform.domain.oauth2.service.OAuth2UserService;
+import MusicPlatform.global.filter.JwtAuthorizationFilter;
 import MusicPlatform.global.handler.LoginSuccessHandler;
 import MusicPlatform.global.handler.OauthAccessDeniedHandler;
 import MusicPlatform.global.handler.OauthAuthenticationEntryPoint;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +26,7 @@ public class Oauth2ClientConfig {
     private final LoginSuccessHandler loginSuccessHandler;
     private final OauthAccessDeniedHandler oauthAccessDeniedHandler;
     private final OauthAuthenticationEntryPoint oauthAuthenticationEntryPoint;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Value(value = "${server.error-page}")
     private String errorPage;
@@ -42,6 +45,8 @@ public class Oauth2ClientConfig {
                 .successHandler(loginSuccessHandler)
                 .failureUrl(errorPage)
         );
+
+        http.addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling(exception -> exception
                 .accessDeniedHandler(oauthAccessDeniedHandler)
