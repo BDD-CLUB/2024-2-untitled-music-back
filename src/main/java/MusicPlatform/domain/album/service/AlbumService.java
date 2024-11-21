@@ -58,7 +58,7 @@ public class AlbumService {
 
     @Transactional(readOnly = true)
     public List<AlbumGetResponseDto> getAll(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").ascending());
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
         Page<Album> albums = albumRepository.findAll(pageable);
         return albums.getContent().stream().map(this::convertToDto).toList();
     }
