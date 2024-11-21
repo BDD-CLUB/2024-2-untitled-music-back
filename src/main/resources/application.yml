@@ -16,11 +16,17 @@ spring:
             client-secret: -
             scope: profile, email
 
-
   datasource:
     url: jdbc:mysql://localhost:3306/music
     username: root
     password: 1234
+
+  #pageable
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+        default-page-size: 10
 
 logging:
   level:
