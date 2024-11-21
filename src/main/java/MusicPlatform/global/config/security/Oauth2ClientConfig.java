@@ -1,5 +1,7 @@
 package MusicPlatform.global.config.security;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 import MusicPlatform.domain.oauth2.service.OAuth2UserService;
 import MusicPlatform.global.filter.JwtAuthorizationFilter;
 import MusicPlatform.global.handler.LoginSuccessHandler;
@@ -40,13 +42,15 @@ public class Oauth2ClientConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
 
+        http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(STATELESS));
+
         http.oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(oAuth2UserService))
                 .successHandler(loginSuccessHandler)
                 .failureUrl(errorPage)
         );
 
-        http.addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling(exception -> exception
                 .accessDeniedHandler(oauthAccessDeniedHandler)
