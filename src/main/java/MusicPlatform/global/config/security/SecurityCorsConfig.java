@@ -1,4 +1,4 @@
-package MusicPlatform.global.config.cors;
+package MusicPlatform.global.config.security;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +9,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-public class CorsConfig {
+public class SecurityCorsConfig {
 
     @Value(value = "${cors.allow.origins}")
     private String[] allowedOrigins;

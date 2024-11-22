@@ -3,7 +3,6 @@ package MusicPlatform.global.config.security;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import MusicPlatform.domain.oauth2.service.OAuth2UserService;
-import MusicPlatform.global.config.cors.CorsConfig;
 import MusicPlatform.global.filter.JwtAuthorizationFilter;
 import MusicPlatform.global.handler.LoginSuccessHandler;
 import MusicPlatform.global.handler.OauthAccessDeniedHandler;
@@ -25,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class Oauth2ClientConfig {
 
-    private final CorsConfig corsConfig;
+    private final SecurityCorsConfig corsConfig;
     private final OAuth2UserService oAuth2UserService;
     private final LoginSuccessHandler loginSuccessHandler;
     private final OauthAccessDeniedHandler oauthAccessDeniedHandler;
