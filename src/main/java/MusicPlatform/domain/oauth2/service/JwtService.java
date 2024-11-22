@@ -1,4 +1,4 @@
-package MusicPlatform.global.provider;
+package MusicPlatform.domain.oauth2.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.*;
@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
-public class JwtProvider {
+@Service
+public class JwtService {
 
     @Value("${jwt.expiration_time}")
     private long ACCESS_TOKEN_EXP_TIME;

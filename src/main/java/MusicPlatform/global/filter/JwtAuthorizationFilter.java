@@ -1,6 +1,6 @@
 package MusicPlatform.global.filter;
 
-import MusicPlatform.global.provider.JwtProvider;
+import MusicPlatform.domain.oauth2.service.JwtService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,7 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final JwtProvider jwtProvider;
+    private final JwtService jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -35,7 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         String token = header.replace("Bearer ", "");
-        Claims claims = jwtProvider.validateToken(token);
+        Claims claims = jwtService.validateToken(token);
 
         String uuid = claims.getSubject();
         List<?> rawAuthority = (List<?>) claims.get("authority");
