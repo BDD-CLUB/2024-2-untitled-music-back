@@ -78,4 +78,6 @@ server:
   front: https://soundforest.kro.kr
   api: https://soundforest.kro.kr/v1
   error-page: https://soundforest.kro.kr/error
+  login-page: https://soundforest.kro.kr
+
   
