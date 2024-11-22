@@ -18,6 +18,10 @@ import MusicPlatform.global.error.BusinessException;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class AlbumService {
-
     private final AlbumRepository albumRepository;
     private final TrackService trackService;
     private final ArtistService artistService;
@@ -37,9 +40,8 @@ public class AlbumService {
     }
 
     public void save(AlbumRequestDto requestDto) {
-        //todo: s3 이미지 업로드 구현
         Album album = Album.builder()
-                .artImage("")
+                .artImage(requestDto.albumArt())
                 .title(requestDto.title())
                 .description(requestDto.description())
                 //.profile() //todo 현재 프로필을 가져온다.
@@ -51,15 +53,21 @@ public class AlbumService {
     @Transactional(readOnly = true)
     public AlbumGetResponseDto getAlbum(String uuid) {
         Album album = getByUuid(uuid);
-        List<Track> tracks = trackService.getAllByAlbum(album);
+        return convertToDto(album);
+    }
 
-        return AlbumGetResponseDto.builder()
-                .albumResponseDto(AlbumResponseDto.from(album))
-                .trackResponseDtos(tracks.stream()
-                        .map(TrackResponseDto::from)
-                        .toList())
-                .profileResponseDto(ProfileResponseDto.from(album.getProfile()))
-                .build();
+    @Transactional(readOnly = true)
+    public List<AlbumGetResponseDto> getAll(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
+        Page<Album> albums = albumRepository.findAll(pageable);
+        return albums.getContent().stream().map(this::convertToDto).toList();
+    }
+
+    @Deprecated
+    @Transactional(readOnly = true)
+    public List<AlbumGetResponseDto> getAll() {
+        List<Album> albums = albumRepository.findAll();
+        return albums.stream().map(this::convertToDto).toList();
     }
 
     @Transactional(readOnly = true)
@@ -83,5 +91,16 @@ public class AlbumService {
         //todo: 내가 업로드한 앨범인지 확인한다.
         Album album = getByUuid(uuid);
         albumRepository.delete(album);
+    }
+
+    private AlbumGetResponseDto convertToDto(Album album) {
+        List<Track> tracks = trackService.getAllByAlbum(album);
+        return AlbumGetResponseDto.builder()
+                .albumResponseDto(AlbumResponseDto.from(album))
+                .trackResponseDtos(tracks.stream()
+                        .map(TrackResponseDto::from)
+                        .toList())
+                .profileResponseDto(ProfileResponseDto.from(album.getProfile()))
+                .build();
     }
 }
