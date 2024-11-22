@@ -4,8 +4,10 @@ import MusicPlatform.domain.artist.entity.Role;
 import MusicPlatform.global.provider.JwtProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,10 +40,10 @@ public class CookieService {
         return cookie;
     }
 
-    public void authenticate(String uuid, Role role, HttpServletResponse response) {
+    public void authenticate(String uuid, List<? extends GrantedAuthority> role, HttpServletResponse response) {
         String accessToken = jwtProvider.createToken(uuid, role);
         response.addCookie(this.makeAccessTokenCookie(accessToken));
         
-        log.info("쿠키 저장 = " + response.getHeader("Set-Cookie"));
+        log.info("쿠키 저장 = " + accessToken);
     }
 }
