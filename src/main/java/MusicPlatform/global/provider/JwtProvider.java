@@ -1,5 +1,6 @@
 package MusicPlatform.global.provider;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -38,5 +39,17 @@ public class JwtProvider {
                 .setExpiration(Date.from(tokenValidity.toInstant()))
                 .signWith(Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public Claims validateToken(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8)))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException e) {
+            throw new JwtException("유효하지 않은 토큰입니다.");
+        }
     }
 }
