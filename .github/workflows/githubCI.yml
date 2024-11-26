@@ -1,8 +1,5 @@
 name: githubCI
 
-env:
-  JASYPT_KEY: ${{ secrets.JASYPT_KEY }};
-  
 on:
   pull_request:
     branches: [ "develop" ]
@@ -81,4 +78,6 @@ jobs:
           gradle-version: 8.5
           arguments: build
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'ref/heads/develop' }}
+        env:
+          JASYPT_KEY: ${{ secrets.JASYPT_KEY }}
       - run: ls build/libs
