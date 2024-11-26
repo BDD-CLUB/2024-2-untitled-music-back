@@ -17,9 +17,9 @@ spring:
             scope: profile, email
 
   datasource:
-    url: jdbc:mysql://localhost:3306/music
-    username: root
-    password: fostree1351
+    url: jdbc:mysql://localhost:3306/soundflyer
+    username: ENC(P4wzO9GTjJwQp7fOh2wzuB2rVwsblwS9dVlps7kFyYU=)
+    password: ENC(qhubAFmvwAlxinSmFJ+UMCqaAZVN2azeBV7a1BEaFEo=)
 
   #pageable
   data:
