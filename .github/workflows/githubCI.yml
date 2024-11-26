@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [ "develop" ]
 
+env:
+  JASYPT_KEY: ${{ secrets.JASYPT_KEY }};
+
 jobs:
   deploy_development:
     runs-on: ubuntu-22.04
@@ -65,12 +68,6 @@ jobs:
       - name: Create Docker Compose File
         run: |
           echo '${{ secrets.DOCKER_COMPOSE }}' >> docker-compose.yml
-
-      - name: Create application.yml
-        working-directory: ./src/main/resources
-        run: |
-          echo '${{ secrets.APPLICATION_YML }}' > application.yml
-          echo '${{ secrets.APPLICATION_DEV_YML }}' >> application-dev.yml
 
       - name: Start Containers
         run: docker compose -p soundflyer up -d
