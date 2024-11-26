@@ -8,6 +8,9 @@ name: deploy
 
 on: workflow_dispatch
 
+env:
+  JASYPT_KEY: ${{ secrets.JASYPT_KEY }};
+
 jobs:
   deploy_development:
     runs-on: ubuntu-22.04
