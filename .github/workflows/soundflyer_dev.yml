@@ -73,19 +73,6 @@ jobs:
         run: |
           echo '${{ secrets.DOCKER_COMPOSE }}' >> docker-compose.yml
 
-      - name: Create application.yml
-        working-directory: ./src/main/resources
-        run: |
-          echo '${{ secrets.APPLICATION_YML }}' > application.yml
-          echo '${{ secrets.APPLICATION_DEV_YML }}' >> application-dev.yml
-
-      - name: Check application.yml
-        run: ls -al
-      
-      - name: Check application.yml
-        working-directory: ./src/main/resources
-        run: ls -al
-
       - name: Start Containers
         run: docker compose -p soundflyer up -d
 
