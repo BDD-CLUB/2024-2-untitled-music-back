@@ -4,9 +4,6 @@ on:
   pull_request:
     branches: [ "develop" ]
 
-env:
-  JASYPT_KEY: ${{ secrets.JASYPT_KEY }};
-
 jobs:
   deploy_development:
     runs-on: ubuntu-22.04
@@ -15,6 +12,9 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    
+    env:
+      JASYPT_KEY: ${{ secrets.JASYPT_KEY }};
 
     steps:
       - name: Checkout
