@@ -8,9 +8,6 @@ name: deploy
 
 on: workflow_dispatch
 
-env:
-  JASYPT_KEY: ${{ secrets.JASYPT_KEY }};
-
 jobs:
   deploy_development:
     runs-on: ubuntu-22.04
@@ -88,7 +85,8 @@ jobs:
           gradle-version: 8.5
           arguments: build
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'ref/heads/develop' }}
-
+        env:
+          JASYPT_KEY: ${{ secrets.JASYPT_KEY }}
       - run: ls build/libs
       - run: java -Djarmode=layertools -jar build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar extract
 
