@@ -61,7 +61,6 @@ jobs:
         run: |
           echo '${{ secrets.DOCKER_ENV }}' >> .env
           echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
-          echo "JASYPT_KEY=${{ secrets.JASYPT_KEY }}" >> .env
 
       - name: Create Docker Compose File
         run: |
@@ -79,4 +78,6 @@ jobs:
           gradle-version: 8.5
           arguments: build
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'ref/heads/develop' }}
+        env:
+          JASYPT_KEY: ${{ secrets.JASYPT_KEY }}
       - run: ls build/libs
