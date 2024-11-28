@@ -40,20 +40,15 @@ public class Track extends UuidEntity {
     @JoinColumn(name = "ALBUM_ID", nullable = false)
     private Album album;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "Profile_ID", nullable = false) // todo: 인가 구현 이후 주석 해제
-    private Profile profile;
-
     @Column(nullable = false)
     private boolean isDeleted;
 
     @Builder
-    private Track(String title, String lyric, String song_url, Album album, Profile profile) {
+    private Track(String title, String lyric, String song_url, Album album) {
         this.title = title;
         this.lyric = lyric;
         this.song_url = song_url;
         this.album = album;
-        this.profile = profile;
     }
 
     public String getAlbumArt() {
@@ -61,7 +56,7 @@ public class Track extends UuidEntity {
     }
 
     public Artist getArtist() {
-        return this.profile.getArtist();
+        return this.album.getProfile().getArtist();
     }
 
     public void update(String title, String lyric) {
