@@ -27,6 +27,10 @@ public class CookieService {
         return this.makeCookie("access_token", null, 0);
     }
 
+    public Cookie makeProfileCookie(String profileUuid) {
+        return this.makeCookie("profile", profileUuid, maxAge);
+    }
+
     private Cookie makeCookie(String key, String value, int maxAge) {
         Cookie cookie = new Cookie(key, value);
         cookie.setSecure(true); // HTTPS에서만 쿠키가 전송되도록 설정
@@ -41,7 +45,10 @@ public class CookieService {
     public void authenticate(String uuid, List<? extends GrantedAuthority> role, HttpServletResponse response) {
         String accessToken = jwtService.createToken(uuid, role);
         response.addCookie(this.makeAccessTokenCookie(accessToken));
-        
         log.info("쿠키 저장 = " + accessToken);
+    }
+
+    public void saveProfileCookie(String uuid, HttpServletResponse response) {
+        response.addCookie(this.makeProfileCookie(uuid));
     }
 }
