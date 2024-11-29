@@ -13,7 +13,7 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     Optional<Track> findByUuid(String uuid);
 
     @Query("SELECT t FROM Track t "
-            + "JOIN t.profile p "
+            + "JOIN t.album.profile p "
             + "JOIN p.artist a "
             + "WHERE a = :artist")
     List<Track> findAllByArtist(Artist artist);
