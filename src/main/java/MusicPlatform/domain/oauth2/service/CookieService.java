@@ -45,10 +45,11 @@ public class CookieService {
     public void authenticate(String uuid, List<? extends GrantedAuthority> role, HttpServletResponse response) {
         String accessToken = jwtService.createToken(uuid, role);
         response.addCookie(this.makeAccessTokenCookie(accessToken));
-        log.info("쿠키 저장 = " + accessToken);
+        log.info("access token 쿠키 저장 = " + accessToken);
     }
 
     public void saveProfileCookie(String uuid, HttpServletResponse response) {
         response.addCookie(this.makeProfileCookie(uuid));
+        log.info("profile 쿠키 저장 = " + uuid);
     }
 }

@@ -11,9 +11,11 @@ import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -52,6 +54,7 @@ public class ProfileService {
     }
 
     private Profile changeToMain(HttpServletResponse response) {
+        log.info("profile 쿠키 존재하지 않음.");
         String artistUuid = authorizationHelper.getMyUuid();
         Profile mainProfile = profileRepository.findByArtistUuidAndMainIsTrue(artistUuid);
         cookieService.saveProfileCookie(mainProfile.getUuid(), response);
