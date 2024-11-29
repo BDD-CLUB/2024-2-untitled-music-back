@@ -27,8 +27,8 @@ public class ProfileController {
     @Operation(summary = "현재 선택된 프로필 조회")
     @GetMapping
     public ResponseEntity<ProfileResponseDto> getMyProfile(
-            @CookieValue(value = "profile", defaultValue = "") String profileInfo, HttpServletResponse response) {
-        ProfileResponseDto responseDto = profileService.get(profileInfo, response);
+            @CookieValue(value = "profile", defaultValue = "") String profileUuid, HttpServletResponse response) {
+        ProfileResponseDto responseDto = profileService.get(profileUuid, response);
         return ResponseEntity.ok(responseDto);
     }
 
