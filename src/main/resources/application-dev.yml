@@ -15,9 +15,10 @@ spring:
             client-id: ENC(s3G2fjTX8UpUzU0pyV43hyPBnq8LM2f59A2xm1Ne7rrrAlY65OyqFWljlCmNIrP2NfX0Imr7CFL6/R5dU/Rns7/2pvKbRV6iR8WxBxhusJx5anb4olCXwK68i0kitggL)
             client-secret: ENC(p81Kq6PKL87766UmgGokPRvnfnl3Dp54fuytKjpFl2G32VuunC08J1PT2LB+flj+RcUhsgKKgR4=)
             scope: profile, email
+            redirect-uri: https://soundforest.kro.kr/v1/login/oauth2/code/google
 
   datasource:
-    url: jdbc:mysql://localhost:3306/soundflyer
+    url: jdbc:mysql://soundflyer-db:3306/soundflyer
     username: ENC(P4wzO9GTjJwQp7fOh2wzuB2rVwsblwS9dVlps7kFyYU=)
     password: ENC(qhubAFmvwAlxinSmFJ+UMCqaAZVN2azeBV7a1BEaFEo=)
 
@@ -44,7 +45,7 @@ jwt:
   secret: ENC(AZvoDf/asAWYXziKuttJ5UgS3eQNzC1Kn5NF30mezA3kzJE+JqS0FWsbmOrwNmsqJszBf1kt2o8=)
 
 cookie:
-  domain: localhost
+  domain: soundforest.kro.kr
   max-age: 604800  # 60*60*24*7, 7일
 
 # swagger
@@ -81,8 +82,7 @@ jasypt:
     password: ${JASYPT_KEY}
 
 server:
-  front: http://localhost:3000
-  api: http://localhsot:8080
-  error-page: http://localhost:3000
-  login-page: http://localhost:3000
-  
+  front: https://soundforest.kro.kr
+  api: https://soundforest.kro.kr/V1
+  error-page: https://soundforest.kro.kr/error
+  login-page: https://soundforest.kro.kr
