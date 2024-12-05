@@ -35,7 +35,7 @@ public class PlaylistController {
     public ResponseEntity<Void> updatePlaylist(@PathVariable String uuid,
                                                @RequestBody @Valid PlaylistRequestDto requestDto) {
         playlistService.update(uuid, requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "플레이리스트 내 트랙 수정 및 삭제")
@@ -43,11 +43,10 @@ public class PlaylistController {
     public ResponseEntity<Void> updatePlaylistTrack(@PathVariable String uuid,
                                                @RequestBody @Valid PlaylistItemUpdateRequestDto requestDto) {
         playlistService.update(uuid, requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.noContent().build();
     }
 
     //조회
-    
 
     //삭제
 }
