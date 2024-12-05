@@ -45,4 +45,9 @@ public class Playlist extends UuidEntity {
         this.description = description;
         this.artist = artist;
     }
+
+    public void update(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }

@@ -1,13 +1,19 @@
 package MusicPlatform.domain.playlist.service;
 
+import static MusicPlatform.global.error.BusinessError.NOT_FOUND_PLAYLIST;
+
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
+import MusicPlatform.domain.playlist._item.entity.PlaylistItem;
 import MusicPlatform.domain.playlist._item.service.PlaylistItemService;
+import MusicPlatform.domain.playlist._item.service.dto.request.PlaylistItemUpdateRequestDto;
 import MusicPlatform.domain.playlist.entity.Playlist;
 import MusicPlatform.domain.playlist.repository.PlaylistRepository;
 import MusicPlatform.domain.playlist.service.dto.request.PlaylistRequestDto;
+import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
-import jakarta.transaction.Transactional;
+import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +27,12 @@ public class PlaylistService {
     private final ArtistService artistService;
     private final PlaylistItemService playlistItemService;
 
+    @Transactional(readOnly = true)
+    public Playlist findByUuid(String uuid) {
+        return playlistRepository.findByUuid(uuid)
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_PLAYLIST));
+    }
+
     public void save(PlaylistRequestDto requestDto) {
         String artistUuid = authorizationHelper.getMyUuid();
         Artist artist = artistService.findByUuid(artistUuid);
@@ -33,6 +45,24 @@ public class PlaylistService {
 
         for (String trackUuid : requestDto.trackUuids()) {
             playlistItemService.save(playlist, trackUuid);
+        }
+    }
+
+    public void update(String uuid, PlaylistRequestDto requestDto) {
+        Playlist playlist = findByUuid(uuid);
+        playlist.update(requestDto.title(), requestDto.description());
+    }
+
+    public void update(String uuid, PlaylistItemUpdateRequestDto requestDto) {
+        Playlist playlist = findByUuid(uuid);
+        String[] removedItemUuids = requestDto.removedItemUuids();
+        String[] newTrackUuids = requestDto.newTrackUuids();
+
+        for (String removedItemUuid : removedItemUuids) {
+            playlistItemService.delete(removedItemUuid);
+        }
+        for (String newTrackUuid : newTrackUuids) {
+            playlistItemService.save(playlist, newTrackUuid);
         }
     }
 }

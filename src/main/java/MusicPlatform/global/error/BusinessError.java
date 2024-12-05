@@ -16,6 +16,9 @@ public enum BusinessError {
     //Track
     NOT_FOUND_TRACK(HttpStatus.NOT_FOUND, "트랙을 찾을 수 없습니다."),
 
+    //Playlist
+    NOT_FOUND_PLAYLIST(HttpStatus.NOT_FOUND, "플레이리스트를 찾을 수 없습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
