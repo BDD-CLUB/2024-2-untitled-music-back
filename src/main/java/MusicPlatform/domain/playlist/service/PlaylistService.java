@@ -7,9 +7,12 @@ import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.playlist._item.entity.PlaylistItem;
 import MusicPlatform.domain.playlist._item.service.PlaylistItemService;
 import MusicPlatform.domain.playlist._item.service.dto.request.PlaylistItemUpdateRequestDto;
+import MusicPlatform.domain.playlist._item.service.dto.response.PlaylistItemResponseDto;
 import MusicPlatform.domain.playlist.entity.Playlist;
 import MusicPlatform.domain.playlist.repository.PlaylistRepository;
 import MusicPlatform.domain.playlist.service.dto.request.PlaylistRequestDto;
+import MusicPlatform.domain.playlist.service.dto.response.PlaylistResponseDto;
+import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
 import java.util.List;
@@ -64,5 +67,16 @@ public class PlaylistService {
         for (String newTrackUuid : newTrackUuids) {
             playlistItemService.save(playlist, newTrackUuid);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public PlaylistResponseDto getPlaylist(String uuid) {
+        Playlist playlist = findByUuid(uuid);
+        List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.findAllByPlaylist(playlist)
+                .stream()
+                .map(PlaylistItemResponseDto::from)
+                .toList();
+
+        return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
     }
 }

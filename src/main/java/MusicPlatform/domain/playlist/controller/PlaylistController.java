@@ -3,6 +3,7 @@ package MusicPlatform.domain.playlist.controller;
 import MusicPlatform.domain.playlist._item.service.dto.request.PlaylistItemUpdateRequestDto;
 import MusicPlatform.domain.playlist.service.PlaylistService;
 import MusicPlatform.domain.playlist.service.dto.request.PlaylistRequestDto;
+import MusicPlatform.domain.playlist.service.dto.response.PlaylistResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,12 +42,18 @@ public class PlaylistController {
     @Operation(summary = "플레이리스트 내 트랙 수정 및 삭제")
     @PutMapping("/{uuid}/tracks")
     public ResponseEntity<Void> updatePlaylistTrack(@PathVariable String uuid,
-                                               @RequestBody @Valid PlaylistItemUpdateRequestDto requestDto) {
+                                                    @RequestBody @Valid PlaylistItemUpdateRequestDto requestDto) {
         playlistService.update(uuid, requestDto);
         return ResponseEntity.noContent().build();
     }
 
     //조회
+    @Operation(summary = "플레이리스트 조회")
+    @PutMapping("/{uuid}")
+    public ResponseEntity<PlaylistResponseDto> getPlaylist(@PathVariable String uuid) {
+        PlaylistResponseDto responseDto = playlistService.getPlaylist(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
 
     //삭제
 }
