@@ -9,7 +9,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,23 +36,25 @@ public class PlaylistController {
     //수정
     @Operation(summary = "플레이리스트 수정")
     @PutMapping("/{uuid}")
-    public ResponseEntity<Void> updatePlaylist(@PathVariable String uuid,
+    public ResponseEntity<Void> updatePlaylist(@AuthenticationPrincipal String artistUuid,
+                                               @PathVariable String uuid,
                                                @RequestBody @Valid PlaylistRequestDto requestDto) {
-        playlistService.update(uuid, requestDto);
+        playlistService.update(artistUuid, uuid, requestDto);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "플레이리스트 내 트랙 수정 및 삭제")
     @PutMapping("/{uuid}/tracks")
-    public ResponseEntity<Void> updatePlaylistTrack(@PathVariable String uuid,
+    public ResponseEntity<Void> updatePlaylistTrack(@AuthenticationPrincipal String artistUuid,
+                                                    @PathVariable String uuid,
                                                     @RequestBody @Valid PlaylistItemUpdateRequestDto requestDto) {
-        playlistService.update(uuid, requestDto);
+        playlistService.update(artistUuid, uuid, requestDto);
         return ResponseEntity.noContent().build();
     }
 
     //조회
     @Operation(summary = "플레이리스트 조회")
-    @PutMapping("/{uuid}")
+    @GetMapping("/{uuid}")
     public ResponseEntity<PlaylistResponseDto> getPlaylist(@PathVariable String uuid) {
         PlaylistResponseDto responseDto = playlistService.getPlaylist(uuid);
         return ResponseEntity.ok(responseDto);
@@ -59,8 +63,8 @@ public class PlaylistController {
     //삭제
     @Operation(summary = "플레이리스트 삭제")
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Void> deletePlaylist(@PathVariable String uuid) {
-        playlistService.deletePlaylist(uuid);
+    public ResponseEntity<Void> deletePlaylist(@AuthenticationPrincipal String artistUuid, @PathVariable String uuid) {
+        playlistService.deletePlaylist(artistUuid, uuid);
         return ResponseEntity.noContent().build();
     }
 }

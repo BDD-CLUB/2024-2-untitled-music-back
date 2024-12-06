@@ -1,10 +1,10 @@
 package MusicPlatform.domain.playlist.service;
 
+import static MusicPlatform.global.error.BusinessError.FORBIDDEN_PLAYLIST_ACCESS;
 import static MusicPlatform.global.error.BusinessError.NOT_FOUND_PLAYLIST;
 
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
-import MusicPlatform.domain.playlist._item.entity.PlaylistItem;
 import MusicPlatform.domain.playlist._item.service.PlaylistItemService;
 import MusicPlatform.domain.playlist._item.service.dto.request.PlaylistItemUpdateRequestDto;
 import MusicPlatform.domain.playlist._item.service.dto.response.PlaylistItemResponseDto;
@@ -12,7 +12,6 @@ import MusicPlatform.domain.playlist.entity.Playlist;
 import MusicPlatform.domain.playlist.repository.PlaylistRepository;
 import MusicPlatform.domain.playlist.service.dto.request.PlaylistRequestDto;
 import MusicPlatform.domain.playlist.service.dto.response.PlaylistResponseDto;
-import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
 import java.util.List;
@@ -51,13 +50,16 @@ public class PlaylistService {
         }
     }
 
-    public void update(String uuid, PlaylistRequestDto requestDto) {
+    public void update(String artistUuid, String uuid, PlaylistRequestDto requestDto) {
         Playlist playlist = findByUuid(uuid);
+        isAuthenticated(artistUuid, playlist.getArtist().getUuid());
         playlist.update(requestDto.title(), requestDto.description());
     }
 
-    public void update(String uuid, PlaylistItemUpdateRequestDto requestDto) {
+    public void update(String artistUuid, String uuid, PlaylistItemUpdateRequestDto requestDto) {
         Playlist playlist = findByUuid(uuid);
+        isAuthenticated(artistUuid, playlist.getArtist().getUuid());
+
         String[] removedItemUuids = requestDto.removedItemUuids();
         String[] newTrackUuids = requestDto.newTrackUuids();
 
@@ -80,8 +82,15 @@ public class PlaylistService {
         return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
     }
 
-    public void deletePlaylist(String uuid) {
+    public void deletePlaylist(String artistUuid, String uuid) {
         Playlist playlist = findByUuid(uuid);
+        isAuthenticated(artistUuid, playlist.getArtist().getUuid());
         playlistRepository.delete(playlist);
+    }
+
+    private void isAuthenticated(String artistUuid, String playlistArtistUuid) {
+        if (!playlistArtistUuid.equals(artistUuid)) {
+            throw new BusinessException(FORBIDDEN_PLAYLIST_ACCESS);
+        }
     }
 }
