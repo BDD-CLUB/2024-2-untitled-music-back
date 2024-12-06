@@ -79,4 +79,9 @@ public class PlaylistService {
 
         return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
     }
+
+    public void deletePlaylist(String uuid) {
+        Playlist playlist = findByUuid(uuid);
+        playlistRepository.delete(playlist);
+    }
 }

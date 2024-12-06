@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,4 +57,10 @@ public class PlaylistController {
     }
 
     //삭제
+    @Operation(summary = "플레이리스트 삭제")
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deletePlaylist(@PathVariable String uuid) {
+        playlistService.deletePlaylist(uuid);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -32,6 +32,6 @@ public class PlaylistItemService {
     }
 
     public void delete(String removedItemUuid) {
-        playlistItemRepository.deleteByUuid(removedItemUuid);
+        playlistItemRepository.deleteByUuid(removedItemUuid); //hard delete
     }
 }
