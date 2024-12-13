@@ -71,6 +71,12 @@ public class ProfileService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public ProfileResponseDto get(String uuid) {
+        Profile profile = getByUuid(uuid);
+        return ProfileResponseDto.from(profile);
+    }
+
     private Profile changeToMain(HttpServletResponse response) {
         log.info("profile 쿠키 존재하지 않음.");
         String artistUuid = authorizationHelper.getMyUuid();

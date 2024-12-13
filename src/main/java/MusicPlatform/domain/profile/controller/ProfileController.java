@@ -44,7 +44,13 @@ public class ProfileController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // 특정 프로필 조회
+    @Operation(summary = "특정 프로필 조회")
+    @GetMapping("/{uuid}")
+    public ResponseEntity<ProfileResponseDto> getMyProfile(@PathVariable String uuid) {
+        ProfileResponseDto responseDto = profileService.get(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
+    
     // 프로필 목록 조회
     // 프로필 수정
     // 프로필 삭제
