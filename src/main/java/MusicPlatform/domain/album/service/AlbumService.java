@@ -10,6 +10,8 @@ import MusicPlatform.domain.album.service.dto.response.AlbumGetResponseDto;
 import MusicPlatform.domain.album.service.dto.response.AlbumResponseDto;
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
+import MusicPlatform.domain.profile.entity.Profile;
+import MusicPlatform.domain.profile.service.ProfileService;
 import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
@@ -32,6 +34,7 @@ public class AlbumService {
     private final AlbumRepository albumRepository;
     private final TrackService trackService;
     private final ArtistService artistService;
+    private final ProfileService profileService;
 
     @Transactional(readOnly = true)
     public Album getByUuid(String uuid) {
@@ -39,12 +42,13 @@ public class AlbumService {
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_ALBUM));
     }
 
-    public void save(AlbumRequestDto requestDto) {
+    public void save(AlbumRequestDto requestDto, String profileUuid) {
+        Profile profile = profileService.getByUuid(profileUuid);
         Album album = Album.builder()
                 .artImage(requestDto.albumArt())
                 .title(requestDto.title())
                 .description(requestDto.description())
-                //.profile() //todo 현재 프로필을 가져온다.
+                .profile(profile)
                 .releaseDate(LocalDate.now())
                 .build();
         albumRepository.save(album);

@@ -36,11 +36,9 @@ public class TrackService {
     }
 
     public void save(TrackRequestDto requestDto, Album album) {
-        // String songUrl = s3Service.uploadToS3(); //todo:  s3 파일 업로드 구현
         Track track = Track.builder()
                 .title(requestDto.title())
                 .lyric(requestDto.lyric())
-                .profile(null) //todo: 인가 구현
                 .album(album)
                 .song_url("temp url")
                 .build();
