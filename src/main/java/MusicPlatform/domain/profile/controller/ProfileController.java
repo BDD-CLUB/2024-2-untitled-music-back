@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,14 @@ public class ProfileController {
         ProfileResponseDto responseDto = profileService.get(uuid);
         return ResponseEntity.ok(responseDto);
     }
-    
+
+    @Operation(summary = "프로필 목록 조회") // 사용 여부 미정
+    @GetMapping("/all")
+    public ResponseEntity<List<ProfileResponseDto>> getMyProfile() {
+        List<ProfileResponseDto> responseDtos = profileService.getAll();
+        return ResponseEntity.ok(responseDtos);
+    }
+
     // 프로필 목록 조회
     // 프로필 수정
     // 프로필 삭제

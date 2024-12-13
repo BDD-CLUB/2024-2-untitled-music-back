@@ -12,6 +12,7 @@ import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,12 @@ public class ProfileService {
     public ProfileResponseDto get(String uuid) {
         Profile profile = getByUuid(uuid);
         return ProfileResponseDto.from(profile);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProfileResponseDto> getAll() {
+        List<Profile> profiles = profileRepository.findAll();
+        return profiles.stream().map(ProfileResponseDto::from).toList();
     }
 
     private Profile changeToMain(HttpServletResponse response) {
