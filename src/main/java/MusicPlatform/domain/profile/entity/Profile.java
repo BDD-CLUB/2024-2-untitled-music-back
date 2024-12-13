@@ -25,6 +25,10 @@ public class Profile extends UuidEntity {
     @Column(nullable = false)
     private String name;
 
+    private String description;
+    private String link1;
+    private String link2;
+
     @Column(nullable = false)
     private String profileImage;
 
@@ -39,11 +43,28 @@ public class Profile extends UuidEntity {
     private boolean isDeleted;
 
     @Builder
-    private Profile(String name, String profileImage, Artist artist, boolean isMain) {
+    private Profile(String name, String description,
+                    String link1, String link2, String profileImage,
+                    Artist artist, boolean isMain, boolean isDeleted) {
         this.name = name;
+        this.description = description;
+        this.link1 = link1;
+        this.link2 = link2;
         this.profileImage = profileImage;
         this.artist = artist;
         this.isMain = isMain;
-        this.isDeleted = false;
+        this.isDeleted = isDeleted;
+    }
+
+    public void update(String name, String description, String link1, String link2, Boolean isMain) {
+        this.name = name;
+        this.description = description;
+        this.link1 = link1;
+        this.link2 = link2;
+        this.isMain = isMain;
+    }
+
+    public void updateProfileImage(String profileImageLink) {
+        this.profileImage = profileImageLink;
     }
 }

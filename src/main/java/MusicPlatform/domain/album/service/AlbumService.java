@@ -43,7 +43,7 @@ public class AlbumService {
     }
 
     public void save(AlbumRequestDto requestDto, String profileUuid) {
-        Profile profile = profileService.getByUuid(profileUuid);
+        Profile profile = profileService.findByUuid(profileUuid);
         Album album = Album.builder()
                 .artImage(requestDto.albumArt())
                 .title(requestDto.title())
