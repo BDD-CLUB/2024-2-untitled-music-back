@@ -5,7 +5,6 @@ import static MusicPlatform.global.error.BusinessError.NOT_FOUND_PROFILE;
 import static MusicPlatform.global.error.BusinessError.ZERO_PROFILE_REQUEST;
 
 import MusicPlatform.domain.artist.entity.Artist;
-import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.oauth2.service.CookieService;
 import MusicPlatform.domain.profile.entity.Profile;
 import MusicPlatform.domain.profile.repository.ProfileRepository;
@@ -29,7 +28,6 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final AuthorizationHelper authorizationHelper;
     private final CookieService cookieService;
-    private final ArtistService artistService;
 
     @Transactional(readOnly = true)
     public Profile findByUuid(String uuid) {
@@ -38,16 +36,16 @@ public class ProfileService {
         );
     }
 
-    @Transactional(readOnly = true)
-    public List<Profile> findAllByArtist(String artistUuid) {
-        Artist artist = artistService.findByUuid(artistUuid);
-        return profileRepository.findAllByArtist(artist);
-    }
+//    @Transactional(readOnly = true)
+//    public List<Profile> findAllByArtist(Artist artistUuid) {
+//        Artist artist = artistService.findByUuid(artistUuid);
+//        return profileRepository.findAllByArtist(artist);
+//    }
 
     //create
-    public void save(ProfileRequestDto requestDto) {
+    public void save(ProfileRequestDto requestDto, Artist artist) {
         String uuid = authorizationHelper.getMyUuid();
-        Artist artist = artistService.findByUuid(uuid);
+        //Artist artist = artistService.findByUuid(uuid);
         Profile profile = Profile.builder()
                 .name(requestDto.name())
                 .description(requestDto.description())
@@ -89,8 +87,9 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProfileResponseDto> getAllByArtist(String artistUuid) {
-        List<Profile> profiles = findAllByArtist(artistUuid);
+    public List<ProfileResponseDto> getAllByArtist(Artist artist) {
+        //List<Profile> profiles = findAllByArtist(artist);
+        List<Profile> profiles = profileRepository.findAllByArtist(artist);
         return profiles.stream().map(ProfileResponseDto::from).toList();
     }
 
@@ -127,10 +126,10 @@ public class ProfileService {
     }
 
     //delete
-    public void delete(String artistUuid, String uuid) {
+    public void delete(String artistUuid, String uuid, Artist artist) {
         Profile profile = findByUuid(uuid);
         isAuthenticated(artistUuid, profile.getArtist().getUuid());
-        if (findAllByArtist(artistUuid).size() == 1) {
+        if ( profileRepository.findAllByArtist(artist).size() == 1) {
             throw new BusinessException(ZERO_PROFILE_REQUEST);
         }
         profileRepository.delete(profile);

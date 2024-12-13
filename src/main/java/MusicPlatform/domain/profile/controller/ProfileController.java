@@ -1,5 +1,7 @@
 package MusicPlatform.domain.profile.controller;
 
+import MusicPlatform.domain.artist.entity.Artist;
+import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.profile.service.ProfileService;
 import MusicPlatform.domain.profile.service.dto.request.ProfileRequestDto;
 import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
@@ -30,12 +32,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final ArtistService artistService;
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "프로필 생성")
     @PostMapping
-    public ResponseEntity<Void> createProfile(@RequestBody @Valid ProfileRequestDto requestDto) {
-        profileService.save(requestDto);
+    public ResponseEntity<Void> createProfile(@AuthenticationPrincipal String artistUuid,
+                                              @RequestBody @Valid ProfileRequestDto requestDto) {
+        Artist artist = artistService.findByUuid(artistUuid); //todo: 순환의존 수정
+        profileService.save(requestDto, artist);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -54,11 +59,12 @@ public class ProfileController {
         ProfileResponseDto responseDto = profileService.getByUuid(uuid);
         return ResponseEntity.ok(responseDto);
     }
-    
+
     @Operation(summary = "아티스트의 프로필 목록 조회")
     @GetMapping("/{artistUuid}")
     public ResponseEntity<List<ProfileResponseDto>> getProfiles(@PathVariable String artistUuid) {
-        List<ProfileResponseDto> responseDtos = profileService.getAllByArtist(artistUuid);
+        Artist artist = artistService.findByUuid(artistUuid); //todo: 순환의존 수정
+        List<ProfileResponseDto> responseDtos = profileService.getAllByArtist(artist);
         return ResponseEntity.ok(responseDtos);
     }
 
@@ -95,7 +101,8 @@ public class ProfileController {
     @DeleteMapping("/{uuid}")
     public ResponseEntity<Void> deleteProfile(@AuthenticationPrincipal String artistUuid,
                                               @PathVariable String uuid) {
-        profileService.delete(artistUuid, uuid);
+        Artist artist = artistService.findByUuid(artistUuid); // todo: 순환의존 수정
+        profileService.delete(artistUuid, uuid, artist);
         return ResponseEntity.noContent().build();
     }
 }
