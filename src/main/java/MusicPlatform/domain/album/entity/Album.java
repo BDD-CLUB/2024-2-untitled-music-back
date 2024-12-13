@@ -37,7 +37,7 @@ public class Album extends UuidEntity {
     private LocalDate releaseDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Profile_ID", nullable = true) //todo: false로 교체한다.
+    @JoinColumn(name = "PROFILE_ID", nullable = false)
     private Profile profile;
 
     @Column(nullable = false)

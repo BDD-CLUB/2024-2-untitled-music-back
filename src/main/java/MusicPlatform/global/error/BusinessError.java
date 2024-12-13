@@ -16,6 +16,9 @@ public enum BusinessError {
     //Track
     NOT_FOUND_TRACK(HttpStatus.NOT_FOUND, "트랙을 찾을 수 없습니다."),
 
+    //Profile
+    NOT_FOUND_PROFILE(HttpStatus.NOT_FOUND, "프로필을 찾을 수 없습니다."),
+
     ;
 
     private final HttpStatus httpStatus;

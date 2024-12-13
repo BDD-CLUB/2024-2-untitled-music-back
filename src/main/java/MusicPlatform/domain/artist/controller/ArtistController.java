@@ -3,6 +3,7 @@ package MusicPlatform.domain.artist.controller;
 import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/artist")
+@Tag(name = "회원 (Artist)")
 public class ArtistController {
 
     private final ArtistService artistService;
