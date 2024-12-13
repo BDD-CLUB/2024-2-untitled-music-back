@@ -18,7 +18,7 @@ public enum BusinessError {
 
     //Playlist
     NOT_FOUND_PLAYLIST(HttpStatus.NOT_FOUND, "플레이리스트를 찾을 수 없습니다."),
-    FORBIDDEN_PLAYLIST_ACCESS(HttpStatus.FORBIDDEN, "플레이리스트 접근 권한이 없습니다.")
+    FORBIDDEN_PLAYLIST_ACCESS(HttpStatus.FORBIDDEN, "플레이리스트 접근 권한이 없습니다."),
 
     //Profile
     NOT_FOUND_PROFILE(HttpStatus.NOT_FOUND, "프로필을 찾을 수 없습니다."),
