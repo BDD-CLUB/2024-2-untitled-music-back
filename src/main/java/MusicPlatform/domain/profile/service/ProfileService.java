@@ -2,6 +2,7 @@ package MusicPlatform.domain.profile.service;
 
 import static MusicPlatform.global.error.BusinessError.FORBIDDEN_PROFILE_ACCESS;
 import static MusicPlatform.global.error.BusinessError.NOT_FOUND_PROFILE;
+import static MusicPlatform.global.error.BusinessError.ZERO_PROFILE_REQUEST;
 
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
@@ -31,12 +32,19 @@ public class ProfileService {
     private final ArtistService artistService;
 
     @Transactional(readOnly = true)
-    public Profile getByUuid(String uuid) {
+    public Profile findByUuid(String uuid) {
         return profileRepository.findByUuid(uuid).orElseThrow(
                 () -> new BusinessException(NOT_FOUND_PROFILE)
         );
     }
 
+    @Transactional(readOnly = true)
+    public List<Profile> findAllByArtist(String artistUuid) {
+        Artist artist = artistService.findByUuid(artistUuid);
+        return profileRepository.findAllByArtist(artist);
+    }
+
+    //create
     public void save(ProfileRequestDto requestDto) {
         String uuid = authorizationHelper.getMyUuid();
         Artist artist = artistService.findByUuid(uuid);
@@ -62,10 +70,11 @@ public class ProfileService {
         profileRepository.save(profile);
     }
 
+    //read
     @Transactional(readOnly = true)
     public ProfileResponseDto get(String uuid, HttpServletResponse response) {
         try {
-            Profile profile = uuid.isBlank() ? changeToMain(response) : getByUuid(uuid);
+            Profile profile = uuid.isBlank() ? changeToMain(response) : findByUuid(uuid);
             return ProfileResponseDto.from(profile);
         } catch (BusinessException e) {
             Profile profile = changeToMain(response);
@@ -74,17 +83,18 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
-    public ProfileResponseDto get(String uuid) {
-        Profile profile = getByUuid(uuid);
+    public ProfileResponseDto getByUuid(String uuid) {
+        Profile profile = findByUuid(uuid);
         return ProfileResponseDto.from(profile);
     }
 
     @Transactional(readOnly = true)
-    public List<ProfileResponseDto> getAll() {
-        List<Profile> profiles = profileRepository.findAll();
+    public List<ProfileResponseDto> getAllByArtist(String artistUuid) {
+        List<Profile> profiles = findAllByArtist(artistUuid);
         return profiles.stream().map(ProfileResponseDto::from).toList();
     }
 
+    // update
     private Profile changeToMain(HttpServletResponse response) {
         log.info("profile 쿠키 존재하지 않음.");
         String artistUuid = authorizationHelper.getMyUuid();
@@ -95,13 +105,13 @@ public class ProfileService {
 
     @Transactional(readOnly = true)
     public ProfileResponseDto change(String uuid, HttpServletResponse response) {
-        Profile profile = getByUuid(uuid);
+        Profile profile = findByUuid(uuid);
         cookieService.saveProfileCookie(uuid, response);
         return ProfileResponseDto.from(profile);
     }
 
     public void updateByUuid(String artistUuid, String uuid, ProfileResponseDto request) {
-        Profile profile = getByUuid(uuid);
+        Profile profile = findByUuid(uuid);
         isAuthenticated(artistUuid, profile.getArtist().getUuid());
         profile.update(request.name(),
                 request.description(),
@@ -111,9 +121,19 @@ public class ProfileService {
     }
 
     public void updateProfileImage(String artistUuid, String uuid, String profileImageLink) {
-        Profile profile = getByUuid(uuid);
+        Profile profile = findByUuid(uuid);
         isAuthenticated(artistUuid, profile.getArtist().getUuid());
         profile.updateProfileImage(profileImageLink);
+    }
+
+    //delete
+    public void delete(String artistUuid, String uuid) {
+        Profile profile = findByUuid(uuid);
+        isAuthenticated(artistUuid, profile.getArtist().getUuid());
+        if (findAllByArtist(artistUuid).size() == 1) {
+            throw new BusinessException(ZERO_PROFILE_REQUEST);
+        }
+        profileRepository.delete(profile);
     }
 
     private void isAuthenticated(String artistUuid, String profileArtistUuid) {

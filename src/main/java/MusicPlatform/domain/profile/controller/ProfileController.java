@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,15 +50,15 @@ public class ProfileController {
 
     @Operation(summary = "특정 프로필 조회")
     @GetMapping("/{uuid}")
-    public ResponseEntity<ProfileResponseDto> getMyProfile(@PathVariable String uuid) {
-        ProfileResponseDto responseDto = profileService.get(uuid);
+    public ResponseEntity<ProfileResponseDto> getProfile(@PathVariable String uuid) {
+        ProfileResponseDto responseDto = profileService.getByUuid(uuid);
         return ResponseEntity.ok(responseDto);
     }
-
-    @Operation(summary = "프로필 목록 조회") // 사용 여부 미정
-    @GetMapping("/all")
-    public ResponseEntity<List<ProfileResponseDto>> getMyProfile() {
-        List<ProfileResponseDto> responseDtos = profileService.getAll();
+    
+    @Operation(summary = "아티스트의 프로필 목록 조회")
+    @GetMapping("/{artistUuid}")
+    public ResponseEntity<List<ProfileResponseDto>> getProfiles(@PathVariable String artistUuid) {
+        List<ProfileResponseDto> responseDtos = profileService.getAllByArtist(artistUuid);
         return ResponseEntity.ok(responseDtos);
     }
 
@@ -89,5 +90,12 @@ public class ProfileController {
         return ResponseEntity.noContent().build();
     }
 
-    // 프로필 삭제
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @Operation(summary = "프로필 삭제")
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteProfile(@AuthenticationPrincipal String artistUuid,
+                                              @PathVariable String uuid) {
+        profileService.delete(artistUuid, uuid);
+        return ResponseEntity.noContent().build();
+    }
 }
