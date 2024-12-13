@@ -8,6 +8,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,4 +29,10 @@ public class PlaylistItem extends UuidEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Playlist playlist;
+
+    @Builder
+    private PlaylistItem(Track track, Playlist playlist) {
+        this.track = track;
+        this.playlist = playlist;
+    }
 }

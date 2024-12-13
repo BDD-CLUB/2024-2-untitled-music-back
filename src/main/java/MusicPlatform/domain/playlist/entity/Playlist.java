@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -37,4 +38,16 @@ public class Playlist extends UuidEntity {
 
     @Column(nullable = false)
     private boolean isDeleted;
+
+    @Builder
+    private Playlist(String title, String description, Artist artist) {
+        this.title = title;
+        this.description = description;
+        this.artist = artist;
+    }
+
+    public void update(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }
