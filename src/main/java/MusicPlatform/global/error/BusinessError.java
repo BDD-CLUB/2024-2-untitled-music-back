@@ -22,6 +22,7 @@ public enum BusinessError {
 
     //Profile
     NOT_FOUND_PROFILE(HttpStatus.NOT_FOUND, "프로필을 찾을 수 없습니다."),
+    FORBIDDEN_PROFILE_ACCESS(HttpStatus.FORBIDDEN, "프로필 접근 권한이 없습니다."),
     ;
 
     private final HttpStatus httpStatus;

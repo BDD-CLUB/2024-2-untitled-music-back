@@ -55,4 +55,16 @@ public class Profile extends UuidEntity {
         this.isMain = isMain;
         this.isDeleted = isDeleted;
     }
+
+    public void update(String name, String description, String link1, String link2, Boolean isMain) {
+        this.name = name;
+        this.description = description;
+        this.link1 = link1;
+        this.link2 = link2;
+        this.isMain = isMain;
+    }
+
+    public void updateProfileImage(String profileImageLink) {
+        this.profileImage = profileImageLink;
+    }
 }

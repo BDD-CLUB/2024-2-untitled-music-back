@@ -1,5 +1,6 @@
 package MusicPlatform.domain.profile.service;
 
+import static MusicPlatform.global.error.BusinessError.FORBIDDEN_PROFILE_ACCESS;
 import static MusicPlatform.global.error.BusinessError.NOT_FOUND_PROFILE;
 
 import MusicPlatform.domain.artist.entity.Artist;
@@ -99,5 +100,25 @@ public class ProfileService {
         return ProfileResponseDto.from(profile);
     }
 
+    public void updateByUuid(String artistUuid, String uuid, ProfileResponseDto request) {
+        Profile profile = getByUuid(uuid);
+        isAuthenticated(artistUuid, profile.getArtist().getUuid());
+        profile.update(request.name(),
+                request.description(),
+                request.link1(),
+                request.link2(),
+                request.isMain());
+    }
 
+    public void updateProfileImage(String artistUuid, String uuid, String profileImageLink) {
+        Profile profile = getByUuid(uuid);
+        isAuthenticated(artistUuid, profile.getArtist().getUuid());
+        profile.updateProfileImage(profileImageLink);
+    }
+
+    private void isAuthenticated(String artistUuid, String profileArtistUuid) {
+        if (!profileArtistUuid.equals(artistUuid)) {
+            throw new BusinessException(FORBIDDEN_PROFILE_ACCESS);
+        }
+    }
 }

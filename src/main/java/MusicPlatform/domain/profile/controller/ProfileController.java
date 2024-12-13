@@ -12,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,10 +61,6 @@ public class ProfileController {
         return ResponseEntity.ok(responseDtos);
     }
 
-    // 프로필 목록 조회
-    // 프로필 수정
-    // 프로필 삭제
-
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "현재 선택된 프로필 변경")
     @PostMapping("/{uuid}")
@@ -70,4 +68,26 @@ public class ProfileController {
         ProfileResponseDto responseDto = profileService.change(uuid, response);
         return ResponseEntity.ok(responseDto);
     }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @Operation(summary = "프로필 수정")
+    @PatchMapping("/{uuid}")
+    public ResponseEntity<Void> updateProfile(@AuthenticationPrincipal String artistUuid,
+                                              @PathVariable String uuid,
+                                              @RequestBody @Valid ProfileResponseDto request) {
+        profileService.updateByUuid(artistUuid, uuid, request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @Operation(summary = "프로필 사진 수정")
+    @PatchMapping("/{uuid}/image")
+    public ResponseEntity<Void> updateProfile(@AuthenticationPrincipal String artistUuid,
+                                              @PathVariable String uuid,
+                                              String profileImageLink) {
+        profileService.updateProfileImage(artistUuid, uuid, profileImageLink);
+        return ResponseEntity.noContent().build();
+    }
+
+    // 프로필 삭제
 }
