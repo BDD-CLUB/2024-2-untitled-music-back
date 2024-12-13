@@ -3,9 +3,11 @@ package MusicPlatform.domain.profile.service;
 import static MusicPlatform.global.error.BusinessError.NOT_FOUND_PROFILE;
 
 import MusicPlatform.domain.artist.entity.Artist;
+import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.oauth2.service.CookieService;
 import MusicPlatform.domain.profile.entity.Profile;
 import MusicPlatform.domain.profile.repository.ProfileRepository;
+import MusicPlatform.domain.profile.service.dto.request.ProfileRequestDto;
 import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
@@ -24,12 +26,28 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final AuthorizationHelper authorizationHelper;
     private final CookieService cookieService;
+    private final ArtistService artistService;
 
     @Transactional(readOnly = true)
     public Profile getByUuid(String uuid) {
         return profileRepository.findByUuid(uuid).orElseThrow(
                 () -> new BusinessException(NOT_FOUND_PROFILE)
         );
+    }
+
+    public void save(ProfileRequestDto requestDto) {
+        String uuid = authorizationHelper.getMyUuid();
+        Artist artist = artistService.findByUuid(uuid);
+        Profile profile = Profile.builder()
+                .name(requestDto.name())
+                .description(requestDto.description())
+                .link1(requestDto.link1())
+                .link2(requestDto.link2())
+                .profileImage(requestDto.profileImage())
+                .isMain(requestDto.isMain())
+                .artist(artist)
+                .build();
+        profileRepository.save(profile);
     }
 
     public void createProfile(Artist artist) {
@@ -67,4 +85,6 @@ public class ProfileService {
         cookieService.saveProfileCookie(uuid, response);
         return ProfileResponseDto.from(profile);
     }
+
+
 }
