@@ -84,6 +84,16 @@ public class AlbumService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<AlbumResponseDto> getAllByProfile(String uuid) {
+        Profile profile = profileService.findByUuid(uuid);
+        List<Album> albums = albumRepository.getAllByProfile(profile);
+
+        return albums.stream()
+                .map(AlbumResponseDto::from)
+                .toList();
+    }
+
     public void updateByUuid(AlbumUpdateRequestDto requestDto, String uuid) {
         //todo: 내가 업로드한 앨범인지 확인한다.
         Album album = getByUuid(uuid);
