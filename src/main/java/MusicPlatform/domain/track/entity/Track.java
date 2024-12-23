@@ -36,6 +36,9 @@ public class Track extends UuidEntity {
     @Column(nullable = false)
     private String song_url;
 
+    @Column(nullable = false)
+    private int duration;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ALBUM_ID", nullable = false)
     private Album album;
@@ -44,10 +47,11 @@ public class Track extends UuidEntity {
     private boolean isDeleted;
 
     @Builder
-    private Track(String title, String lyric, String song_url, Album album) {
+    private Track(String title, String lyric, String song_url, int duration, Album album) {
         this.title = title;
         this.lyric = lyric;
         this.song_url = song_url;
+        this.duration = duration;
         this.album = album;
     }
 
