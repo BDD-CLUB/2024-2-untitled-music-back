@@ -62,6 +62,13 @@ public class AlbumController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @Operation(summary = "특정 프로필의 엘범 목록 조회")
+    @GetMapping("/profile/{uuid}/album")
+    public ResponseEntity<List<AlbumResponseDto>> getAllByProfile(@PathVariable String uuid) {
+        List<AlbumResponseDto> responseDto = albumService.getAllByProfile(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
+
     @Operation(summary = "앨범 수정")
     @PatchMapping("/album/{uuid}")
     public ResponseEntity<Void> updateByUuid(@RequestBody @Valid AlbumUpdateRequestDto requestDto,
