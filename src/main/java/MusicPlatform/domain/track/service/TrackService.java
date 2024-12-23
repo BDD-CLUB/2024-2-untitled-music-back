@@ -39,10 +39,10 @@ public class TrackService {
         Track track = Track.builder()
                 .title(requestDto.title())
                 .lyric(requestDto.lyric())
+                .duration(requestDto.duration())
                 .album(album)
-                .song_url("temp url")
+                .song_url(requestDto.trackFile())
                 .build();
-
         trackRepository.save(track);
     }
 

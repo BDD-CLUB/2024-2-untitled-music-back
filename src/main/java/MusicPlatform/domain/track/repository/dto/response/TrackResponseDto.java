@@ -10,6 +10,7 @@ public record TrackResponseDto(
         String uuid,
         String title,
         String lyric,
+        int duration,
         String artUrl
 ) {
     public static TrackResponseDto from(Track track) {
@@ -17,6 +18,7 @@ public record TrackResponseDto(
                 .uuid(track.getUuid())
                 .title(track.getTitle())
                 .lyric(track.getLyric())
+                .duration(track.getDuration())
                 .artUrl(track.getAlbumArt())
                 .build();
     }
