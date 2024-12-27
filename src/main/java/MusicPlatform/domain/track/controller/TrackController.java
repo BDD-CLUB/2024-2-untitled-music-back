@@ -2,6 +2,7 @@ package MusicPlatform.domain.track.controller;
 
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.album.service.AlbumService;
+import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.repository.dto.request.TrackUpdateRequestDto;
 import MusicPlatform.domain.track.repository.dto.response.TrackGetResponseDto;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -45,6 +47,15 @@ public class TrackController {
     @GetMapping("/track/{uuid}")
     public ResponseEntity<TrackGetResponseDto> getByUuid(@PathVariable String uuid) {
         TrackGetResponseDto responseDto = trackService.getTrack(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @Operation(summary = "트랙 목록 조회")
+    @GetMapping("/track")
+    public ResponseEntity<List<TrackGetResponseDto>> getAll(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+        List<TrackGetResponseDto> responseDto = trackService.getAll(pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
