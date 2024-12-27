@@ -7,6 +7,7 @@ import MusicPlatform.domain.playlist.service.dto.response.PlaylistResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -63,6 +65,15 @@ public class PlaylistController {
     @GetMapping("/{uuid}")
     public ResponseEntity<PlaylistResponseDto> getPlaylist(@PathVariable String uuid) {
         PlaylistResponseDto responseDto = playlistService.getPlaylist(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @Operation(summary = "프로필 목록 조회")
+    @GetMapping("/profile")
+    public ResponseEntity<List<PlaylistResponseDto>> getAll(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+        List<PlaylistResponseDto> responseDto = playlistService.getAll(pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 

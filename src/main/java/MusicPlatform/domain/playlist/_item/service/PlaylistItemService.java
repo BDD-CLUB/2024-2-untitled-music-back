@@ -2,6 +2,7 @@ package MusicPlatform.domain.playlist._item.service;
 
 import MusicPlatform.domain.playlist._item.entity.PlaylistItem;
 import MusicPlatform.domain.playlist._item.repository.PlaylistItemRepository;
+import MusicPlatform.domain.playlist._item.service.dto.response.PlaylistItemResponseDto;
 import MusicPlatform.domain.playlist.entity.Playlist;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.service.TrackService;
@@ -33,5 +34,12 @@ public class PlaylistItemService {
 
     public void delete(String removedItemUuid) {
         playlistItemRepository.deleteByUuid(removedItemUuid); //hard delete
+    }
+
+    public List<PlaylistItemResponseDto> convertToDto(Playlist playlist) {
+        return findAllByPlaylist(playlist)
+                .stream()
+                .map(PlaylistItemResponseDto::from)
+                .toList();
     }
 }
