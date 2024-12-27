@@ -12,7 +12,7 @@ public record PlaylistItemResponseDto(
     public static PlaylistItemResponseDto from(PlaylistItem playlistItem) {
         return PlaylistItemResponseDto.builder()
                 .uuid(playlistItem.getUuid())
-                .track(MusicPlatform.domain.track.repository.dto.response.TrackResponseDto.from(playlistItem.getTrack()))
+                .track(TrackResponseDto.from(playlistItem.getTrack()))
                 .build();
     }
 }
