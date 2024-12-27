@@ -87,8 +87,8 @@ public class ProfileService {
     @Transactional(readOnly = true)
     public List<ProfileResponseDto> getAll(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
-        Page<Profile> albums = profileRepository.findAll(pageable);
-        return albums.getContent().stream().map(ProfileResponseDto::from).toList();
+        Page<Profile> profiles = profileRepository.findAll(pageable);
+        return profiles.getContent().stream().map(ProfileResponseDto::from).toList();
     }
 
     @Transactional(readOnly = true)
