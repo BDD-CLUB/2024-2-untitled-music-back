@@ -2,7 +2,6 @@ package MusicPlatform.domain.track.controller;
 
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.album.service.AlbumService;
-import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.repository.dto.request.TrackUpdateRequestDto;
 import MusicPlatform.domain.track.repository.dto.response.TrackGetResponseDto;

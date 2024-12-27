@@ -5,8 +5,6 @@ import static MusicPlatform.global.error.BusinessError.NOT_FOUND_TRACK;
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
-import MusicPlatform.domain.profile.entity.Profile;
-import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
