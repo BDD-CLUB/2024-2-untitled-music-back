@@ -71,9 +71,9 @@ public class ProfileController {
     }
 
     @Operation(summary = "아티스트의 프로필 목록 조회")
-    @GetMapping("/{artistUuid}")
-    public ResponseEntity<List<ProfileResponseDto>> getProfiles(@PathVariable String artistUuid) {
-        Artist artist = artistService.findByUuid(artistUuid); //todo: 순환의존 수정
+    @GetMapping("/artist/{uuid}")
+    public ResponseEntity<List<ProfileResponseDto>> getProfiles(@PathVariable String uuid) {
+        Artist artist = artistService.findByUuid(uuid); //todo: 순환의존 수정
         List<ProfileResponseDto> responseDtos = profileService.getAllByArtist(artist);
         return ResponseEntity.ok(responseDtos);
     }
