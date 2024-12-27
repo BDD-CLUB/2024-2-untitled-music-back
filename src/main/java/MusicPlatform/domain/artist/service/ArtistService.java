@@ -56,4 +56,24 @@ public class ArtistService {
         Artist artist = findByUuid(uuid);
         return ArtistResponseDto.from(artist);
     }
+
+    @Transactional
+    public ArtistResponseDto changeArtistImage(String newImage) {
+
+        String uuid = authorizationHelper.getMyUuid();
+        Artist artist = findByUuid(uuid);
+        artist.updateImage(newImage);
+
+        return ArtistResponseDto.from(artist);
+    }
+
+
+    public void removeArtist(){
+        String uuid = authorizationHelper.getMyUuid();
+        Artist artist = findByUuid(uuid);
+        artist.deleteArtist();
+        artistRepository.save(artist);
+    }
+
+
 }
