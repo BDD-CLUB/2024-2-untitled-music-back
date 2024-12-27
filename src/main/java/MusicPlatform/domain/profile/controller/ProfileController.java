@@ -62,7 +62,7 @@ public class ProfileController {
     }
 
     @Operation(summary = "프로필 목록 조회")
-    @GetMapping("/profile")
+    @GetMapping
     public ResponseEntity<List<ProfileResponseDto>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

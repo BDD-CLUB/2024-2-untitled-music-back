@@ -68,8 +68,8 @@ public class PlaylistController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @Operation(summary = "프로필 목록 조회")
-    @GetMapping("/profile")
+    @Operation(summary = "플레이리스트 목록 조회")
+    @GetMapping
     public ResponseEntity<List<PlaylistResponseDto>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
