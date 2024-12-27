@@ -2,7 +2,7 @@ package MusicPlatform.domain.artist.controller;
 
 import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
-import MusicPlatform.domain.s3.service.S3Service;
+import MusicPlatform.domain.s3.service.S3ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class ArtistController {
 
     private final ArtistService artistService;
-    private final S3Service s3Service;
+    private final S3ImageService s3ImageService;
 
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
@@ -36,7 +36,7 @@ public class ArtistController {
     @PutMapping("/image-change")
     public ResponseEntity<?> changeArtistImage(@RequestParam("file") MultipartFile file) throws IOException {
 
-        String url = s3Service.uploadFile(file);
+        String url = s3ImageService.uploadFile(file);
         ArtistResponseDto artistResponseDto = artistService.changeArtistImage(url);
         return ResponseEntity.ok(artistResponseDto);
     }
