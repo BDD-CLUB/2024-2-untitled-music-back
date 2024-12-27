@@ -16,6 +16,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,6 +85,13 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
+    public List<ProfileResponseDto> getAll(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
+        Page<Profile> albums = profileRepository.findAll(pageable);
+        return albums.getContent().stream().map(ProfileResponseDto::from).toList();
+    }
+
+    @Transactional(readOnly = true)
     public ProfileResponseDto getByUuid(String uuid) {
         Profile profile = findByUuid(uuid);
         return ProfileResponseDto.from(profile);
@@ -140,4 +151,6 @@ public class ProfileService {
             throw new BusinessException(FORBIDDEN_PROFILE_ACCESS);
         }
     }
+
+
 }
