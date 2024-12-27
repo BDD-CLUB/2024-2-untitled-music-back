@@ -95,7 +95,6 @@ public class PlaylistService {
                 .toList();
     }
 
-
     public void deletePlaylist(String artistUuid, String uuid) {
         Playlist playlist = findByUuid(uuid);
         isAuthenticated(artistUuid, playlist.getArtist().getUuid());

@@ -151,6 +151,4 @@ public class ProfileService {
             throw new BusinessException(FORBIDDEN_PROFILE_ACCESS);
         }
     }
-
-
 }
