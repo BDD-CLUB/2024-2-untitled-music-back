@@ -13,6 +13,10 @@ import MusicPlatform.domain.track.repository.dto.response.TrackGetResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +54,13 @@ public class TrackService {
     public TrackGetResponseDto getTrack(String uuid) {
         Track track = getByUuid(uuid);
         return TrackGetResponseDto.from(track);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TrackGetResponseDto> getAll(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
+        Page<Track> tracks = trackRepository.findAll(pageable);
+        return tracks.getContent().stream().map(TrackGetResponseDto::from).toList();
     }
 
     @Deprecated // 앨범의 getAllByArtist로 대체한다.

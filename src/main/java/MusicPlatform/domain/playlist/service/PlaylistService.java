@@ -15,6 +15,10 @@ import MusicPlatform.domain.playlist.service.dto.response.PlaylistResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -74,12 +78,21 @@ public class PlaylistService {
     @Transactional(readOnly = true)
     public PlaylistResponseDto getPlaylist(String uuid) {
         Playlist playlist = findByUuid(uuid);
-        List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.findAllByPlaylist(playlist)
-                .stream()
-                .map(PlaylistItemResponseDto::from)
-                .toList();
-
+        List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist);
         return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PlaylistResponseDto> getAll(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
+        Page<Playlist> playlists = playlistRepository.findAll(pageable);
+
+        return playlists.stream()
+                .map(playlist -> {
+                    List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist);
+                    return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
+                })
+                .toList();
     }
 
     public void deletePlaylist(String artistUuid, String uuid) {

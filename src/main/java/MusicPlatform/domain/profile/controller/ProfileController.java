@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -46,7 +47,7 @@ public class ProfileController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "현재 선택된 프로필 조회")
-    @GetMapping
+    @GetMapping("/now")
     public ResponseEntity<ProfileResponseDto> getMyProfile(
             @CookieValue(value = "profile", defaultValue = "") String profileUuid, HttpServletResponse response) {
         ProfileResponseDto responseDto = profileService.get(profileUuid, response);
@@ -57,6 +58,15 @@ public class ProfileController {
     @GetMapping("/{uuid}")
     public ResponseEntity<ProfileResponseDto> getProfile(@PathVariable String uuid) {
         ProfileResponseDto responseDto = profileService.getByUuid(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @Operation(summary = "프로필 목록 조회")
+    @GetMapping
+    public ResponseEntity<List<ProfileResponseDto>> getAll(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+        List<ProfileResponseDto> responseDto = profileService.getAll(pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 

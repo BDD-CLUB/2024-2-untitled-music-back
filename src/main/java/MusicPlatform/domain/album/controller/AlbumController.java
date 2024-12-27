@@ -77,7 +77,7 @@ public class AlbumController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "트랙 삭제")
+    @Operation(summary = "앨범 삭제")
     @DeleteMapping("/album/{uuid}")
     public ResponseEntity<Void> deleteByUuid(@PathVariable String uuid) {
         albumService.deleteByUuid(uuid);
