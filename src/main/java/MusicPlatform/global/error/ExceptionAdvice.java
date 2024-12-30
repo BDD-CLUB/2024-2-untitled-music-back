@@ -22,6 +22,7 @@ public class ExceptionAdvice {
                 .build();
     }
 
+    /*
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorResponse handleValidationExceptions(MethodArgumentNotValidException exception) {
 
@@ -34,4 +35,5 @@ public class ExceptionAdvice {
                 .build();
 
     }
+    */
 }
