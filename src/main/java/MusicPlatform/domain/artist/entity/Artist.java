@@ -54,9 +54,6 @@ public class Artist extends UuidEntity {
         this.artistImage = newImage;
     }
 
-    public void deleteArtist(){
-        this.isDeleted = true;
-    }
 
 
 }
