@@ -90,19 +90,11 @@ jobs:
       - run: ls build/libs
       - run: java -Djarmode=layertools -jar build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar extract
 
-      - name: Compress
-        run: |
-          tar -zcf ${GITHUB_SHA::8}.tar.gz \
-            dependencies \
-            snapshot-dependencies \
-            spring-boot-loader \
-            application
-
-      - name: Upload to S3
+      - name: Upload JAR to S3
         run: |
           aws s3 mv --region ${{ secrets.AWS_REGION }} \
-          ${GITHUB_SHA::8}.tar.gz \
-          ${{ secrets.S3_DEV_BACK_LOCATION }}/${GITHUB_SHA::8}.tar.gz
+          build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar \
+          ${{ secrets.S3_DEV_BACK_LOCATION }}/${GITHUB_SHA::8}.jar
 
       - name: Deploy
         uses: appleboy/ssh-action@master
