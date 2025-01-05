@@ -31,7 +31,7 @@ public class ArtistController {
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "artist의 image 변경 api")
     @PutMapping("/image-change")
-    public ResponseEntity<?> changeArtistImage(@RequestBody @Valid ArtistImageUrlDto artistImageUrlDto){
+    public ResponseEntity<ArtistResponseDto> changeArtistImage(@RequestBody @Valid ArtistImageUrlDto artistImageUrlDto){
         ArtistResponseDto artistResponseDto = artistService.changeArtistImage(
                 artistImageUrlDto.imageUrl()
         );
