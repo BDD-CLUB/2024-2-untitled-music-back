@@ -49,4 +49,11 @@ public class Artist extends UuidEntity {
         this.role = role;
         this.isDeleted = false;
     }
+
+    public void updateImage(String newImage) {
+        this.artistImage = newImage;
+    }
+
+
+
 }

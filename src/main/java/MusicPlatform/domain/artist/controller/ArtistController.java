@@ -1,15 +1,16 @@
 package MusicPlatform.domain.artist.controller;
 
 import MusicPlatform.domain.artist.service.ArtistService;
+import MusicPlatform.domain.artist.service.dto.request.ArtistImageUrlDto;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -27,10 +28,23 @@ public class ArtistController {
         return ResponseEntity.ok(responseDto);
     }
 
-//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-//    @Operation(summary = "ADMIN 권환 확인")
-//    @GetMapping("/admin")
-//    public ResponseEntity<Void> isAdmin() {
-//        return ResponseEntity.noContent().build();
-//    }
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @Operation(summary = "artist의 image 변경 api")
+    @PutMapping("/image-change")
+    public ResponseEntity<ArtistResponseDto> changeArtistImage(@RequestBody @Valid ArtistImageUrlDto artistImageUrlDto){
+        ArtistResponseDto artistResponseDto = artistService.changeArtistImage(
+                artistImageUrlDto.imageUrl()
+        );
+        return ResponseEntity.ok(artistResponseDto);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @Operation(summary = "artist 삭제 api")
+    @DeleteMapping
+    public ResponseEntity<?> deleteArtist() {
+        artistService.removeArtist();
+        return ResponseEntity.ok().build();
+    }
+
 }
