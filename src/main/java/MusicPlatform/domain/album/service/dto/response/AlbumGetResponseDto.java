@@ -1,7 +1,7 @@
 package MusicPlatform.domain.album.service.dto.response;
 
 import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
-import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
+import MusicPlatform.domain.track.service.dto.response.TrackResponseDto;
 import java.util.List;
 import lombok.Builder;
 

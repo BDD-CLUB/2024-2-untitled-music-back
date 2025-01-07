@@ -1,7 +1,5 @@
-package MusicPlatform.domain.track.repository.dto.response;
+package MusicPlatform.domain.track.service.dto.response;
 
-import MusicPlatform.domain.album.service.dto.response.AlbumResponseDto;
-import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import MusicPlatform.domain.track.entity.Track;
 import lombok.Builder;
 
