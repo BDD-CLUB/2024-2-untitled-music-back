@@ -14,7 +14,7 @@ import MusicPlatform.domain.profile.entity.Profile;
 import MusicPlatform.domain.profile.service.ProfileService;
 import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
 import MusicPlatform.domain.track.entity.Track;
-import MusicPlatform.domain.track.repository.dto.response.TrackResponseDto;
+import MusicPlatform.domain.track.service.dto.response.TrackResponseDto;
 import MusicPlatform.domain.track.service.TrackService;
 import MusicPlatform.global.error.BusinessException;
 import java.time.LocalDate;

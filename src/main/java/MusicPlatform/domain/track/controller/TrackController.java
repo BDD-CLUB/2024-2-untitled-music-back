@@ -2,9 +2,9 @@ package MusicPlatform.domain.track.controller;
 
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.album.service.AlbumService;
-import MusicPlatform.domain.track.repository.dto.request.TrackRequestDto;
-import MusicPlatform.domain.track.repository.dto.request.TrackUpdateRequestDto;
-import MusicPlatform.domain.track.repository.dto.response.TrackGetResponseDto;
+import MusicPlatform.domain.track.service.dto.request.TrackRequestDto;
+import MusicPlatform.domain.track.service.dto.request.TrackUpdateRequestDto;
+import MusicPlatform.domain.track.service.dto.response.TrackGetResponseDto;
 import MusicPlatform.domain.track.service.TrackService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
