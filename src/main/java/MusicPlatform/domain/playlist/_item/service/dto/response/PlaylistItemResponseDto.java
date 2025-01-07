@@ -1,18 +1,18 @@
 package MusicPlatform.domain.playlist._item.service.dto.response;
 
 import MusicPlatform.domain.playlist._item.entity.PlaylistItem;
-import MusicPlatform.domain.track.service.dto.response.TrackResponseDto;
+import MusicPlatform.domain.track.service.dto.response.TrackGetResponseDto;
 import lombok.Builder;
 
 @Builder
 public record PlaylistItemResponseDto(
         String uuid,
-       TrackResponseDto track
+       TrackGetResponseDto trackGetResponseDto
 ) {
     public static PlaylistItemResponseDto from(PlaylistItem playlistItem) {
         return PlaylistItemResponseDto.builder()
                 .uuid(playlistItem.getUuid())
-                .track(TrackResponseDto.from(playlistItem.getTrack()))
+                .trackGetResponseDto(TrackGetResponseDto.from(playlistItem.getTrack()))
                 .build();
     }
 }
