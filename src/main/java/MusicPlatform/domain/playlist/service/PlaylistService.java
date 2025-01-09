@@ -95,6 +95,19 @@ public class PlaylistService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<PlaylistResponseDto> getAllByArtist(String uuid) {
+        Artist artist = artistService.findByUuid(uuid);
+        List<Playlist> playlists = playlistRepository.findAllByArtist(artist);
+
+        return playlists.stream()
+                .map(playlist -> {
+                    List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist);
+                    return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
+                })
+                .toList();
+    }
+
     public void deletePlaylist(String artistUuid, String uuid) {
         Playlist playlist = findByUuid(uuid);
         isAuthenticated(artistUuid, playlist.getArtist().getUuid());

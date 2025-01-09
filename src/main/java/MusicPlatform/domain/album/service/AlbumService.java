@@ -74,7 +74,7 @@ public class AlbumService {
     @Transactional(readOnly = true)
     public List<AlbumResponseDto> getAllByArtist(String uuid) {
         Artist artist = artistService.findByUuid(uuid);
-        List<Album> albums = albumRepository.getAllByArtist(artist);
+        List<Album> albums = albumRepository.findAllByArtist(artist);
 
         return albums.stream()
                 .map(AlbumResponseDto::from)
