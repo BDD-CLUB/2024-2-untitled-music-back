@@ -26,6 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/*
+Profile 대신 Artist를 사용하도록 한다.
+2025-01-09
+ */
+
+@Deprecated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/profiles")
