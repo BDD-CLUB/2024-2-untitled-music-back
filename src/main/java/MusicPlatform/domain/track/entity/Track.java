@@ -2,7 +2,6 @@ package MusicPlatform.domain.track.entity;
 
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.artist.entity.Artist;
-import MusicPlatform.domain.profile.entity.Profile;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,11 +59,7 @@ public class Track extends UuidEntity {
     }
 
     public Artist getArtist() {
-        return this.album.getProfile().getArtist();
-    }
-
-    public Profile getProfile() {
-        return this.album.getProfile();
+        return this.album.getArtist();
     }
 
     public void update(String title, String lyric) {
