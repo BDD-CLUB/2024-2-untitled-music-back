@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlbumRepository extends JpaRepository<Album, Long> {
     Optional<Album> findByUuid(String uuid);
-    List<Album> getAllByArtist(Artist artist);
+    List<Album> findAllByArtist(Artist artist);
 }
