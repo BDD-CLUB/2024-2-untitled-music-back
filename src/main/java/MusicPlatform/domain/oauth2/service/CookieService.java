@@ -27,6 +27,7 @@ public class CookieService {
         return this.makeCookie("access_token", null, 0);
     }
 
+    @Deprecated
     public Cookie makeProfileCookie(String profileUuid) {
         return this.makeCookie("profile", profileUuid, maxAge);
     }
@@ -48,6 +49,7 @@ public class CookieService {
         log.info("access token 쿠키 저장 = " + accessToken);
     }
 
+    @Deprecated
     public void saveProfileCookie(String uuid, HttpServletResponse response) {
         response.addCookie(this.makeProfileCookie(uuid));
         log.info("profile 쿠키 저장 = " + uuid);

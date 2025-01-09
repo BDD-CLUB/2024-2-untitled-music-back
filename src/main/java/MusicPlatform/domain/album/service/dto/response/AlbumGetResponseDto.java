@@ -1,6 +1,6 @@
 package MusicPlatform.domain.album.service.dto.response;
 
-import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
+import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import MusicPlatform.domain.track.service.dto.response.TrackResponseDto;
 import java.util.List;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.Builder;
 public record AlbumGetResponseDto(
         AlbumResponseDto albumResponseDto,
         List<TrackResponseDto> trackResponseDtos,
-        ProfileResponseDto profileResponseDto
+        ArtistResponseDto artistResponseDto
 ) {
 }

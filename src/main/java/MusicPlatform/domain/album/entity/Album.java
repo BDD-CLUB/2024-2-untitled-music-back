@@ -1,6 +1,6 @@
 package MusicPlatform.domain.album.entity;
 
-import MusicPlatform.domain.profile.entity.Profile;
+import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,19 +37,19 @@ public class Album extends UuidEntity {
     private LocalDate releaseDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROFILE_ID", nullable = false)
-    private Profile profile;
+    @JoinColumn(name = "ARTIST_ID", nullable = false)
+    private Artist artist;
 
     @Column(nullable = false)
     private boolean isDeleted;
 
     @Builder
-    private Album(String title, String description, String artImage, LocalDate releaseDate, Profile profile) {
+    private Album(String title, String description, String artImage, LocalDate releaseDate, Artist artist) {
         this.title = title;
         this.description = description;
         this.artImage = artImage;
         this.releaseDate = releaseDate;
-        this.profile = profile;
+        this.artist = artist;
         this.isDeleted = false;
     }
 

@@ -7,7 +7,6 @@ import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.repository.ArtistRepository;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import MusicPlatform.domain.oauth2.entity.ProviderUser;
-import MusicPlatform.domain.profile.service.ProfileService;
 import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArtistService {
 
     private final ArtistRepository artistRepository;
-    private final ProfileService profileService;
     private final AuthorizationHelper authorizationHelper;
 
     @Transactional(readOnly = true)
@@ -46,7 +44,6 @@ public class ArtistService {
                 .build();
 
         artistRepository.save(artist);
-        profileService.createProfile(artist);
         return artist;
     }
 
@@ -73,6 +70,4 @@ public class ArtistService {
         Artist artist = findByUuid(uuid);
         artistRepository.delete(artist);
     }
-
-
 }

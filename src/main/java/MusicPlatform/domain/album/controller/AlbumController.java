@@ -12,7 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -34,8 +34,8 @@ public class AlbumController {
     @Operation(summary = "앨범 업로드")
     @PostMapping("/albums")
     public ResponseEntity<Void> uploadAlbum(@RequestBody @Valid AlbumRequestDto requestDto,
-                                            @CookieValue(value = "profile", defaultValue = "") String profileUuid) {
-        albumService.save(requestDto, profileUuid);
+                                            @AuthenticationPrincipal String artistUuid) {
+        albumService.save(requestDto, artistUuid);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -59,13 +59,6 @@ public class AlbumController {
     @GetMapping("/artists/{uuid}/albums")
     public ResponseEntity<List<AlbumResponseDto>> getAllByArtist(@PathVariable String uuid) {
         List<AlbumResponseDto> responseDto = albumService.getAllByArtist(uuid);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    @Operation(summary = "특정 프로필의 엘범 목록 조회")
-    @GetMapping("/profiles/{uuid}/albums")
-    public ResponseEntity<List<AlbumResponseDto>> getAllByProfile(@PathVariable String uuid) {
-        List<AlbumResponseDto> responseDto = albumService.getAllByProfile(uuid);
         return ResponseEntity.ok(responseDto);
     }
 
