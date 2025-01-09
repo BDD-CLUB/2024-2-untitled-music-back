@@ -77,6 +77,13 @@ public class PlaylistController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @Operation(summary = "특정 아티스트의 플레이리스트 목록 조회")
+    @GetMapping("/artists/{uuid}/playlists")
+    public ResponseEntity<List<PlaylistResponseDto>> getAllByArtist(@PathVariable String uuid) {
+        List<PlaylistResponseDto> responseDto = playlistService.getAllByArtist(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
+
     //삭제
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "플레이리스트 삭제")
