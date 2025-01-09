@@ -10,9 +10,7 @@ import MusicPlatform.domain.album.service.dto.response.AlbumGetResponseDto;
 import MusicPlatform.domain.album.service.dto.response.AlbumResponseDto;
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
-import MusicPlatform.domain.profile.entity.Profile;
-import MusicPlatform.domain.profile.service.ProfileService;
-import MusicPlatform.domain.profile.service.dto.response.ProfileResponseDto;
+import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.service.dto.response.TrackResponseDto;
 import MusicPlatform.domain.track.service.TrackService;
@@ -34,7 +32,6 @@ public class AlbumService {
     private final AlbumRepository albumRepository;
     private final TrackService trackService;
     private final ArtistService artistService;
-    private final ProfileService profileService;
 
     @Transactional(readOnly = true)
     public Album getByUuid(String uuid) {
@@ -42,13 +39,13 @@ public class AlbumService {
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_ALBUM));
     }
 
-    public void save(AlbumRequestDto requestDto, String profileUuid) {
-        Profile profile = profileService.findByUuid(profileUuid);
+    public void save(AlbumRequestDto requestDto, String artistUuid) {
+        Artist artist = artistService.findByUuid(artistUuid);
         Album album = Album.builder()
                 .artImage(requestDto.albumArt())
                 .title(requestDto.title())
                 .description(requestDto.description())
-                .profile(profile)
+                .artist(artist)
                 .releaseDate(LocalDate.now())
                 .build();
         albumRepository.save(album);
@@ -84,16 +81,6 @@ public class AlbumService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
-    public List<AlbumResponseDto> getAllByProfile(String uuid) {
-        Profile profile = profileService.findByUuid(uuid);
-        List<Album> albums = albumRepository.getAllByProfile(profile);
-
-        return albums.stream()
-                .map(AlbumResponseDto::from)
-                .toList();
-    }
-
     public void updateByUuid(AlbumUpdateRequestDto requestDto, String uuid) {
         //todo: 내가 업로드한 앨범인지 확인한다.
         Album album = getByUuid(uuid);
@@ -114,7 +101,7 @@ public class AlbumService {
                 .trackResponseDtos(tracks.stream()
                         .map(TrackResponseDto::from)
                         .toList())
-                .profileResponseDto(ProfileResponseDto.from(album.getProfile()))
+                .artistResponseDto(ArtistResponseDto.from(album.getArtist()))
                 .build();
     }
 }
