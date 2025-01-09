@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/artist")
+@RequestMapping("/artists")
 @Tag(name = "회원 (Artist)")
 public class ArtistController {
 
@@ -30,7 +30,7 @@ public class ArtistController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "artist의 image 변경 api")
-    @PutMapping("/image-change")
+    @PutMapping("/profile-image")
     public ResponseEntity<ArtistResponseDto> changeArtistImage(@RequestBody @Valid ArtistImageUrlDto artistImageUrlDto){
         ArtistResponseDto artistResponseDto = artistService.changeArtistImage(
                 artistImageUrlDto.imageUrl()

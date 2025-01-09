@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/playlist")
+@RequestMapping("/playlists")
 @Tag(name = "플레이리스트 (Playlist)")
 public class PlaylistController {
     private final PlaylistService playlistService;
@@ -33,7 +33,7 @@ public class PlaylistController {
     //생성
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "플레이리스트 생성")
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Void> createPlaylist(@RequestBody @Valid PlaylistRequestDto requestDto) {
         playlistService.save(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();

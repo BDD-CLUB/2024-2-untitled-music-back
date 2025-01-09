@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/upload")
+@RequestMapping("/uploads")
 @Tag(name = "S3 업로드 (S3)")
 public class S3Controller {
 

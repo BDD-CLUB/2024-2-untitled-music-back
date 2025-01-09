@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/profile")
+@RequestMapping("/profiles")
 @Tag(name = "프로필 (Profile)")
 public class ProfileController {
 
@@ -47,7 +47,7 @@ public class ProfileController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "현재 선택된 프로필 조회")
-    @GetMapping("/now")
+    @GetMapping("/current")
     public ResponseEntity<ProfileResponseDto> getMyProfile(
             @CookieValue(value = "profile", defaultValue = "") String profileUuid, HttpServletResponse response) {
         ProfileResponseDto responseDto = profileService.get(profileUuid, response);
@@ -71,7 +71,7 @@ public class ProfileController {
     }
 
     @Operation(summary = "아티스트의 프로필 목록 조회")
-    @GetMapping("/artist/{uuid}")
+    @GetMapping("/artists/{uuid}")
     public ResponseEntity<List<ProfileResponseDto>> getProfiles(@PathVariable String uuid) {
         Artist artist = artistService.findByUuid(uuid); //todo: 순환의존 수정
         List<ProfileResponseDto> responseDtos = profileService.getAllByArtist(artist);
@@ -98,7 +98,7 @@ public class ProfileController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "프로필 사진 수정")
-    @PatchMapping("/{uuid}/image")
+    @PatchMapping("/{uuid}/profile-image")
     public ResponseEntity<Void> updateProfile(@AuthenticationPrincipal String artistUuid,
                                               @PathVariable String uuid,
                                               String profileImageLink) {
