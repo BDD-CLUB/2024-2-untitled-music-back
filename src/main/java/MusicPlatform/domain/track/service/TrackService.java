@@ -35,8 +35,8 @@ public class TrackService {
 
 
     @Transactional(readOnly = true)
-    public List<Track> getAllByAlbum(Album album) {
-        return trackRepository.findAllByAlbum(album);
+    public Page<Track> getAllByAlbum(Album album, Pageable pageable) {
+        return trackRepository.findAllByAlbum(album, pageable);
     }
 
     public void save(TrackRequestDto requestDto, Album album) {

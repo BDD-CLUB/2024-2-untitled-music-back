@@ -50,15 +50,21 @@ public class AlbumController {
 
     @Operation(summary = "엘범 조회")
     @GetMapping("/albums/{uuid}")
-    public ResponseEntity<AlbumGetResponseDto> getByUuid(@PathVariable String uuid) {
-        AlbumGetResponseDto responseDto = albumService.getAlbum(uuid);
+    public ResponseEntity<AlbumGetResponseDto> getByUuid(
+            @PathVariable String uuid,
+            @RequestParam(value = "trackPage", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "trackPageSize", required = false, defaultValue = "10") int pageSize) {
+        AlbumGetResponseDto responseDto = albumService.getAlbum(uuid, pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
     @Operation(summary = "특정 아티스트의 엘범 목록 조회")
     @GetMapping("/artists/{uuid}/albums")
-    public ResponseEntity<List<AlbumResponseDto>> getAllByArtist(@PathVariable String uuid) {
-        List<AlbumResponseDto> responseDto = albumService.getAllByArtist(uuid);
+    public ResponseEntity<List<AlbumResponseDto>> getAllByArtist(
+            @PathVariable String uuid,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "20") int pageSize) {
+        List<AlbumResponseDto> responseDto = albumService.getAllByArtist(uuid, pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
