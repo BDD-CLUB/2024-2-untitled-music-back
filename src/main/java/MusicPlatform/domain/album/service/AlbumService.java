@@ -6,13 +6,13 @@ import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.album.repository.AlbumRepository;
 import MusicPlatform.domain.album.service.dto.request.AlbumRequestDto;
 import MusicPlatform.domain.album.service.dto.request.AlbumUpdateRequestDto;
-import MusicPlatform.domain.album.service.dto.response.AlbumGetResponseDto;
-import MusicPlatform.domain.album.service.dto.response.AlbumResponseDto;
+import MusicPlatform.domain.album.service.dto.response.AlbumFullResponseDto;
+import MusicPlatform.domain.album.service.dto.response.AlbumBasicResponseDto;
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import MusicPlatform.domain.track.entity.Track;
-import MusicPlatform.domain.track.service.dto.response.TrackResponseDto;
+import MusicPlatform.domain.track.service.dto.response.TrackBasicResponseDto;
 import MusicPlatform.domain.track.service.TrackService;
 import MusicPlatform.global.error.BusinessException;
 import java.time.LocalDate;
@@ -52,32 +52,28 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = true)
-    public AlbumGetResponseDto getAlbum(String uuid) {
+    public AlbumFullResponseDto getAlbum(String uuid, int pageNo, int pageSize) {
         Album album = getByUuid(uuid);
-        return convertToDto(album);
+        Pageable trackPageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
+        return convertToDto(album, trackPageable);
     }
 
     @Transactional(readOnly = true)
-    public List<AlbumGetResponseDto> getAll(int pageNo, int pageSize) {
+    public List<AlbumFullResponseDto> getAll(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
         Page<Album> albums = albumRepository.findAll(pageable);
-        return albums.getContent().stream().map(this::convertToDto).toList();
-    }
-
-    @Deprecated
-    @Transactional(readOnly = true)
-    public List<AlbumGetResponseDto> getAll() {
-        List<Album> albums = albumRepository.findAll();
-        return albums.stream().map(this::convertToDto).toList();
+        Pageable trackPageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+        return albums.stream().map(album -> convertToDto(album, trackPageable)).toList();
     }
 
     @Transactional(readOnly = true)
-    public List<AlbumResponseDto> getAllByArtist(String uuid) {
+    public List<AlbumBasicResponseDto> getAllByArtist(String uuid, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
         Artist artist = artistService.findByUuid(uuid);
-        List<Album> albums = albumRepository.findAllByArtist(artist);
+        Page<Album> albums = albumRepository.findAllByArtist(artist, pageable);
 
         return albums.stream()
-                .map(AlbumResponseDto::from)
+                .map(AlbumBasicResponseDto::from)
                 .toList();
     }
 
@@ -94,12 +90,12 @@ public class AlbumService {
         albumRepository.delete(album);
     }
 
-    private AlbumGetResponseDto convertToDto(Album album) {
-        List<Track> tracks = trackService.getAllByAlbum(album);
-        return AlbumGetResponseDto.builder()
-                .albumResponseDto(AlbumResponseDto.from(album))
+    private AlbumFullResponseDto convertToDto(Album album, Pageable trackPageable) {
+        Page<Track> tracks = trackService.getAllByAlbum(album, trackPageable);
+        return AlbumFullResponseDto.builder()
+                .albumResponseDto(AlbumBasicResponseDto.from(album))
                 .trackResponseDtos(tracks.stream()
-                        .map(TrackResponseDto::from)
+                        .map(TrackBasicResponseDto::from)
                         .toList())
                 .artistResponseDto(ArtistResponseDto.from(album.getArtist()))
                 .build();

@@ -4,15 +4,15 @@ import MusicPlatform.domain.track.entity.Track;
 import lombok.Builder;
 
 @Builder
-public record TrackResponseDto(
+public record TrackBasicResponseDto(
         String uuid,
         String title,
         String lyric,
         int duration,
         String artUrl
 ) {
-    public static TrackResponseDto from(Track track) {
-        return TrackResponseDto.builder()
+    public static TrackBasicResponseDto from(Track track) {
+        return TrackBasicResponseDto.builder()
                 .uuid(track.getUuid())
                 .title(track.getTitle())
                 .lyric(track.getLyric())

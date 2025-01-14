@@ -7,6 +7,8 @@ import MusicPlatform.domain.playlist.entity.Playlist;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.service.TrackService;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,8 @@ public class PlaylistItemService {
     private final TrackService trackService;
 
     @Transactional(readOnly = true)
-    public List<PlaylistItem> findAllByPlaylist(Playlist playlist) {
-        return playlistItemRepository.findAllByPlaylist(playlist);
+    public List<PlaylistItem> findAllByPlaylist(Playlist playlist, Pageable pageable) {
+        return playlistItemRepository.findAllByPlaylist(playlist, pageable).getContent();
     }
 
     public void save(Playlist playlist, String trackUuid) {
@@ -36,8 +38,9 @@ public class PlaylistItemService {
         playlistItemRepository.deleteByUuid(removedItemUuid); //hard delete
     }
 
-    public List<PlaylistItemResponseDto> convertToDto(Playlist playlist) {
-        return findAllByPlaylist(playlist)
+    public List<PlaylistItemResponseDto> convertToDto(Playlist playlist, Pageable pageable) {
+        List<PlaylistItem> playlistItems = findAllByPlaylist(playlist, pageable);
+        return playlistItems
                 .stream()
                 .map(PlaylistItemResponseDto::from)
                 .toList();

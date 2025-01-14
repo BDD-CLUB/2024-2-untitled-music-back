@@ -6,17 +6,13 @@ import java.util.List;
 import lombok.Builder;
 
 @Builder
-public record PlaylistResponseDto(
-        String uuid,
-        String title,
-        String description,
+public record PlaylistFullResponseDto(
+        PlaylistBasicResponseDto playlistBasicResponseDto,
         List<PlaylistItemResponseDto> playlistItemResponseDtos
 ) {
-    public static PlaylistResponseDto from(Playlist playlist, List<PlaylistItemResponseDto> playlistItemResponseDtos) {
-        return PlaylistResponseDto.builder()
-                .uuid(playlist.getUuid())
-                .title(playlist.getTitle())
-                .description(playlist.getDescription())
+    public static PlaylistFullResponseDto from(Playlist playlist, List<PlaylistItemResponseDto> playlistItemResponseDtos) {
+        return PlaylistFullResponseDto.builder()
+                .playlistBasicResponseDto(PlaylistBasicResponseDto.from(playlist))
                 .playlistItemResponseDtos(playlistItemResponseDtos)
                 .build();
     }

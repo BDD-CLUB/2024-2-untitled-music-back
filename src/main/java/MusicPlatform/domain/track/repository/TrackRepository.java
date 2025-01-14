@@ -5,6 +5,8 @@ import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.track.entity.Track;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,5 +19,5 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
             + "WHERE a = :artist")
     List<Track> findAllByArtist(Artist artist);
 
-    List<Track> findAllByAlbum(Album album);
+    Page<Track> findAllByAlbum(Album album, Pageable pageable);
 }
