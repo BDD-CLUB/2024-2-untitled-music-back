@@ -76,9 +76,11 @@ public class PlaylistService {
     }
 
     @Transactional(readOnly = true)
-    public PlaylistResponseDto getPlaylist(String uuid) {
+    public PlaylistResponseDto getPlaylist(String uuid, int itemPageNo, int itemPageSize) {
         Playlist playlist = findByUuid(uuid);
-        List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist);
+        Pageable itemPageable = PageRequest.of(itemPageNo, itemPageSize, Sort.by("createdAt").descending());
+        List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,
+                itemPageable);
         return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
     }
 
@@ -86,10 +88,12 @@ public class PlaylistService {
     public List<PlaylistResponseDto> getAll(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
         Page<Playlist> playlists = playlistRepository.findAll(pageable);
+        Pageable itemPageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 
         return playlists.stream()
                 .map(playlist -> {
-                    List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist);
+                    List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,
+                            itemPageable);
                     return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
                 })
                 .toList();
@@ -99,10 +103,12 @@ public class PlaylistService {
     public List<PlaylistResponseDto> getAllByArtist(String uuid) {
         Artist artist = artistService.findByUuid(uuid);
         List<Playlist> playlists = playlistRepository.findAllByArtist(artist);
+        Pageable itemPageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 
         return playlists.stream()
                 .map(playlist -> {
-                    List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist);
+                    List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,
+                            itemPageable);
                     return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
                 })
                 .toList();

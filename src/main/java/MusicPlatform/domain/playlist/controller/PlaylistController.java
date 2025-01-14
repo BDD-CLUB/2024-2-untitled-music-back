@@ -63,8 +63,11 @@ public class PlaylistController {
     //조회
     @Operation(summary = "플레이리스트 조회")
     @GetMapping("/{uuid}")
-    public ResponseEntity<PlaylistResponseDto> getPlaylist(@PathVariable String uuid) {
-        PlaylistResponseDto responseDto = playlistService.getPlaylist(uuid);
+    public ResponseEntity<PlaylistResponseDto> getPlaylist(
+            @PathVariable String uuid,
+            @RequestParam(value = "itemPage", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "itemPageSize", required = false, defaultValue = "10") int pageSize) {
+        PlaylistResponseDto responseDto = playlistService.getPlaylist(uuid, pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
