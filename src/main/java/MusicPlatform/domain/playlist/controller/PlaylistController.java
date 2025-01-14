@@ -3,7 +3,7 @@ package MusicPlatform.domain.playlist.controller;
 import MusicPlatform.domain.playlist._item.service.dto.request.PlaylistItemUpdateRequestDto;
 import MusicPlatform.domain.playlist.service.PlaylistService;
 import MusicPlatform.domain.playlist.service.dto.request.PlaylistRequestDto;
-import MusicPlatform.domain.playlist.service.dto.response.PlaylistResponseDto;
+import MusicPlatform.domain.playlist.service.dto.response.PlaylistFullResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -63,27 +63,27 @@ public class PlaylistController {
     //조회
     @Operation(summary = "플레이리스트 조회")
     @GetMapping("/{uuid}")
-    public ResponseEntity<PlaylistResponseDto> getPlaylist(
+    public ResponseEntity<PlaylistFullResponseDto> getPlaylist(
             @PathVariable String uuid,
             @RequestParam(value = "itemPage", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "itemPageSize", required = false, defaultValue = "10") int pageSize) {
-        PlaylistResponseDto responseDto = playlistService.getPlaylist(uuid, pageNo, pageSize);
+        PlaylistFullResponseDto responseDto = playlistService.getPlaylist(uuid, pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
     @Operation(summary = "플레이리스트 목록 조회")
     @GetMapping
-    public ResponseEntity<List<PlaylistResponseDto>> getAll(
+    public ResponseEntity<List<PlaylistFullResponseDto>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        List<PlaylistResponseDto> responseDto = playlistService.getAll(pageNo, pageSize);
+        List<PlaylistFullResponseDto> responseDto = playlistService.getAll(pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
     @Operation(summary = "특정 아티스트의 플레이리스트 목록 조회")
     @GetMapping("/artists/{uuid}/playlists")
-    public ResponseEntity<List<PlaylistResponseDto>> getAllByArtist(@PathVariable String uuid) {
-        List<PlaylistResponseDto> responseDto = playlistService.getAllByArtist(uuid);
+    public ResponseEntity<List<PlaylistFullResponseDto>> getAllByArtist(@PathVariable String uuid) {
+        List<PlaylistFullResponseDto> responseDto = playlistService.getAllByArtist(uuid);
         return ResponseEntity.ok(responseDto);
     }
 

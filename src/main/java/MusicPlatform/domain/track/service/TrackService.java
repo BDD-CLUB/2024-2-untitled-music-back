@@ -9,7 +9,7 @@ import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.service.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.service.dto.request.TrackUpdateRequestDto;
-import MusicPlatform.domain.track.service.dto.response.TrackGetResponseDto;
+import MusicPlatform.domain.track.service.dto.response.TrackFullResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -51,25 +51,25 @@ public class TrackService {
     }
 
     @Transactional(readOnly = true)
-    public TrackGetResponseDto getTrack(String uuid) {
+    public TrackFullResponseDto getTrack(String uuid) {
         Track track = getByUuid(uuid);
-        return TrackGetResponseDto.from(track);
+        return TrackFullResponseDto.from(track);
     }
 
     @Transactional(readOnly = true)
-    public List<TrackGetResponseDto> getAll(int pageNo, int pageSize) {
+    public List<TrackFullResponseDto> getAll(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
         Page<Track> tracks = trackRepository.findAll(pageable);
-        return tracks.getContent().stream().map(TrackGetResponseDto::from).toList();
+        return tracks.getContent().stream().map(TrackFullResponseDto::from).toList();
     }
 
     @Deprecated // 앨범의 getAllByArtist로 대체한다.
     @Transactional(readOnly = true)
-    public List<TrackGetResponseDto> getAllByArtist(String artistUuid) {
+    public List<TrackFullResponseDto> getAllByArtist(String artistUuid) {
         Artist artist = artistService.findByUuid(artistUuid);
         List<Track> tracks = trackRepository.findAllByArtist(artist);
         return tracks.stream()
-                .map(TrackGetResponseDto::from)
+                .map(TrackFullResponseDto::from)
                 .toList();
     }
 

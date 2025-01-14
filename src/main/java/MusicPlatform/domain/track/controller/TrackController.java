@@ -4,7 +4,7 @@ import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.album.service.AlbumService;
 import MusicPlatform.domain.track.service.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.service.dto.request.TrackUpdateRequestDto;
-import MusicPlatform.domain.track.service.dto.response.TrackGetResponseDto;
+import MusicPlatform.domain.track.service.dto.response.TrackFullResponseDto;
 import MusicPlatform.domain.track.service.TrackService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,25 +44,25 @@ public class TrackController {
 
     @Operation(summary = "트랙 조회")
     @GetMapping("/tracks/{uuid}")
-    public ResponseEntity<TrackGetResponseDto> getByUuid(@PathVariable String uuid) {
-        TrackGetResponseDto responseDto = trackService.getTrack(uuid);
+    public ResponseEntity<TrackFullResponseDto> getByUuid(@PathVariable String uuid) {
+        TrackFullResponseDto responseDto = trackService.getTrack(uuid);
         return ResponseEntity.ok(responseDto);
     }
 
     @Operation(summary = "트랙 목록 조회")
     @GetMapping("/tracks")
-    public ResponseEntity<List<TrackGetResponseDto>> getAll(
+    public ResponseEntity<List<TrackFullResponseDto>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        List<TrackGetResponseDto> responseDto = trackService.getAll(pageNo, pageSize);
+        List<TrackFullResponseDto> responseDto = trackService.getAll(pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
     @Deprecated
     @Operation(summary = "특정 아티스트의 트랙 목록 조회")
     @GetMapping("/artists/{uuid}/tracks")
-    public ResponseEntity<List<TrackGetResponseDto>> getAllByArtist(@PathVariable String uuid) {
-        List<TrackGetResponseDto> responseDto = trackService.getAllByArtist(uuid);
+    public ResponseEntity<List<TrackFullResponseDto>> getAllByArtist(@PathVariable String uuid) {
+        List<TrackFullResponseDto> responseDto = trackService.getAllByArtist(uuid);
         return ResponseEntity.ok(responseDto);
     }
 

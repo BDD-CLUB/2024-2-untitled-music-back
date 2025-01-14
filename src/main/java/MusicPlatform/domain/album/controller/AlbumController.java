@@ -3,8 +3,8 @@ package MusicPlatform.domain.album.controller;
 import MusicPlatform.domain.album.service.AlbumService;
 import MusicPlatform.domain.album.service.dto.request.AlbumRequestDto;
 import MusicPlatform.domain.album.service.dto.request.AlbumUpdateRequestDto;
-import MusicPlatform.domain.album.service.dto.response.AlbumGetResponseDto;
-import MusicPlatform.domain.album.service.dto.response.AlbumResponseDto;
+import MusicPlatform.domain.album.service.dto.response.AlbumFullResponseDto;
+import MusicPlatform.domain.album.service.dto.response.AlbumBasicResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -41,30 +41,30 @@ public class AlbumController {
 
     @Operation(summary = "엘범 목록 조회")
     @GetMapping("/albums")
-    public ResponseEntity<List<AlbumGetResponseDto>> getAll(
+    public ResponseEntity<List<AlbumFullResponseDto>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        List<AlbumGetResponseDto> responseDto = albumService.getAll(pageNo, pageSize);
+        List<AlbumFullResponseDto> responseDto = albumService.getAll(pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
     @Operation(summary = "엘범 조회")
     @GetMapping("/albums/{uuid}")
-    public ResponseEntity<AlbumGetResponseDto> getByUuid(
+    public ResponseEntity<AlbumFullResponseDto> getByUuid(
             @PathVariable String uuid,
             @RequestParam(value = "trackPage", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "trackPageSize", required = false, defaultValue = "10") int pageSize) {
-        AlbumGetResponseDto responseDto = albumService.getAlbum(uuid, pageNo, pageSize);
+        AlbumFullResponseDto responseDto = albumService.getAlbum(uuid, pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
     @Operation(summary = "특정 아티스트의 엘범 목록 조회")
     @GetMapping("/artists/{uuid}/albums")
-    public ResponseEntity<List<AlbumResponseDto>> getAllByArtist(
+    public ResponseEntity<List<AlbumBasicResponseDto>> getAllByArtist(
             @PathVariable String uuid,
             @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "20") int pageSize) {
-        List<AlbumResponseDto> responseDto = albumService.getAllByArtist(uuid, pageNo, pageSize);
+        List<AlbumBasicResponseDto> responseDto = albumService.getAllByArtist(uuid, pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 

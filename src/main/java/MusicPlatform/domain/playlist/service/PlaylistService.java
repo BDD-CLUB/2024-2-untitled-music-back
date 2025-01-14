@@ -11,7 +11,7 @@ import MusicPlatform.domain.playlist._item.service.dto.response.PlaylistItemResp
 import MusicPlatform.domain.playlist.entity.Playlist;
 import MusicPlatform.domain.playlist.repository.PlaylistRepository;
 import MusicPlatform.domain.playlist.service.dto.request.PlaylistRequestDto;
-import MusicPlatform.domain.playlist.service.dto.response.PlaylistResponseDto;
+import MusicPlatform.domain.playlist.service.dto.response.PlaylistFullResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
 import java.util.List;
@@ -76,16 +76,16 @@ public class PlaylistService {
     }
 
     @Transactional(readOnly = true)
-    public PlaylistResponseDto getPlaylist(String uuid, int itemPageNo, int itemPageSize) {
+    public PlaylistFullResponseDto getPlaylist(String uuid, int itemPageNo, int itemPageSize) {
         Playlist playlist = findByUuid(uuid);
         Pageable itemPageable = PageRequest.of(itemPageNo, itemPageSize, Sort.by("createdAt").descending());
         List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,
                 itemPageable);
-        return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
+        return PlaylistFullResponseDto.from(playlist, playlistItemResponseDtos);
     }
 
     @Transactional(readOnly = true)
-    public List<PlaylistResponseDto> getAll(int pageNo, int pageSize) {
+    public List<PlaylistFullResponseDto> getAll(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
         Page<Playlist> playlists = playlistRepository.findAll(pageable);
         Pageable itemPageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
@@ -94,13 +94,13 @@ public class PlaylistService {
                 .map(playlist -> {
                     List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,
                             itemPageable);
-                    return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
+                    return PlaylistFullResponseDto.from(playlist, playlistItemResponseDtos);
                 })
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<PlaylistResponseDto> getAllByArtist(String uuid) {
+    public List<PlaylistFullResponseDto> getAllByArtist(String uuid) {
         Artist artist = artistService.findByUuid(uuid);
         List<Playlist> playlists = playlistRepository.findAllByArtist(artist);
         Pageable itemPageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
@@ -109,7 +109,7 @@ public class PlaylistService {
                 .map(playlist -> {
                     List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,
                             itemPageable);
-                    return PlaylistResponseDto.from(playlist, playlistItemResponseDtos);
+                    return PlaylistFullResponseDto.from(playlist, playlistItemResponseDtos);
                 })
                 .toList();
     }

@@ -5,15 +5,15 @@ import java.time.LocalDate;
 import lombok.Builder;
 
 @Builder
-public record AlbumResponseDto(
+public record AlbumBasicResponseDto(
         String uuid,
         String title,
         String description,
         String artImage,
         LocalDate releaseDate
 ) {
-    public static AlbumResponseDto from(Album album) {
-        return AlbumResponseDto.builder()
+    public static AlbumBasicResponseDto from(Album album) {
+        return AlbumBasicResponseDto.builder()
                 .uuid(album.getUuid())
                 .title(album.getTitle())
                 .description(album.getDescription())
