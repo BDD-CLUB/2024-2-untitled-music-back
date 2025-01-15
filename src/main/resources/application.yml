@@ -27,6 +27,11 @@ spring:
       pageable:
         max-page-size: 100
         default-page-size: 10
+        
+  servlet:
+    multipart:
+      max-file-size: 6MB
+      max-request-size: 6MB
 
 logging:
   level:
