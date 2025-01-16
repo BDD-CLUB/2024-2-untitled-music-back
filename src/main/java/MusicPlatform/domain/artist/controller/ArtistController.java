@@ -25,7 +25,7 @@ public class ArtistController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "현재 로그인한 회원의 정보 조회")
-    @GetMapping
+    @GetMapping("/my-profile")
     public ResponseEntity<ArtistResponseDto> getMyInfo() {
         ArtistResponseDto responseDto = artistService.getMyInfo();
         return ResponseEntity.ok(responseDto);
