@@ -13,6 +13,7 @@ import static MusicPlatform.global.error.ApplicationError.METHOD_ARGUMENT_NOT_VA
 @RestControllerAdvice
 public class ExceptionAdvice {
 
+    //business error
     @ExceptionHandler(BusinessException.class)
     public ErrorResponse businessExceptionHandler(BusinessException exception) {
         BusinessError businessError = exception.getBusinessError();
@@ -22,7 +23,7 @@ public class ExceptionAdvice {
                 .build();
     }
 
-    /*
+    //validation
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorResponse handleValidationExceptions(MethodArgumentNotValidException exception) {
 
@@ -33,7 +34,5 @@ public class ExceptionAdvice {
         return ErrorResponse.builder(exception, applicationError.getHttpStatus(), applicationError.getMessage())
                 .title(applicationError.name())
                 .build();
-
     }
-    */
 }
