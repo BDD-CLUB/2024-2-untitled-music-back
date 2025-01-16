@@ -5,6 +5,7 @@ import static MusicPlatform.global.error.BusinessError.NOT_FOUND_ARTIST;
 
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.repository.ArtistRepository;
+import MusicPlatform.domain.artist.service.dto.request.ArtistUpdateRequestDto;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import MusicPlatform.domain.oauth2.entity.ProviderUser;
 import MusicPlatform.global.error.BusinessException;
@@ -77,6 +78,14 @@ public class ArtistService {
         artist.updateImage(newImage);
 
         return ArtistResponseDto.from(artist);
+    }
+
+    public void updateByUuid(String uuid, ArtistUpdateRequestDto request) {
+        Artist artist = findByUuid(uuid);
+        artist.update(request.name(),
+                request.link1(),
+                request.link2(),
+                request.description());
     }
 
     public void removeArtist() {

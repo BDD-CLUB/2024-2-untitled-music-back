@@ -2,6 +2,7 @@ package MusicPlatform.domain.artist.controller;
 
 import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.artist.service.dto.request.ArtistImageUrlDto;
+import MusicPlatform.domain.artist.service.dto.request.ArtistUpdateRequestDto;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -55,6 +57,16 @@ public class ArtistController {
         return ResponseEntity.ok(artistResponseDto);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @Operation(summary = "회원 정보 수정")
+    @PatchMapping()
+    public ResponseEntity<Void> updateProfile(@AuthenticationPrincipal String uuid,
+                                              @RequestBody @Valid ArtistUpdateRequestDto request) {
+        artistService.updateByUuid(uuid, request);
+        return ResponseEntity.noContent().build();
+    }
+
+    //todo: 회원 탈퇴시 연관 데이터는 어떻게 처리할 것인가?
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "회원 탈퇴")
     @DeleteMapping

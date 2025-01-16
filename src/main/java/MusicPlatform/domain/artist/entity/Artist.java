@@ -61,6 +61,10 @@ public class Artist extends UuidEntity {
         this.artistImage = newImage;
     }
 
-    
-
+    public void update(String name, String link1, String link2, String description) {
+        this.name = name;
+        this.link1 = link1;
+        this.link2 = link2;
+        this.description = description;
+    }
 }
