@@ -6,6 +6,7 @@ import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +29,22 @@ public class ArtistController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @Operation(summary = "특정 회원 정보 조회")
+    @GetMapping("/{uuid}")
+    public ResponseEntity<ArtistResponseDto> getArtist(@PathVariable String uuid) {
+        ArtistResponseDto responseDto = artistService.getByUuid(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @Operation(summary = "회원 목록 조회")
+    @GetMapping
+    public ResponseEntity<List<ArtistResponseDto>> getAll(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+        List<ArtistResponseDto> responseDto = artistService.getAll(pageNo, pageSize);
+        return ResponseEntity.ok(responseDto);
+    }
+
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "회원의 프로필 이미지 변경")
     @PutMapping("/profile-image")
@@ -39,11 +56,10 @@ public class ArtistController {
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-    @Operation(summary = "회원 삭제")
+    @Operation(summary = "회원 탈퇴")
     @DeleteMapping
     public ResponseEntity<?> deleteArtist() {
         artistService.removeArtist();
         return ResponseEntity.ok().build();
     }
-
 }
