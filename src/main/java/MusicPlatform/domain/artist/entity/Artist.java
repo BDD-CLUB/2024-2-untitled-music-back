@@ -27,6 +27,10 @@ public class Artist extends UuidEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String link1;
+    private String link2;
+    private String description;
+
     @Column(nullable = false)
     private String provider; //todo: enum으로 수정
 
@@ -41,9 +45,12 @@ public class Artist extends UuidEntity {
     private boolean isDeleted;
 
     @Builder
-    private Artist(String name, String email, String provider, String artistImage, Role role) {
+    private Artist(String name, String email, String link1, String link2, String description, String provider, String artistImage, Role role) {
         this.name = name;
         this.email = email;
+        this.link1 = link1;
+        this.link2 = link2;
+        this.description = description;
         this.provider = provider;
         this.artistImage = artistImage;
         this.role = role;
@@ -54,6 +61,6 @@ public class Artist extends UuidEntity {
         this.artistImage = newImage;
     }
 
-
+    
 
 }
