@@ -29,7 +29,7 @@ public class ArtistController {
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-    @Operation(summary = "artist의 image 변경 api")
+    @Operation(summary = "회원의 프로필 이미지 변경")
     @PutMapping("/profile-image")
     public ResponseEntity<ArtistResponseDto> changeArtistImage(@RequestBody @Valid ArtistImageUrlDto artistImageUrlDto){
         ArtistResponseDto artistResponseDto = artistService.changeArtistImage(
@@ -38,9 +38,8 @@ public class ArtistController {
         return ResponseEntity.ok(artistResponseDto);
     }
 
-
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-    @Operation(summary = "artist 삭제 api")
+    @Operation(summary = "회원 삭제")
     @DeleteMapping
     public ResponseEntity<?> deleteArtist() {
         artistService.removeArtist();
