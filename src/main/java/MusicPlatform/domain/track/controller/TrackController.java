@@ -1,7 +1,5 @@
 package MusicPlatform.domain.track.controller;
 
-import MusicPlatform.domain.album.entity.Album;
-import MusicPlatform.domain.album.service.AlbumService;
 import MusicPlatform.domain.track.service.dto.request.TrackRequestDto;
 import MusicPlatform.domain.track.service.dto.request.TrackUpdateRequestDto;
 import MusicPlatform.domain.track.service.dto.response.TrackFullResponseDto;
@@ -31,21 +29,19 @@ import jakarta.validation.Valid;
 public class TrackController {
 
     private final TrackService trackService;
-    private final AlbumService albumService;
 
     @Operation(summary = "트랙 업로드")
     @PostMapping(value = "/albums/{uuid}/tracks")
     public ResponseEntity<Void> uploadTrack(@RequestBody @Valid TrackRequestDto requestDto,
                                             @PathVariable String uuid) {
-        Album album = albumService.getByUuid(uuid);
-        trackService.save(requestDto, album);
+        trackService.save(requestDto, uuid);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "트랙 조회")
     @GetMapping("/tracks/{uuid}")
-    public ResponseEntity<TrackFullResponseDto> getByUuid(@PathVariable String uuid) {
-        TrackFullResponseDto responseDto = trackService.getTrack(uuid);
+    public ResponseEntity<TrackFullResponseDto> getTrack(@PathVariable String uuid) {
+        TrackFullResponseDto responseDto = trackService.getByUuid(uuid);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -68,15 +64,15 @@ public class TrackController {
 
     @Operation(summary = "트랙 수정")
     @PatchMapping("/tracks/{uuid}")
-    public ResponseEntity<Void> updateByUuid(@RequestBody @Valid TrackUpdateRequestDto requestDto,
-                                             @PathVariable String uuid) {
+    public ResponseEntity<Void> updateTrack(@RequestBody @Valid TrackUpdateRequestDto requestDto,
+                                            @PathVariable String uuid) {
         trackService.updateByUuid(requestDto, uuid);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "트랙 삭제")
     @DeleteMapping("/tracks/{uuid}")
-    public ResponseEntity<Void> deleteByUuid(@PathVariable String uuid) {
+    public ResponseEntity<Void> deleteTrack(@PathVariable String uuid) {
         trackService.deleteByUuid(uuid);
         return ResponseEntity.noContent().build();
     }
