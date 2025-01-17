@@ -31,7 +31,7 @@ public class TrackService {
     private final ArtistService artistService;
 
     @Transactional(readOnly = true)
-    public Track getByUuid(String uuid) {
+    public Track findByUuid(String uuid) {
         return trackRepository.findByUuid(uuid).orElseThrow(() ->
                 new BusinessException(NOT_FOUND_TRACK));
     }
@@ -55,8 +55,8 @@ public class TrackService {
     }
 
     @Transactional(readOnly = true)
-    public TrackFullResponseDto getTrack(String uuid) {
-        Track track = getByUuid(uuid);
+    public TrackFullResponseDto getByUuid(String uuid) {
+        Track track = findByUuid(uuid);
         return TrackFullResponseDto.from(track);
     }
 
@@ -79,13 +79,13 @@ public class TrackService {
 
     public void updateByUuid(TrackUpdateRequestDto requestDto, String uuid) {
         //todo: 인가 필요
-        Track track = getByUuid(uuid);
+        Track track = findByUuid(uuid);
         track.update(requestDto.title(), requestDto.lyric());
     }
 
     public void deleteByUuid(String uuid) {
         //todo: 인가 필요
-        Track track = getByUuid(uuid);
+        Track track = findByUuid(uuid);
         trackRepository.delete(track);
         //s3에 업로드된 파일도 삭제해야하는가? (복구 불가?)
     }

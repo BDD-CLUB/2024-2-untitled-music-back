@@ -40,8 +40,8 @@ public class TrackController {
 
     @Operation(summary = "트랙 조회")
     @GetMapping("/tracks/{uuid}")
-    public ResponseEntity<TrackFullResponseDto> getByUuid(@PathVariable String uuid) {
-        TrackFullResponseDto responseDto = trackService.getTrack(uuid);
+    public ResponseEntity<TrackFullResponseDto> getTrack(@PathVariable String uuid) {
+        TrackFullResponseDto responseDto = trackService.getByUuid(uuid);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -64,15 +64,15 @@ public class TrackController {
 
     @Operation(summary = "트랙 수정")
     @PatchMapping("/tracks/{uuid}")
-    public ResponseEntity<Void> updateByUuid(@RequestBody @Valid TrackUpdateRequestDto requestDto,
-                                             @PathVariable String uuid) {
+    public ResponseEntity<Void> updateTrack(@RequestBody @Valid TrackUpdateRequestDto requestDto,
+                                            @PathVariable String uuid) {
         trackService.updateByUuid(requestDto, uuid);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "트랙 삭제")
     @DeleteMapping("/tracks/{uuid}")
-    public ResponseEntity<Void> deleteByUuid(@PathVariable String uuid) {
+    public ResponseEntity<Void> deleteTrack(@PathVariable String uuid) {
         trackService.deleteByUuid(uuid);
         return ResponseEntity.noContent().build();
     }

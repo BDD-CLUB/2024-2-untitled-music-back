@@ -7,7 +7,6 @@ import MusicPlatform.domain.playlist.entity.Playlist;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.service.TrackService;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class PlaylistItemService {
     }
 
     public void save(Playlist playlist, String trackUuid) {
-        Track track = trackService.getByUuid(trackUuid);
+        Track track = trackService.findByUuid(trackUuid);
         PlaylistItem playlistItem = PlaylistItem.builder()
                 .playlist(playlist)
                 .track(track)
