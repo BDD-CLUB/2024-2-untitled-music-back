@@ -5,12 +5,18 @@ import static MusicPlatform.global.error.BusinessError.NOT_FOUND_ARTIST;
 
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.repository.ArtistRepository;
+import MusicPlatform.domain.artist.service.dto.request.ArtistUpdateRequestDto;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import MusicPlatform.domain.oauth2.entity.ProviderUser;
 import MusicPlatform.global.error.BusinessException;
 import MusicPlatform.global.helper.AuthorizationHelper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +60,16 @@ public class ArtistService {
         return ArtistResponseDto.from(artist);
     }
 
+    public ArtistResponseDto getByUuid(String uuid) {
+        Artist artist = findByUuid(uuid);
+        return ArtistResponseDto.from(artist);
+    }
+
+    public List<ArtistResponseDto> getAll(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
+        Page<Artist> artist = artistRepository.findAll(pageable);
+        return artist.stream().map(ArtistResponseDto::from).toList();
+    }
 
     public ArtistResponseDto changeArtistImage(String newImage) {
 
@@ -64,8 +80,15 @@ public class ArtistService {
         return ArtistResponseDto.from(artist);
     }
 
+    public void updateByUuid(String uuid, ArtistUpdateRequestDto request) {
+        Artist artist = findByUuid(uuid);
+        artist.update(request.name(),
+                request.link1(),
+                request.link2(),
+                request.description());
+    }
 
-    public void removeArtist(){
+    public void removeArtist() {
         String uuid = authorizationHelper.getMyUuid();
         Artist artist = findByUuid(uuid);
         artistRepository.delete(artist);
