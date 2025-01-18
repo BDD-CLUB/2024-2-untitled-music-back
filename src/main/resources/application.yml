@@ -87,7 +87,7 @@ jasypt:
 
 server:
   front: http://localhost:3000
-  api: http://localhsot:8080
+  api: http://localhost:8080
   error-page: http://localhost:3000
   login-page: http://localhost:3000
   

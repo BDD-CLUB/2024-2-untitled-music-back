@@ -2,7 +2,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create # 수정
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -88,6 +88,6 @@ jasypt:
 
 server:
   front: https://soundforest.kro.kr
-  api: https://soundforest.kro.kr/V1
+  api: https://soundforest.kro.kr/v1
   error-page: https://soundforest.kro.kr/error
   login-page: https://soundforest.kro.kr
