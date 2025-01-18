@@ -2,7 +2,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create # 수정
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
