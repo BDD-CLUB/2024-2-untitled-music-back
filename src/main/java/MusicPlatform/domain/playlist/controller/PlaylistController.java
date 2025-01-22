@@ -61,7 +61,7 @@ public class PlaylistController {
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-    @Operation(summary = "플레이리스트 내 트랙 수정 및 삭제")
+    @Operation(summary = "플레이리스트 내 트랙 추가 및 삭제")
     @PutMapping("/{uuid}/tracks")
     public ResponseEntity<Void> updatePlaylistTrack(@AuthenticationPrincipal String artistUuid,
                                                     @PathVariable String uuid,
