@@ -51,6 +51,16 @@ public class PlaylistController {
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @Operation(summary = "플레이리스트 커버 이미지 수정")
+    @PutMapping("/{uuid}/cover-image")
+    public ResponseEntity<Void> updatePlaylistCoverImage(@AuthenticationPrincipal String artistUuid,
+                                                         @PathVariable String uuid,
+                                                         String coverImageLink) {
+        playlistService.updateCoverImage(artistUuid, uuid, coverImageLink);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "플레이리스트 내 트랙 수정 및 삭제")
     @PutMapping("/{uuid}/tracks")
     public ResponseEntity<Void> updatePlaylistTrack(@AuthenticationPrincipal String artistUuid,

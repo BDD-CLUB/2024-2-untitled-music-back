@@ -60,6 +60,13 @@ public class PlaylistService {
         playlist.update(requestDto.title(), requestDto.description());
     }
 
+    public void updateCoverImage(String artistUuid, String uuid, String coverImageLink) {
+        Playlist playlist = findByUuid(uuid);
+        isAuthenticated(artistUuid, playlist.getArtist().getUuid());
+        playlist.updateCoverImage(coverImageLink);
+    }
+
+
     public void update(String artistUuid, String uuid, PlaylistItemUpdateRequestDto requestDto) {
         Playlist playlist = findByUuid(uuid);
         isAuthenticated(artistUuid, playlist.getArtist().getUuid());

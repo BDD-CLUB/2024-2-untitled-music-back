@@ -49,7 +49,7 @@ public class Playlist extends UuidEntity {
         this.artist = artist;
     }
 
-    public void changeCoverImage (String coverImgUrl) {
+    public void updateCoverImage (String coverImgUrl) {
         this.coverImageUrl = coverImgUrl;
     }
 
