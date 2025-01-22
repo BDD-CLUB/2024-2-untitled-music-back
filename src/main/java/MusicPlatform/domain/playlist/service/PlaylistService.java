@@ -83,7 +83,7 @@ public class PlaylistService {
     }
 
     @Transactional(readOnly = true)
-    public PlaylistFullResponseDto getPlaylist(String uuid, int itemPageNo, int itemPageSize) {
+    public PlaylistFullResponseDto getByUuid(String uuid, int itemPageNo, int itemPageSize) {
         Playlist playlist = findByUuid(uuid);
         Pageable itemPageable = PageRequest.of(itemPageNo, itemPageSize, Sort.by("createdAt").descending());
         List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,

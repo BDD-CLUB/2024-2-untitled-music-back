@@ -77,7 +77,7 @@ public class PlaylistController {
             @PathVariable String uuid,
             @RequestParam(value = "itemPage", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "itemPageSize", required = false, defaultValue = "10") int pageSize) {
-        PlaylistFullResponseDto responseDto = playlistService.getPlaylist(uuid, pageNo, pageSize);
+        PlaylistFullResponseDto responseDto = playlistService.getByUuid(uuid, pageNo, pageSize);
         return ResponseEntity.ok(responseDto);
     }
 
