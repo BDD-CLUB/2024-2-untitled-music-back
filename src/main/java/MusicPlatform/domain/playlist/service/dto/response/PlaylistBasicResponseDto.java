@@ -7,13 +7,15 @@ import lombok.Builder;
 public record PlaylistBasicResponseDto(
         String uuid,
         String title,
-        String description
+        String description,
+        String coverImageUrl
 ) {
     public static PlaylistBasicResponseDto from(Playlist playlist) {
         return PlaylistBasicResponseDto.builder()
                 .uuid(playlist.getUuid())
                 .title(playlist.getTitle())
                 .description(playlist.getDescription())
+                .coverImageUrl(playlist.getCoverImageUrl())
                 .build();
     }
 }
