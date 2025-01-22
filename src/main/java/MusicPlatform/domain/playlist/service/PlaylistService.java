@@ -88,7 +88,7 @@ public class PlaylistService {
         Pageable itemPageable = PageRequest.of(itemPageNo, itemPageSize, Sort.by("createdAt").descending());
         List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,
                 itemPageable);
-        return PlaylistFullResponseDto.from(playlist, playlistItemResponseDtos);
+        return PlaylistFullResponseDto.from(playlist, playlistItemResponseDtos, playlist.getArtist());
     }
 
     @Transactional(readOnly = true)
@@ -101,7 +101,7 @@ public class PlaylistService {
                 .map(playlist -> {
                     List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,
                             itemPageable);
-                    return PlaylistFullResponseDto.from(playlist, playlistItemResponseDtos);
+                    return PlaylistFullResponseDto.from(playlist, playlistItemResponseDtos, playlist.getArtist());
                 })
                 .toList();
     }
@@ -116,7 +116,7 @@ public class PlaylistService {
                 .map(playlist -> {
                     List<PlaylistItemResponseDto> playlistItemResponseDtos = playlistItemService.convertToDto(playlist,
                             itemPageable);
-                    return PlaylistFullResponseDto.from(playlist, playlistItemResponseDtos);
+                    return PlaylistFullResponseDto.from(playlist, playlistItemResponseDtos, playlist.getArtist());
                 })
                 .toList();
     }
