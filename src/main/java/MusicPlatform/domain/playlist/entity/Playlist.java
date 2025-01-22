@@ -32,6 +32,8 @@ public class Playlist extends UuidEntity {
     @Column(nullable = false)
     private String description;
 
+    private String coverImageUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ARTIST_ID", nullable = true)
     private Artist artist;
@@ -40,10 +42,15 @@ public class Playlist extends UuidEntity {
     private boolean isDeleted;
 
     @Builder
-    private Playlist(String title, String description, Artist artist) {
+    private Playlist(String title, String description, String coverImageUrl, Artist artist) {
         this.title = title;
         this.description = description;
+        this.coverImageUrl = coverImageUrl;
         this.artist = artist;
+    }
+
+    public void changeCoverImage (String coverImgUrl) {
+        this.coverImageUrl = coverImgUrl;
     }
 
     public void update(String title, String description) {
