@@ -35,7 +35,7 @@ public class Playlist extends UuidEntity {
     private String coverImageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ARTIST_ID", nullable = true)
+    @JoinColumn(name = "ARTIST_ID")
     private Artist artist;
 
     @Column(nullable = false)
