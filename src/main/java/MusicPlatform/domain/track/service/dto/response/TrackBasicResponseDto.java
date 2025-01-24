@@ -8,6 +8,7 @@ public record TrackBasicResponseDto(
         String uuid,
         String title,
         String lyric,
+        String trackUrl,
         int duration,
         String artUrl
 ) {
@@ -15,6 +16,7 @@ public record TrackBasicResponseDto(
         return TrackBasicResponseDto.builder()
                 .uuid(track.getUuid())
                 .title(track.getTitle())
+                .trackUrl(track.getTrackUrl())
                 .lyric(track.getLyric())
                 .duration(track.getDuration())
                 .artUrl(track.getAlbumArt())

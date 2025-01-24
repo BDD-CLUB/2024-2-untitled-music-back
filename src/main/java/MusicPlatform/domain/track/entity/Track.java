@@ -33,7 +33,7 @@ public class Track extends UuidEntity {
     private String lyric;
 
     @Column(nullable = false)
-    private String song_url;
+    private String trackUrl;
 
     @Column(nullable = false)
     private int duration;
@@ -46,10 +46,10 @@ public class Track extends UuidEntity {
     private boolean isDeleted;
 
     @Builder
-    private Track(String title, String lyric, String song_url, int duration, Album album) {
+    private Track(String title, String lyric, String trackUrl, int duration, Album album) {
         this.title = title;
         this.lyric = lyric;
-        this.song_url = song_url;
+        this.trackUrl = trackUrl;
         this.duration = duration;
         this.album = album;
     }
