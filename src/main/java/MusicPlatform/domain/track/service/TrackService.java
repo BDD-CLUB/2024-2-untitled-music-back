@@ -49,7 +49,7 @@ public class TrackService {
                 .lyric(requestDto.lyric())
                 .duration(requestDto.duration())
                 .album(album)
-                .song_url(requestDto.trackFile())
+                .trackUrl(requestDto.trackFile())
                 .build();
         trackRepository.save(track);
     }
