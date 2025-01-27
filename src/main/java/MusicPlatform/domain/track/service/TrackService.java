@@ -1,10 +1,9 @@
 package MusicPlatform.domain.track.service;
 
-import static MusicPlatform.global.error.BusinessError.NOT_FOUND_ALBUM;
 import static MusicPlatform.global.error.BusinessError.NOT_FOUND_TRACK;
 
 import MusicPlatform.domain.album.entity.Album;
-import MusicPlatform.domain.album.repository.AlbumRepository;
+import MusicPlatform.domain.album.service.AlbumService;
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.track.entity.Track;
@@ -27,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TrackService {
     private final TrackRepository trackRepository;
-    private final AlbumRepository albumRepository;
+    private final AlbumService albumService;
     private final ArtistService artistService;
 
     @Transactional(readOnly = true)
@@ -36,14 +35,8 @@ public class TrackService {
                 new BusinessException(NOT_FOUND_TRACK));
     }
 
-    @Transactional(readOnly = true)
-    public Page<Track> getAllByAlbum(Album album, Pageable pageable) {
-        return trackRepository.findAllByAlbum(album, pageable);
-    }
-
     public void save(TrackRequestDto requestDto, String albumUuid) {
-        Album album = albumRepository.findByUuid(albumUuid)
-                .orElseThrow(() -> new BusinessException(NOT_FOUND_ALBUM));
+        Album album = albumService.getByUuid(albumUuid);
         Track track = Track.builder()
                 .title(requestDto.title())
                 .lyric(requestDto.lyric())
