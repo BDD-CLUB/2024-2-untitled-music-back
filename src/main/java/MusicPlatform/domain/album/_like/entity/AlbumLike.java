@@ -27,7 +27,7 @@ public class AlbumLike extends UuidEntity {
     @JoinColumn(name = "ARTIST_ID", nullable = false)
     private Artist artist;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ALBUM_ID", nullable = false)
     private Album album;
 }
