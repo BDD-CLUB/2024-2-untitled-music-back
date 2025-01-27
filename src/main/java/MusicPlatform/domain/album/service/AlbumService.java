@@ -87,6 +87,7 @@ public class AlbumService {
     public void deleteByUuid(String uuid) {
         //todo: 내가 업로드한 앨범인지 확인한다.
         Album album = getByUuid(uuid);
+        trackRepository.deleteAllByAlbum(album);
         albumRepository.delete(album);
     }
 
