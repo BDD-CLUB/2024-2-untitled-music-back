@@ -35,7 +35,7 @@ public class AlbumComment extends UuidEntity {
     @JoinColumn(name = "ARTIST_ID", nullable = false)
     private Artist artist;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ALBUM_ID", nullable = false)
     private Album album;
 
