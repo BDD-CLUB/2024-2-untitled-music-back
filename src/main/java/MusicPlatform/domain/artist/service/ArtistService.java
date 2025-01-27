@@ -89,6 +89,7 @@ public class ArtistService {
     }
 
     public void removeArtist() {
+        //todo: 회원 탈퇴시 리소스는 어떻게 처리할 것인가?
         String uuid = authorizationHelper.getMyUuid();
         Artist artist = findByUuid(uuid);
         artistRepository.delete(artist);
