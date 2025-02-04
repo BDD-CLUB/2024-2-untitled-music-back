@@ -20,5 +20,4 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     List<Track> findAllByArtist(Artist artist);
 
     Page<Track> findAllByAlbum(Album album, Pageable pageable);
-    void deleteAllByAlbum(Album album);
 }

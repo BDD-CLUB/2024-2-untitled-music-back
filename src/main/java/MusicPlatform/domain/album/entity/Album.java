@@ -3,6 +3,7 @@ package MusicPlatform.domain.album.entity;
 import MusicPlatform.domain.album._comment.entity.AlbumComment;
 import MusicPlatform.domain.album._like.entity.AlbumLike;
 import MusicPlatform.domain.artist.entity.Artist;
+import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,6 +46,9 @@ public class Album extends UuidEntity {
 
     @OneToMany(mappedBy = "album", orphanRemoval = true)
     private List<AlbumLike> albumLikes;
+    
+    @OneToMany(mappedBy = "album", orphanRemoval = true)
+    private List<Track> tracks;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ARTIST_ID", nullable = false)
