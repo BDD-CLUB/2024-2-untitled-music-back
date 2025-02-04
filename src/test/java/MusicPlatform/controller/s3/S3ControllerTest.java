@@ -1,4 +1,4 @@
-package MusicPlatform.s3.service;
+package MusicPlatform.controller.s3;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
