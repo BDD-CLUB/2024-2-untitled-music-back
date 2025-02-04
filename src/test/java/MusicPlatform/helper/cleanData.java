@@ -9,6 +9,6 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Sql(value = "/clean.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/sql/clean.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 public @interface cleanData {
 }
