@@ -12,13 +12,13 @@ import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
 import MusicPlatform.domain.track.entity.Track;
-import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.service.dto.response.TrackBasicResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AlbumService {
     private final AlbumRepository albumRepository;
-    private final TrackRepository trackRepository;
     private final ArtistService artistService;
 
     @Transactional(readOnly = true)
@@ -91,7 +90,7 @@ public class AlbumService {
     }
 
     private AlbumFullResponseDto convertToDto(Album album, Pageable trackPageable) {
-        Page<Track> tracks = trackRepository.findAllByAlbum(album, trackPageable);
+        Page<Track> tracks = new PageImpl<>(album.getTracks(), trackPageable, album.getTracks().size());
         return AlbumFullResponseDto.builder()
                 .albumResponseDto(AlbumBasicResponseDto.from(album))
                 .trackResponseDtos(tracks.stream()

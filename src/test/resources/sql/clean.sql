@@ -1,14 +1,14 @@
 delete
-from album;
-
-delete
 from album_like;
 
 delete
 from album_comment;
 
 delete
-from profile;
+from track;
+
+delete
+from album;
 
 delete
 from artist;
@@ -18,6 +18,3 @@ from playlist_item;
 
 delete
 from playlist;
-
-delete
-from track;

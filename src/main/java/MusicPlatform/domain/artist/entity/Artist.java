@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+// todo: 회원 탈퇴시 회원을 삭제하지 않고 이름을 '존재하지 않는 사용자'로 변경한다.
+
 @Entity
 @Getter
 @Table(name = "artist")
