@@ -1,13 +1,16 @@
 package MusicPlatform.domain.playlist.entity;
 import MusicPlatform.domain.artist.entity.Artist;
 
+import MusicPlatform.domain.playlist._item.entity.PlaylistItem;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +40,9 @@ public class Playlist extends UuidEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ARTIST_ID")
     private Artist artist;
+
+    @OneToMany(mappedBy = "playlist", orphanRemoval = true)
+    private List<PlaylistItem> playlistItems;
 
     @Column(nullable = false)
     private boolean isDeleted;
