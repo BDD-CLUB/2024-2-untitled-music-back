@@ -20,7 +20,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Getter
 @Table(name = "track")
-@SQLRestriction("is_deleted = false")
+//@SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE track SET is_deleted = true where id = ?")
 public class Track extends UuidEntity {
