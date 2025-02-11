@@ -17,7 +17,7 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     @Query("SELECT t FROM Track t "
             + "JOIN t.album.artist a "
             + "WHERE a = :artist")
-    List<Track> findAllByArtist(Artist artist);
+    Page<Track> findAllByArtist(Artist artist, Pageable pageable);
 
     Page<Track> findAllByAlbum(Album album, Pageable pageable);
 }

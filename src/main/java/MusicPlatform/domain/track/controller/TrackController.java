@@ -49,16 +49,22 @@ public class TrackController {
     @GetMapping("/tracks")
     public ResponseEntity<List<TrackFullResponseDto>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        List<TrackFullResponseDto> responseDto = trackService.getAll(pageNo, pageSize);
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "direction", required = false, defaultValue = "desc") String direction) {
+        List<TrackFullResponseDto> responseDto = trackService.getAll(pageNo, pageSize, sortBy, direction);
         return ResponseEntity.ok(responseDto);
     }
 
-    @Deprecated
     @Operation(summary = "특정 아티스트의 트랙 목록 조회")
     @GetMapping("/artists/{uuid}/tracks")
-    public ResponseEntity<List<TrackFullResponseDto>> getAllByArtist(@PathVariable String uuid) {
-        List<TrackFullResponseDto> responseDto = trackService.getAllByArtist(uuid);
+    public ResponseEntity<List<TrackFullResponseDto>> getAllByArtist(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "direction", required = false, defaultValue = "desc") String direction,
+            @PathVariable String uuid) {
+        List<TrackFullResponseDto> responseDto = trackService.getAllByArtist(uuid, pageNo, pageSize, sortBy, direction);
         return ResponseEntity.ok(responseDto);
     }
 
