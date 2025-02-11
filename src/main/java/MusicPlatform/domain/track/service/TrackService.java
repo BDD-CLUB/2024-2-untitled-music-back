@@ -54,17 +54,17 @@ public class TrackService {
     }
 
     @Transactional(readOnly = true)
-    public List<TrackFullResponseDto> getAll(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
+    public List<TrackFullResponseDto> getAll(int pageNo, int pageSize, String sortBy, String direction) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.fromString(direction), sortBy));
         Page<Track> tracks = trackRepository.findAll(pageable);
         return tracks.getContent().stream().map(TrackFullResponseDto::from).toList();
     }
 
-    @Deprecated // 앨범의 getAllByArtist로 대체한다.
     @Transactional(readOnly = true)
-    public List<TrackFullResponseDto> getAllByArtist(String artistUuid) {
+    public List<TrackFullResponseDto> getAllByArtist(String artistUuid, int pageNo, int pageSize, String sortBy, String direction) {
         Artist artist = artistService.findByUuid(artistUuid);
-        List<Track> tracks = trackRepository.findAllByArtist(artist);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.fromString(direction), sortBy));
+        Page<Track> tracks = trackRepository.findAllByArtist(artist, pageable);
         return tracks.stream()
                 .map(TrackFullResponseDto::from)
                 .toList();
