@@ -1,8 +1,8 @@
-name: githubCI
-
+name: CI
 on:
   pull_request:
     branches: [ "develop" ]
+  workflow_dispatch:
 
 jobs:
   deploy_development:
