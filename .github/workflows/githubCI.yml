@@ -34,16 +34,14 @@ jobs:
 
       - name: Create Docker Env File
         run: |
-          echo '${{ secrets.DOCKER_ENV }}' >> .env
-          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
-          ls -al ./
-          cat .env || echo ".env file does not exist!"
+          echo '${{ secrets.DOCKER_ENV }}' >>  $GITHUB_WORKSPACE/.env
+          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >>  $GITHUB_WORKSPACE/.env
 
       - name: Upload env as artifact
         uses: actions/upload-artifact@v4
         with:
           name: env
-          path: .env
+          path:  $GITHUB_WORKSPACE/.env
         
       - name: Pull DB Image From ECR
         if: steps.db-docker-image.outputs.cache-hit != 'true' 
