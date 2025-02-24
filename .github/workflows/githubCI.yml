@@ -46,6 +46,9 @@ jobs:
           docker save -o \
             ~/db-docker-image/soundflyer-db.tar \
             $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }}
+      
+      - name: Check Docker Images 
+        run: docker images
 
       - name: Create Docker Env File
         # working-directory: ./docker 
