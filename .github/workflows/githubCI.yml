@@ -1,22 +1,20 @@
 name: CI
 on:
+  push:
+      branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
   workflow_dispatch:
 
 jobs:
-  github-ci:
+  db-container-cache:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
-
     permissions:
       id-token: write
       contents: read
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -47,15 +45,20 @@ jobs:
             ~/db-docker-image/soundflyer-db.tar \
             $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }} 
 
+  test:
+      needs: [ db-container-cache ]
+      runs-on: ubuntu-22.04
+      timeout-minutes: 10
+      permissions:
+        id-token: write
+        contents: read
+
+      steps:
       - name: Load Image
         run: |
           docker load -i ~/db-docker-image/soundflyer-db.tar
       
-      - name: Check Docker Images 
-        run: docker images
-
       - name: Create Docker Env File
-        # working-directory: ./docker 
         run: |
           echo '${{ secrets.DOCKER_ENV }}' >> .env
           echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
@@ -66,10 +69,10 @@ jobs:
 
       - name: Start Containers
         run: docker compose -p soundflyer up -d
+      
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name : check logs
-        run: docker logs soundflyer-db
-            
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
