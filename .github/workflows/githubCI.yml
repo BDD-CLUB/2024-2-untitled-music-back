@@ -36,6 +36,8 @@ jobs:
         run: |
           echo '${{ secrets.DOCKER_ENV }}' >> .env
           echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
+          ls -al ./
+          cat .env || echo ".env file does not exist!"
 
       - name: Upload env as artifact
         uses: actions/upload-artifact@v4
