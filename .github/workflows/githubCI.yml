@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: env
-          path: ./.env
+          path: .env
         
       - name: Pull DB Image From ECR
         if: steps.db-docker-image.outputs.cache-hit != 'true' 
