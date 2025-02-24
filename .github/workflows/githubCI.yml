@@ -14,8 +14,6 @@ jobs:
       id-token: write
       contents: read
       
-    outputs:
-      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
     steps:
       - name: Cache DB Docker Image
         id: db-docker-image
@@ -33,6 +31,17 @@ jobs:
       - name: Login to ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Create Docker Env File
+        run: |
+          echo '${{ secrets.DOCKER_ENV }}' >> .env
+          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
+
+      - name: Upload env as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: env
+          path: ./.env
         
       - name: Pull DB Image From ECR
         if: steps.db-docker-image.outputs.cache-hit != 'true' 
@@ -64,11 +73,12 @@ jobs:
       - name: Load Image
         run: |
           docker load -i ~/db-docker-image/soundflyer-db.tar
-      
-      - name: Create Docker Env File
-        run: |
-          echo '${{ secrets.DOCKER_ENV }}' >> .env
-          echo "ECR_REGISTRY=${{ needs.db-container-cache.outputs.ECR_REGISTRY }}" >> .env
+
+      - name: Download env
+        uses: actions/download-artifact@v4
+        with:
+          name: env
+          path: ./
 
       - name: Create Docker Compose File
         run: |
