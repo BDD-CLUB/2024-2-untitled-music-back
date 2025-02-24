@@ -13,7 +13,9 @@ jobs:
     permissions:
       id-token: write
       contents: read
-
+      
+    outputs:
+      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
     steps:
       - name: Cache DB Docker Image
         id: db-docker-image
@@ -66,7 +68,7 @@ jobs:
       - name: Create Docker Env File
         run: |
           echo '${{ secrets.DOCKER_ENV }}' >> .env
-          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
+          echo "ECR_REGISTRY=${{ needs.db-container-cache.outputs.ECR_REGISTRY }}" >> .env
 
       - name: Create Docker Compose File
         run: |
