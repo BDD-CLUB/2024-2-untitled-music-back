@@ -8,6 +8,7 @@ on:
 
 jobs:
   db-container-cache:
+    if: steps.db-docker-image.outputs.cache-hit != 'true' # DB 캐시 없을 때만 실행
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
@@ -20,30 +21,27 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
-
+          
       - name: Login to ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Create Cache Docker Image Directory
-        run: mkdir -p ~/db-docker-image
-
+        
+      - name: Pull DB Image From ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          mkdir -p ~/db-docker-image
+          docker pull $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }}
+          docker save -o \
+            ~/db-docker-image/soundflyer-db.tar \
+            $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }} 
+      
       - name: Cache DB Docker Image
         id: db-docker-image
         uses: actions/cache@v3
         with:
           path: ~/db-docker-image
           key: db-docker-image-${{ runner.os }}
-
-      - name: Pull DB Image From ECR
-        if: steps.db-docker-image.outputs.cache-hit != 'true'
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: |
-          docker pull $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }}
-          docker save -o \
-            ~/db-docker-image/soundflyer-db.tar \
-            $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }} 
 
   test:
       needs: [ db-container-cache ]
@@ -54,6 +52,13 @@ jobs:
         contents: read
 
       steps:
+      - name: Cache DB Docker Image
+        id: db-docker-image
+        uses: actions/cache@v3
+        with:
+          path: ~/db-docker-image
+          key: db-docker-image-${{ runner.os }}
+          
       - name: Load Image
         run: |
           docker load -i ~/db-docker-image/soundflyer-db.tar
