@@ -70,6 +70,9 @@ jobs:
         run: |
           echo '${{ secrets.DOCKER_ENV }}' >> .env
           echo "$ECR_REGISTRY" >> .env
+
+      - name: Debug .env file
+        run: cat .env 
           
       - name: Create Docker Compose File
         run: |
