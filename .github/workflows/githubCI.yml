@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  db-container-cache:
+  test:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
@@ -23,17 +23,16 @@ jobs:
           key: db-docker-image-${{ runner.os }}
           
       - name: Configure AWS Credentials
+        if: steps.db-docker-image.outputs.cache-hit != 'true' 
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
           
       - name: Login to ECR
+        if: steps.db-docker-image.outputs.cache-hit != 'true' 
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Set environment variable
-        run: echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
 
       - name: Pull DB Image From ECR
         if: steps.db-docker-image.outputs.cache-hit != 'true' 
@@ -41,38 +40,19 @@ jobs:
           ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
         run: |
           mkdir -p ~/db-docker-image
-          docker pull $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }}
+          docker pull ${{ steps.login-ecr.outputs.registry }}/soundflyer-dev:${{ secrets.DB_TAG }}
           docker save -o \
             ~/db-docker-image/soundflyer-db.tar \
-            $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }} 
+            ${{ steps.login-ecr.outputs.registry }}/soundflyer-dev:${{ secrets.DB_TAG }} 
 
-  test:
-      needs: [ db-container-cache ]
-      runs-on: ubuntu-22.04
-      timeout-minutes: 10
-      permissions:
-        id-token: write
-        contents: read
-
-      steps:
-      - name: Cache DB Docker Image
-        id: db-docker-image
-        uses: actions/cache@v3
-        with:
-          path: ~/db-docker-image
-          key: db-docker-image-${{ runner.os }}
-          
       - name: Load Image
         run: |
           docker load -i ~/db-docker-image/soundflyer-db.tar
 
-      - name: Print ECR_REGISTRY
-        run: echo ${{ env.ECR_REGISTRY }}
-
       - name: Create Docker Env File
         run: |
           echo '${{ secrets.DOCKER_ENV }}' >> .env
-          echo "ECR_REGISTRY=${{ env.ECR_REGISTRY }}" >> .env
+          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
           
       - name: Create Docker Compose File
         run: |
