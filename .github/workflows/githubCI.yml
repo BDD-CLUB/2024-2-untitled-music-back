@@ -32,23 +32,9 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Create Docker Env File
-        run: |
-          echo '${{ secrets.DOCKER_ENV }}' >>  .env
-          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >>  .env
+      - name: Set environment variable
+        run: echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
 
-      - name: Debug .env file before upload
-        run: |
-          echo "Current directory: $(pwd)"
-          ls -al
-          cat .env || echo ".env file does not exist!"
-    
-      - name: Upload env as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: env
-          path: .env
-        
       - name: Pull DB Image From ECR
         if: steps.db-docker-image.outputs.cache-hit != 'true' 
         env:
@@ -80,12 +66,11 @@ jobs:
         run: |
           docker load -i ~/db-docker-image/soundflyer-db.tar
 
-      - name: Download env
-        uses: actions/download-artifact@v4
-        with:
-          name: env
-          path: ./
-
+      - name: Create Docker Env File
+        run: |
+          echo '${{ secrets.DOCKER_ENV }}' >> .env
+          echo "$ECR_REGISTRY" >> .env
+          
       - name: Create Docker Compose File
         run: |
           echo '${{ secrets.DOCKER_COMPOSE }}' >> docker-compose.yml
