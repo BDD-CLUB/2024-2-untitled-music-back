@@ -26,14 +26,12 @@ jobs:
           key: db-docker-image-${{ runner.os }}
 
       - name: Configure AWS Credentials
-        if: steps.db-docker-image.outputs.cache-hit != 'true'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to ECR
-        if: steps.db-docker-image.outputs.cache-hit != 'true'
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
