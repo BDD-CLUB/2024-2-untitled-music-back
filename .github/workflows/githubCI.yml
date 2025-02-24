@@ -8,7 +8,6 @@ on:
 
 jobs:
   db-container-cache:
-    if: steps.db-docker-image.outputs.cache-hit != 'true' # DB 캐시 없을 때만 실행
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
@@ -16,6 +15,13 @@ jobs:
       contents: read
 
     steps:
+      - name: Cache DB Docker Image
+        id: db-docker-image
+        uses: actions/cache@v3
+        with:
+          path: ~/db-docker-image
+          key: db-docker-image-${{ runner.os }}
+          
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -27,6 +33,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
         
       - name: Pull DB Image From ECR
+        if: steps.db-docker-image.outputs.cache-hit != 'true' 
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
@@ -35,13 +42,6 @@ jobs:
           docker save -o \
             ~/db-docker-image/soundflyer-db.tar \
             $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }} 
-      
-      - name: Cache DB Docker Image
-        id: db-docker-image
-        uses: actions/cache@v3
-        with:
-          path: ~/db-docker-image
-          key: db-docker-image-${{ runner.os }}
 
   test:
       needs: [ db-container-cache ]
