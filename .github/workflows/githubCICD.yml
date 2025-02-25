@@ -50,7 +50,7 @@ jobs:
       - name: Pull DB Image From ECR
         uses: ./actions-module/common/container/image-pull
         with:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REGISTRY: ${{ secrets.ECR_REGISTRY }}
           CACHE_PATH: '~/db-docker-image'
           IMAGE_CACHE_HIT: ${{ steps.db-docker-image.outputs.cache-hit }}
           IMAGE_NAME: 'soundflyer-dev'
@@ -62,7 +62,7 @@ jobs:
       - name: Create Docker Env File
         run: |
           echo '${{ secrets.DOCKER_ENV }}' >> .env
-          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
+          echo "ECR_REGISTRY=${{ secrets.ECR_REGISTRY }}" >> .env
           
       - name: Create Docker Compose File
         run: |
