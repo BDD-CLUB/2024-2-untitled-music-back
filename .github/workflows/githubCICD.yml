@@ -27,7 +27,9 @@ jobs:
         with:
           repository: "lcqff/github-actions-module"
           path: ./actions-module
-          
+
+      - run: ls actions-module/common/aws/
+      
       - name: Create Cache Docker Image Directory
         run: mkdir -p ~/db-docker-image
         
