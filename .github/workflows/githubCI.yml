@@ -14,7 +14,7 @@ on:
 
 jobs:
   test:
-    if: github.event.inputs.action != 'Deploy'
+    if: github.event.inputs.type != 'Deploy'
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
@@ -99,7 +99,7 @@ jobs:
           path: build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar
   
   deploy:
-    if: github.event.pull_request.merged == true || github.event.inputs.action == 'Deploy'
+    if: github.event.pull_request.merged == true || github.event.inputs.type == 'Deploy'
     needs: [ test ]
     runs-on: ubuntu-22.04
     timeout-minutes: 10
