@@ -5,9 +5,16 @@ on:
   pull_request:
     branches: [ "develop" ]
   workflow_dispatch:
+    inputs:
+      type:
+        type: choice
+        options:
+          - Test
+          - Deploy
 
 jobs:
   test:
+    if: github.event.inputs.action != 'Deploy'
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
@@ -83,3 +90,52 @@ jobs:
         env:
           JASYPT_KEY: ${{ secrets.JASYPT_KEY }}
       - run: ls build/libs
+      - run: java -Djarmode=layertools -jar build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar extract
+
+      - name: Upload JAR as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-jar
+          path: build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar
+  
+  deploy:
+    if: github.event.pull_request.merged == true || github.event.inputs.action == 'Deploy'
+    needs: [ test ]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    permissions:
+      id-token: write
+      contents: read
+      
+    steps:
+        - name: Download Built JAR
+          uses: actions/download-artifact@v4
+          with:
+            name: built-jar
+            path: build/libs
+
+        - name: Configure AWS Credentials
+          id: credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-region: ${{ vars.AWS_REGION }}
+            role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        
+        - name: Upload JAR to S3
+          run: |
+            aws s3 mv --region ${{ secrets.AWS_REGION }} \
+            build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar \
+            ${{ secrets.S3_DEV_BACK_LOCATION }}/${GITHUB_SHA::8}.jar
+  
+        - name: Deploy
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.SSH_HOST_DEV }} 
+            username: ${{ secrets.SSH_USERNAME_DEV }} 
+            port: ${{ secrets.SSH_PORT_DEV }} 
+            key: ${{ secrets.SSH_KEY_DEV }} 
+            envs: GITHUB_SHA
+            script: |
+              cd ~/soundflyer-infra/deploy 
+              chmod +x ./deploy_back.sh                 
+              sudo -E ./deploy_back.sh ${GITHUB_SHA::8} dev 
