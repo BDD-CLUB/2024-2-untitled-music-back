@@ -22,17 +22,15 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository Code
         uses: actions/checkout@v4
         
-      - name: checkout the module code
+      - name: Checkout Action Module code
         uses: actions/checkout@v4
         with:
           repository: "lcqff/github-actions-module"
           path: ./actions-module
 
-      - run: ls actions-module/common/aws/
-      
       - name: Create Cache Docker Image Directory
         run: mkdir -p ~/db-docker-image
         
@@ -49,23 +47,14 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_ARN }}
 
-      - name: Login to ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
       - name: Pull DB Image From ECR
-        if: steps.db-docker-image.outputs.cache-hit != 'true'
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: |
-          docker pull $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }}
-          docker save -o \
-            ~/db-docker-image/soundflyer-db.tar \
-            $ECR_REGISTRY/soundflyer-dev:${{ secrets.DB_TAG }} 
-            
-      - name: Load Image
-        run: |
-          docker load -i ~/db-docker-image/soundflyer-db.tar
+        uses: ./actions-module/common/container/image-pull
+        with:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          CACHE_PATH: '~/db-docker-image'
+          IMAGE_CACHE_HIT: ${{ steps.db-docker-image.outputs.cache-hit }}
+          IMAGE_NAME: 'soundflyer-dev'
+          IMAGE_TAG: ${{ secrets.DB_TAG }}
       
       - name: Check Docker Images 
         run: docker images
