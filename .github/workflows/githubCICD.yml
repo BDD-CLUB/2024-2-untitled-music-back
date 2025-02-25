@@ -22,6 +22,12 @@ jobs:
       contents: read
 
     steps:
+      - name: checkout the module code
+        uses: actions/checkout@v4
+        with:
+          repository: "lcqff/github-actions-module"
+          path: ./actions-module
+          
       - name: Create Cache Docker Image Directory
         run: mkdir -p ~/db-docker-image
         
@@ -33,10 +39,10 @@ jobs:
           key: db-docker-image-${{ runner.os }}
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: ./actions-module/common/aws
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_ARN }}
 
       - name: Login to ECR
         id: login-ecr
