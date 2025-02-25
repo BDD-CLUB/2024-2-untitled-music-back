@@ -92,7 +92,8 @@ jobs:
       
       # - run: java -Djarmode=layertools -jar build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar extract
 
-      - name: Upload JAR as Artifact
+      - name: Upload JAR as Artifact    
+        if: (github.event.pull_request.merged == true || github.event.inputs.type == 'Deploy')
         uses: actions/upload-artifact@v4
         with:
           name: built-jar
@@ -117,11 +118,10 @@ jobs:
             path: build/libs
 
         - name: Configure AWS Credentials
-          id: credentials
           uses: aws-actions/configure-aws-credentials@v4
           with:
-            aws-region: ${{ vars.AWS_REGION }}
-            role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+            role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+            aws-region: ${{ secrets.AWS_REGION }}  
         
         - name: Upload JAR to S3
           run: |
