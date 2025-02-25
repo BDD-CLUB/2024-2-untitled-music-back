@@ -13,6 +13,7 @@ on:
           - Deploy
 
 jobs:
+  # Deploy로 수동트리거 되는 경우 실행하지 않음. 그 외 모든 경우 실행됨
   test:
     if: github.event.inputs.type != 'Deploy'
     runs-on: ubuntu-22.04
@@ -97,9 +98,11 @@ jobs:
         with:
           name: built-jar
           path: build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar
-  
+
+
+  # 머지되거나 Deploy로 수동 트리거 되는 경우에 실행
   deploy:
-    if: github.event.pull_request.merged == true || github.event.inputs.type == 'Deploy'
+    if: (github.event.pull_request.merged == true || github.event.inputs.type == 'Deploy') && always()
     needs: [ test ]
     runs-on: ubuntu-22.04
     timeout-minutes: 10
