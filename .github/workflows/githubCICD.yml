@@ -59,11 +59,6 @@ jobs:
       - name: Check Docker Images 
         run: docker images
 
-      - name: Create Docker Env File
-        run: |
-          echo '' >> .env
-          echo  >> .env
-
       - name: Create Docker Env and Docker Compose File
         uses: ./actions-module/common/container/env
         with:
@@ -72,21 +67,13 @@ jobs:
           
       - name: Start Containers
         run: docker compose -p soundflyer up -d
-            
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: temurin
-          cache: gradle
 
-      - name: Gradle Build & Test
-        uses: gradle/gradle-build-action@v2
+      - name: Build & Test
+        uses: ./actions-module/common/container/env
         with:
-          gradle-version: 8.5
-          arguments: build
-          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'ref/heads/develop' }}
-        env:
+          JAVA_VERSION: 17
+          GRADLE_VERSION: 8.5
+          CURRENT_BRANCH:  ${{ github.ref }}
           JASYPT_KEY: ${{ secrets.JASYPT_KEY }}
       
       # - run: java -Djarmode=layertools -jar build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar extract
