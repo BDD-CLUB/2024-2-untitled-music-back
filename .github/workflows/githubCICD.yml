@@ -67,7 +67,7 @@ jobs:
       - name: Create Docker Env and Docker Compose File
         uses: ./actions-module/common/container/env
         with:
-          DOCKER_ENV: ${{ secrets.DOCKER_ENV }}\nECR_REGISTRY=${{ secrets.ECR_REGISTRY }}
+          DOCKER_ENV: "${{ secrets.DOCKER_ENV }}\nECR_REGISTRY=${{ secrets.ECR_REGISTRY }}"
           DOCKER_COMPOSE: ${{ secrets.DOCKER_COMPOSE }}
           
       - name: Start Containers
