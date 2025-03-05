@@ -53,6 +53,7 @@ jobs:
         with:
           REGISTRY: ${{ secrets.ECR_REGISTRY }}
           CACHE_PATH: '~/db-docker-image'
+          CACHE_NAME: 'soundflyer-db'
           IMAGE_NAME: 'soundflyer-dev'
           IMAGE_TAG: ${{ secrets.DB_TAG }}
 
