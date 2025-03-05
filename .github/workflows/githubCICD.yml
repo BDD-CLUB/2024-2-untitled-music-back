@@ -14,13 +14,13 @@ on:
 
 jobs:
   # 모든 경우 실행됨
-  test:
+
+  cache-db-image:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
-    permissions:
-      id-token: write
-      contents: read
-
+    outputs:
+      cache-hit: ${{ steps.db-docker-image.outputs.cache-hit }}
+      
     steps:
       - name: Checkout Repository Code
         uses: actions/checkout@v4
@@ -41,6 +41,24 @@ jobs:
           path: ~/db-docker-image
           key: db-docker-image-${{ runner.os }}
 
+  test:
+    needs: [cache-db-image] 
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+        
+      - name: Checkout Action Module code
+        uses: actions/checkout@v4
+        with:
+          repository: "lcqff/github-actions-module"
+          path: ./actions-module
+
       - name: Configure AWS Credentials
         uses: ./actions-module/common/aws
         with:
@@ -48,11 +66,11 @@ jobs:
           AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_ARN }}
 
       - name: Pull DB Image From ECR
+        if: ${{ needs.cache-db-image.outputs.cache-hit }} != 'true'
         uses: ./actions-module/common/container/image-pull
         with:
           REGISTRY: ${{ secrets.ECR_REGISTRY }}
           CACHE_PATH: '~/db-docker-image'
-          IMAGE_CACHE_HIT: ${{ steps.db-docker-image.outputs.cache-hit }}
           IMAGE_NAME: 'soundflyer-dev'
           IMAGE_TAG: ${{ secrets.DB_TAG }}
       
