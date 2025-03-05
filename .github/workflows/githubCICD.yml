@@ -55,6 +55,10 @@ jobs:
           CACHE_PATH: '~/db-docker-image'
           IMAGE_NAME: 'soundflyer-dev'
           IMAGE_TAG: ${{ secrets.DB_TAG }}
+
+      - name: Load Image
+        run: |
+          docker load -i ~/db-docker-image/soundflyer-db.tar
       
       - name: Check Docker Images 
         run: docker images
