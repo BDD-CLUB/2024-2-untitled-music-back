@@ -82,6 +82,10 @@ jobs:
         with:
           DOCKER_ENV: "${{ secrets.DOCKER_ENV }}\nECR_REGISTRY=${{ secrets.ECR_REGISTRY }}"
           DOCKER_COMPOSE: ${{ secrets.DOCKER_COMPOSE }}
+
+      - name: Load Image
+        run: |
+          docker load -i ${{ inputs.CACHE_PATH }}/temp-image.tar
           
       - name: Start Containers
         run: docker compose -p soundflyer up -d
