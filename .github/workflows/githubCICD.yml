@@ -61,12 +61,14 @@ jobs:
 
       - name: Create Docker Env File
         run: |
-          echo '${{ secrets.DOCKER_ENV }}' >> .env
-          echo "ECR_REGISTRY=${{ secrets.ECR_REGISTRY }}" >> .env
-          
-      - name: Create Docker Compose File
-        run: |
-          echo '${{ secrets.DOCKER_COMPOSE }}' >> docker-compose.yml
+          echo '' >> .env
+          echo  >> .env
+
+      - name: Create Docker Env and Docker Compose File
+        uses: ./actions-module/common/container/env
+        with:
+          DOCKER_ENV: ${{ secrets.DOCKER_ENV }}\nECR_REGISTRY=${{ secrets.ECR_REGISTRY }}
+          DOCKER_COMPOSE: ${{ secrets.DOCKER_COMPOSE }}
           
       - name: Start Containers
         run: docker compose -p soundflyer up -d
