@@ -69,7 +69,7 @@ jobs:
         run: docker compose -p soundflyer up -d
 
       - name: Build & Test
-        uses: ./actions-module/common/container/env
+        uses: ./actions-module/common/test/gradle
         with:
           JAVA_VERSION: 17
           GRADLE_VERSION: 8.5
