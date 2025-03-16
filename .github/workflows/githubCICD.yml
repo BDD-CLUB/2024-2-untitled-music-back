@@ -51,7 +51,7 @@ jobs:
           AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_ARN }}
 
       - name: Pull DB Image From ECR
-        if: ${{ steps.db-docker-image.outputs.cache-hit == 'false' }}
+        if: 
         uses: ./actions-module/common/container/image-pull
         with:
           REGISTRY: ${{ secrets.ECR_REGISTRY }}
