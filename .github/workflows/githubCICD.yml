@@ -11,6 +11,9 @@ on:
         options:
           - Test
           - Deploy
+      alert:
+        type: boolean
+        description: Alert To Discord
 
 jobs:
   # 모든 경우 실행됨
@@ -131,4 +134,22 @@ jobs:
             script: |
               cd ~/soundflyer-infra/deploy 
               chmod +x ./deploy_back.sh                 
-              sudo -E ./deploy_back.sh ${GITHUB_SHA::8} dev 
+              sudo -E ./deploy_back.sh ${GITHUB_SHA::8} dev
+
+  # 머지 성공 시 실행
+  discord_alert:
+    if: github.event.pull_request.merged == true || github.event.inputs.alert == true
+    needs: [ deploy ]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
