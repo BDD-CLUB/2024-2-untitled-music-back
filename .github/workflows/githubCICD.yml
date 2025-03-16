@@ -138,7 +138,7 @@ jobs:
 
   # 머지 성공 시 실행
   discord_alert:
-    if: github.event.pull_request.merged == true || github.event.inputs.alert == true
+    if: github.event.pull_request.merged == true || github.event.inputs.alert == 'true'
     needs: [ deploy ]
     runs-on: ubuntu-22.04
     timeout-minutes: 10
