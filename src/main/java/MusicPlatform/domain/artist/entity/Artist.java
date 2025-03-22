@@ -1,11 +1,17 @@
 package MusicPlatform.domain.artist.entity;
 
+import MusicPlatform.domain.follow.entity.Follow;
 import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +48,11 @@ public class Artist extends UuidEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "follower", orphanRemoval = true)
+    private Set<Follow> followers;
+    @OneToMany(mappedBy = "following", orphanRemoval = true)
+    private Set<Follow> followings;
 
     @Column(nullable = false)
     private boolean isDeleted;
