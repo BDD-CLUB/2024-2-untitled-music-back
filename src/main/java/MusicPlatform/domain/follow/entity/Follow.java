@@ -27,4 +27,9 @@ public class Follow  extends UuidEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FOLLOWING_ID", nullable = false)
     private Artist following; //팔로 할 사람
+
+    public Follow(Artist follower, Artist following) {
+        this.follower = follower;
+        this.following = following;
+    }
 }

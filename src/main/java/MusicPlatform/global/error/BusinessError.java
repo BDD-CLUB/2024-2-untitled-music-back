@@ -10,6 +10,9 @@ public enum BusinessError {
     //Artist
     NOT_FOUND_ARTIST(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),
 
+    //Follow
+    NOT_FOUND_FOLLOW(HttpStatus.NOT_FOUND, "팔로잉을 찾을 수 없습니다."),
+
     //Album
     NOT_FOUND_ALBUM(HttpStatus.NOT_FOUND, "앨범을 찾을 수 없습니다."),
 
