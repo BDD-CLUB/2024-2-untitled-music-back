@@ -1,5 +1,6 @@
 package MusicPlatform.domain.follow.service;
 
+import static MusicPlatform.global.error.BusinessError.FORBIDDEN_FOLLOWING_ACCESS;
 import static MusicPlatform.global.error.BusinessError.NOT_FOUND_FOLLOW;
 
 import MusicPlatform.domain.artist.entity.Artist;
@@ -34,8 +35,11 @@ public class FollowService {
     }
 
     // unfollow
-    public void delete(String uuid) {
+    public void delete(String artistUuid, String uuid) {
         Follow follow = findByUuid(uuid);
+        if (!follow.getFollower().getUuid().equals(artistUuid)) {
+            throw new BusinessException(FORBIDDEN_FOLLOWING_ACCESS);
+        }
         followRepository.delete(follow);
     }
 }

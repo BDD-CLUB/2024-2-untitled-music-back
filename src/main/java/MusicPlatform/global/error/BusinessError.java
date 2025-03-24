@@ -12,6 +12,7 @@ public enum BusinessError {
 
     //Follow
     NOT_FOUND_FOLLOW(HttpStatus.NOT_FOUND, "팔로잉을 찾을 수 없습니다."),
+    FORBIDDEN_FOLLOWING_ACCESS(HttpStatus.FORBIDDEN, "팔로잉 접근 권한이 없습니다."),
 
     //Album
     NOT_FOUND_ALBUM(HttpStatus.NOT_FOUND, "앨범을 찾을 수 없습니다."),
