@@ -71,6 +71,24 @@ public class ArtistService {
         return artist.stream().map(ArtistResponseDto::from).toList();
     }
 
+    //artist를 팔로하고 있는 모든(최근 20명) 회원을 구한다.
+    @Transactional(readOnly = true)
+    public List<ArtistResponseDto> findAllFollowing(String uuid) {
+        Artist artist = findByUuid(uuid);
+        Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt").descending());
+        Page<Artist> artists = artistRepository.findAllByFollowingIsArtist(artist, pageable);
+        return artists.stream().map(ArtistResponseDto::from).toList();
+    }
+
+    //artist가 팔로하고 있는 모든(최근 20명) 회원을 구한다.
+    @Transactional(readOnly = true)
+    public List<ArtistResponseDto> findAllFollower(String uuid) {
+        Artist artist = findByUuid(uuid);
+        Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt").descending());
+        Page<Artist> artists = artistRepository.findAllByFollowerIsArtist(artist, pageable);
+        return artists.stream().map(ArtistResponseDto::from).toList();
+    }
+
     public ArtistResponseDto changeArtistImage(String newImage) {
 
         String uuid = authorizationHelper.getMyUuid();

@@ -74,4 +74,18 @@ public class ArtistController {
         artistService.removeArtist();
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "팔로워 조회")
+    @GetMapping("artists/{uuid}/followers")
+    public ResponseEntity<List<ArtistResponseDto>> getFollower(@PathVariable String uuid) {
+        List<ArtistResponseDto> responseDto = artistService.findAllFollower(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @Operation(summary = "팔로잉 조회")
+    @GetMapping("artists/{uuid}/followings")
+    public ResponseEntity<List<ArtistResponseDto>> getFollowing(@PathVariable String uuid) {
+        List<ArtistResponseDto> responseDto = artistService.findAllFollowing(uuid);
+        return ResponseEntity.ok(responseDto);
+    }
 }
