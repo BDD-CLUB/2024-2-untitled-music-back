@@ -22,7 +22,7 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE follow SET is_deleted = true where id = ?")
 public class Follow extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FOLLOWIER_ID", nullable = false)
+    @JoinColumn(name = "FOLLOWER_ID", nullable = false)
     private Artist follower; //팔로 하는 사람
 
     @ManyToOne(fetch = FetchType.LAZY)
