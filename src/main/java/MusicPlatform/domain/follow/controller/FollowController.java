@@ -32,7 +32,7 @@ public class FollowController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "언팔로우")
-    @DeleteMapping("/follow/{uuid}")
+    @DeleteMapping("artist/{uuid}/unfollow")
     public ResponseEntity<Void> unfollow(@AuthenticationPrincipal String myUuid,
                                        @PathVariable String uuid) {
         followService.delete(myUuid, uuid);
