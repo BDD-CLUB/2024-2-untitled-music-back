@@ -96,6 +96,10 @@ jobs:
         with:
           name: built-jar
           path: build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar
+      
+      - name: Check PR merge status
+        run: |
+          echo "Merged: ${{ github.event.pull_request.merged }}"
 
 
   # 머지되거나 Deploy로 수동 트리거 되는 경우에 실행
