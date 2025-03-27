@@ -50,12 +50,12 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_ARN }}
 
-      - name: Check Cache Hit
-        run: |
-          echo "Cache hit: ${{ steps.db-docker-image.outputs.cache-hit }}"
+      # - name: Check Cache Hit
+      #   run: |
+      #     echo "Cache hit: ${{ steps.db-docker-image.outputs.cache-hit }}"
 
       - name: Pull DB Image From ECR
-        if: steps.db-docker-image.outputs.cache-hit == 'false'
+        if: steps.db-docker-image.outputs.cache-hit != 'true'
         uses: ./actions-module/common/container/image-pull
         with:
           REGISTRY: ${{ secrets.ECR_REGISTRY }}
