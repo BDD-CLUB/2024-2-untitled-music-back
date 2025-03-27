@@ -11,6 +11,8 @@ public record ArtistResponseDto(
         String description,
         String link1,
         String link2,
+        int following,
+        int follower,
         Role role,
         String email,
         String artistImage
@@ -22,6 +24,8 @@ public record ArtistResponseDto(
                 .description(artist.getDescription())
                 .link1(artist.getLink1())
                 .link2(artist.getLink2())
+                .follower(artist.getFollowings().size())
+                .following(artist.getFollowings().size())
                 .role(artist.getRole())
                 .email(artist.getEmail())
                 .artistImage(artist.getArtistImage())

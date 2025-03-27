@@ -22,7 +22,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 @Transactional
 @SpringBootTest
-@Sql("/sql/service-test-data.sql")
+@Sql("/sql/album-test-data.sql")
 public class PlaylistServiceTest {
     @Autowired
     private EntityManager entityManager;
