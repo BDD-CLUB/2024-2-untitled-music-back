@@ -15,7 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest
 @Transactional
-@Sql("/sql/album-test-data.sql")
+@Sql("/sql/service-test-data.sql")
 public class AlbumServiceTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
