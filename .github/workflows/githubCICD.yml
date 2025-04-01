@@ -2,8 +2,8 @@ name: CICD
 on:
   push:
     branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+  # pull_request:
+  #   branches: [ "develop" ]
   workflow_dispatch:
     inputs:
       type:
@@ -23,6 +23,8 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    outputs:
+      isMerged: ${{ steps.check-merge.outputs.MERGED_PR }}
 
     steps:
       - name: Checkout Repository Code
@@ -96,16 +98,23 @@ jobs:
         with:
           name: built-jar
           path: build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar
-      
+
       - name: Check PR merge status
+        id: check-merge
         run: |
-          echo "Merged: ${{ github.event.pull_request.merged }}"
+          # 현재 커밋의 부모 확인 (PR 머지는 보통 2개의 부모를 가짐)
+          PARENT_COUNT=$(git rev-list --count --merges -n 1 HEAD)
+          if [ "$PARENT_COUNT" -eq 0 ]; then
+            echo "MERGED_PR=false" >> $GITHUB_OUTPUT
+          else
+            echo "MERGED_PR=true" >> $GITHUB_OUTPUT
+          fi
 
 
   # 머지되거나 Deploy로 수동 트리거 되는 경우에 실행
   deploy:
-    if: (github.event.pull_request.merged == true || github.event.inputs.type == 'Deploy')
     needs: [ test ]
+    if: ${{ needs.test.outputs.isMerged }} == 'true' || github.event.inputs.type == 'Deploy'
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
@@ -146,8 +155,8 @@ jobs:
 
   # 머지 성공 시 실행
   discord_alert:
-    if: github.event.pull_request.merged == true || github.event.inputs.alert == 'true'
-    needs: [ deploy ]
+    if: ${{ needs.test.outputs.isMerged }} == 'true' || github.event.inputs.alert == 'true'
+    needs: [ test, deploy ]
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
