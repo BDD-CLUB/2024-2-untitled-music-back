@@ -2,8 +2,6 @@ name: CICD
 on:
   push:
     branches: [ "develop" ]
-  # pull_request:
-  #   branches: [ "develop" ]
   workflow_dispatch:
     inputs:
       type:
@@ -23,8 +21,6 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    outputs:
-      isMerged: ${{ steps.check-merge.outputs.MERGED_PR }}
 
     steps:
       - name: Checkout Repository Code
@@ -99,22 +95,10 @@ jobs:
           name: built-jar
           path: build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar
 
-      - name: Check PR merge status
-        id: check-merge
-        run: |
-          # 현재 커밋의 부모 확인 (PR 머지는 보통 2개의 부모를 가짐)
-          PARENT_COUNT=$(git rev-list --count --merges -n 1 HEAD)
-          if [ "$PARENT_COUNT" -eq 0 ]; then
-            echo "MERGED_PR=false" >> $GITHUB_OUTPUT
-          else
-            echo "MERGED_PR=true" >> $GITHUB_OUTPUT
-          fi
-
-
-  # 머지되거나 Deploy로 수동 트리거 되는 경우에 실행
+  # push되거나 Deploy로 수동 트리거 되는 경우에 실행
   deploy:
     needs: [ test ]
-    if: ${{ needs.test.outputs.isMerged }} == 'true' || github.event.inputs.type == 'Deploy'
+    if: github.event_name == 'push' || github.event.inputs.type == 'Deploy'
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
@@ -153,10 +137,10 @@ jobs:
               chmod +x ./deploy_back.sh                 
               sudo -E ./deploy_back.sh ${GITHUB_SHA::8} dev
 
-  # 머지 성공 시 실행
+  # Push시 실행
   discord_alert:
-    if: ${{ needs.test.outputs.isMerged }} == 'true' || github.event.inputs.alert == 'true'
-    needs: [ test, deploy ]
+    if: github.event_name == 'push' || github.event.inputs.alert == 'true'
+    needs: [ deploy ]
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
@@ -164,9 +148,20 @@ jobs:
       contents: read
     
     steps:
+      - name: Set up GitHub CLI
+        uses: cli/gh-actions@v2
+
+      - name: Get merged PR title
+        id: get-pr-title
+        run: |
+          # Fetch PRs that were merged into develop
+          PR_TITLE=$(gh pr list --state merged --base develop --sort merged --limit 1 --json title -q '.[0].title')
+          echo "Most recent merged PR title: $PR_TITLE"
+          echo "PR_TITLE=$PR_TITLE" >> $GITHUB_OUTPUT
+
       - name: Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'The project ${{ github.event.pull_request.title }} has been deployed.'
+          args: 'The project ${{ steps.get-pr-title.outputs.PR_TITLE }} has been deployed.'
