@@ -49,9 +49,10 @@ public class Artist extends UuidEntity {
     @Column(nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "follower", orphanRemoval = true)
-    private Set<Follow> followers;
+    //mappedBy 주의
     @OneToMany(mappedBy = "following", orphanRemoval = true)
+    private Set<Follow> followers;
+    @OneToMany(mappedBy = "follower", orphanRemoval = true)
     private Set<Follow> followings;
 
     @Column(nullable = false)
