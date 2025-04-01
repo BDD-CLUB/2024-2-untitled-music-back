@@ -43,4 +43,14 @@ public class ArtistServiceTest {
         //then
         assertThat(responseDtos.size()).isEqualTo(2);
     }
+
+    @Test
+    @DisplayName("아티스트의 팔로잉,팔로워 수를 적절히 반환할 수 있다.")
+    public void 아티스트의_팔로잉팔로워_수를_적절히_반환할_수_있다() throws Exception {
+      //given & when
+        Artist artist = artistRepository.findById(1L).orElseThrow();
+      //then
+      assertThat(artist.getFollowers().size()).isEqualTo(1);
+      assertThat(artist.getFollowings().size()).isEqualTo(2);
+    }
 }
