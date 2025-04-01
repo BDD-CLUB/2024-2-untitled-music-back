@@ -89,7 +89,7 @@ jobs:
       # - run: java -Djarmode=layertools -jar build/libs/MusicPlatform-0.0.1-SNAPSHOT.jar extract
 
       - name: Upload JAR as Artifact    
-        if: (github.event.pull_request.merged == true || github.event.inputs.type == 'Deploy')
+        if: github.event_name == 'push' || github.event.inputs.type == 'Deploy')
         uses: actions/upload-artifact@v4
         with:
           name: built-jar
@@ -148,20 +148,17 @@ jobs:
       contents: read
     
     steps:
-      - name: Set up GitHub CLI
-        uses: cli/gh-actions@v2
-
-      - name: Get merged PR title
-        id: get-pr-title
+      - name: Get the most recent commit message
+        id: get-commit-message
         run: |
-          # Fetch PRs that were merged into develop
-          PR_TITLE=$(gh pr list --state merged --base develop --sort merged --limit 1 --json title -q '.[0].title')
-          echo "Most recent merged PR title: $PR_TITLE"
-          echo "PR_TITLE=$PR_TITLE" >> $GITHUB_OUTPUT
+          FULL_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          COMMIT_MESSAGE=$(echo $FULL_COMMIT_MESSAGE | sed -n 's/.*#\([0-9]\+\).*/\1/p')
+          echo "Commit message: $COMMIT_MESSAGE"
+          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
 
       - name: Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'The project ${{ steps.get-pr-title.outputs.PR_TITLE }} has been deployed.'
+          args: 'The project ${{ steps.get-commit-message.outputs.COMMIT_MESSAGE }} has been deployed.'
