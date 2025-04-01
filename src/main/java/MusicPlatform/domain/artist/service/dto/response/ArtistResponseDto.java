@@ -24,7 +24,7 @@ public record ArtistResponseDto(
                 .description(artist.getDescription())
                 .link1(artist.getLink1())
                 .link2(artist.getLink2())
-                .follower(artist.getFollowings().size())
+                .follower(artist.getFollowers().size())
                 .following(artist.getFollowings().size())
                 .role(artist.getRole())
                 .email(artist.getEmail())
