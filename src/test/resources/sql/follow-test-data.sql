@@ -11,5 +11,5 @@ values (2, 1, 3);
 insert into follow (id, follower_id, following_id)
 values (3, 2, 1);
 
--- 1 follows 2, 3
--- 2 follows 1
+-- 1 follows 2, 3 (1's following number:2)
+-- 2 follows 1 (1's follower number:1)

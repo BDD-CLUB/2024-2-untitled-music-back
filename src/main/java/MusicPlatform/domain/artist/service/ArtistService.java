@@ -73,7 +73,7 @@ public class ArtistService {
 
     //artist를 팔로하고 있는 모든(최근 20명) 회원을 구한다.
     @Transactional(readOnly = true)
-    public List<ArtistResponseDto> findAllFollowing(String uuid) {
+    public List<ArtistResponseDto> findAllFollower(String uuid) {
         Artist artist = findByUuid(uuid);
         Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt").descending());
         Page<Artist> artists = artistRepository.findAllByFollowingIsArtist(artist, pageable);
@@ -82,7 +82,7 @@ public class ArtistService {
 
     //artist가 팔로하고 있는 모든(최근 20명) 회원을 구한다.
     @Transactional(readOnly = true)
-    public List<ArtistResponseDto> findAllFollower(String uuid) {
+    public List<ArtistResponseDto> findAllFollowing(String uuid) {
         Artist artist = findByUuid(uuid);
         Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt").descending());
         Page<Artist> artists = artistRepository.findAllByFollowerIsArtist(artist, pageable);

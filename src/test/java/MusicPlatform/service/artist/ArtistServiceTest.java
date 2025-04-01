@@ -28,7 +28,7 @@ public class ArtistServiceTest {
         //given
         Artist artist = artistRepository.findById(1L).orElseThrow();
         //when
-        List<ArtistResponseDto> responseDtos = artistService.findAllFollowing(artist.getUuid());
+        List<ArtistResponseDto> responseDtos = artistService.findAllFollower(artist.getUuid());
         //then
         assertThat(responseDtos.size()).isEqualTo(1);
     }
@@ -39,7 +39,7 @@ public class ArtistServiceTest {
         //given
         Artist artist = artistRepository.findById(1L).orElseThrow();
         //when
-        List<ArtistResponseDto> responseDtos = artistService.findAllFollower(artist.getUuid());
+        List<ArtistResponseDto> responseDtos = artistService.findAllFollowing(artist.getUuid());
         //then
         assertThat(responseDtos.size()).isEqualTo(2);
     }
