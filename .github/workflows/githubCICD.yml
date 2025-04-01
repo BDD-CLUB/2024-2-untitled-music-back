@@ -156,8 +156,8 @@ jobs:
       - name: Get the most recent commit message
         id: get-commit-message
         run: |
-          FULL_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          COMMIT_MESSAGE=$(echo $FULL_COMMIT_MESSAGE | sed -n 's/.*#\([0-9]\+\).*/\1/p')
+          FULL_COMMIT_MESSAGE=$(git log -1 --pretty=%B) 
+          COMMIT_MESSAGE=$(echo $FULL_COMMIT_MESSAGE |  sed -n 's/.*#\([0-9]\+\)-\(.*\)/#\1-\2/p')
           echo "Commit message: $COMMIT_MESSAGE"
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
 
