@@ -148,6 +148,9 @@ jobs:
       contents: read
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Get the most recent commit message
         id: get-commit-message
         run: |
