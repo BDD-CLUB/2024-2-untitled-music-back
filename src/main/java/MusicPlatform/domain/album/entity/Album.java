@@ -18,6 +18,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -41,12 +42,15 @@ public class Album extends UuidEntity {
     @Column(nullable = false)
     private LocalDate releaseDate;
 
+    @BatchSize(size = 20)
     @OneToMany(mappedBy = "album", orphanRemoval = true)
     private List<AlbumComment> albumComments;
 
+    @BatchSize(size = 30)
     @OneToMany(mappedBy = "album", orphanRemoval = true)
     private List<AlbumLike> albumLikes;
-    
+
+    @BatchSize(size = 10)
     @OneToMany(mappedBy = "album", orphanRemoval = true)
     private List<Track> tracks;
 
