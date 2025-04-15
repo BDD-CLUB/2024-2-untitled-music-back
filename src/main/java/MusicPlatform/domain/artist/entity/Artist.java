@@ -16,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -50,8 +51,11 @@ public class Artist extends UuidEntity {
     private Role role;
 
     //mappedBy 주의
+    @BatchSize(size = 20)
     @OneToMany(mappedBy = "following", orphanRemoval = true)
     private Set<Follow> followers;
+
+    @BatchSize(size = 20)
     @OneToMany(mappedBy = "follower", orphanRemoval = true)
     private Set<Follow> followings;
 
