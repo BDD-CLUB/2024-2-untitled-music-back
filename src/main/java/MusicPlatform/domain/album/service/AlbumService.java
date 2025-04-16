@@ -11,15 +11,14 @@ import MusicPlatform.domain.album.service.dto.response.AlbumBasicResponseDto;
 import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.artist.service.dto.response.ArtistResponseDto;
-import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.service.dto.response.TrackBasicResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,14 +51,13 @@ public class AlbumService {
     @Transactional(readOnly = true)
     public AlbumFullResponseDto getAlbum(String uuid, int pageNo, int pageSize) {
         Album album = getByUuid(uuid);
-        Pageable trackPageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
         return convertToDto(album);
     }
 
     @Transactional(readOnly = true)
     public List<AlbumFullResponseDto> getAll(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
-        Page<Album> albums = albumRepository.findAll(pageable);
+        Slice<Album> albums = albumRepository.findAllBy(pageable);
         return albums.stream().map(this::convertToDto).toList();
     }
 
@@ -67,7 +65,7 @@ public class AlbumService {
     public List<AlbumBasicResponseDto> getAllByArtist(String uuid, int pageNo, int pageSize) {
         Artist artist = artistService.findByUuid(uuid);
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
-        Page<Album> albums = albumRepository.findAllByArtist(artist, pageable);
+        Slice<Album> albums = albumRepository.findAllByArtist(artist, pageable);
         return albums.stream()
                 .map(AlbumBasicResponseDto::from)
                 .toList();
