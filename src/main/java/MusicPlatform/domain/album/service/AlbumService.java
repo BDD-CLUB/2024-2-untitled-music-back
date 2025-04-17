@@ -63,9 +63,8 @@ public class AlbumService {
 
     @Transactional(readOnly = true)
     public List<AlbumBasicResponseDto> getAllByArtist(String uuid, int pageNo, int pageSize) {
-        Artist artist = artistService.findByUuid(uuid);
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
-        Slice<Album> albums = albumRepository.findAllByArtist(artist, pageable);
+        Slice<Album> albums = albumRepository.findAllByArtistUuid(uuid, pageable);
         return albums.stream()
                 .map(AlbumBasicResponseDto::from)
                 .toList();

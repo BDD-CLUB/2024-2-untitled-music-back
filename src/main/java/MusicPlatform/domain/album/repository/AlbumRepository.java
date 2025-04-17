@@ -1,9 +1,7 @@
 package MusicPlatform.domain.album.repository;
 
 import MusicPlatform.domain.album.entity.Album;
-import MusicPlatform.domain.artist.entity.Artist;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +14,5 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     Slice<Album> findAllBy(Pageable pageable);
 
     Optional<Album> findByUuid(String uuid);
-    Slice<Album> findAllByArtist(Artist artist, Pageable pageable);
+    Slice<Album> findAllByArtistUuid(String uuid, Pageable pageable);
 }
