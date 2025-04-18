@@ -49,7 +49,7 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = true)
-    public AlbumFullResponseDto getAlbum(String uuid, int pageNo, int pageSize) {
+    public AlbumFullResponseDto getAlbum(String uuid) {
         Album album = getByUuid(uuid);
         return convertToDto(album);
     }
