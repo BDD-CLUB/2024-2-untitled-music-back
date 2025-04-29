@@ -8,6 +8,7 @@ import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -24,10 +25,12 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
-@Table(name = "album")
 @SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE album SET is_deleted = true where id = ?")
+@Table(name = "album", indexes = {
+        @Index(name = "created_deleted_album_index", columnList = "created_at, is_deleted"),
+})
 public class Album extends UuidEntity {
 
     @Column(nullable = false)
