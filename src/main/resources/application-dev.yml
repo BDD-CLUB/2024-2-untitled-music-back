@@ -38,6 +38,8 @@ logging:
   level:
     root: info
     org.springframework.security: debug
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    com.zaxxer.hikari: TRACE
 
 cors:
   allow:
