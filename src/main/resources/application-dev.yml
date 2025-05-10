@@ -22,7 +22,7 @@ spring:
     username: ENC(P4wzO9GTjJwQp7fOh2wzuB2rVwsblwS9dVlps7kFyYU=)
     password: ENC(qhubAFmvwAlxinSmFJ+UMCqaAZVN2azeBV7a1BEaFEo=)
     hikari:
-      maximum-pool-size: 20
+      maximum-pool-size: 10
 
 
   #pageable
