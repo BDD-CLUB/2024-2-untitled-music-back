@@ -65,7 +65,7 @@ springdoc:
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
     path: /swagger-ui
-    config-url: /api-docs/swagger-config
+    config-url: api-docs/swagger-config
     tags-sorter: alpha
     operations-sorter: alpha
   api-docs:
