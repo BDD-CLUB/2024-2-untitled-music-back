@@ -63,14 +63,13 @@ springdoc:
   packages-to-scan: MusicPlatform
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
-  api-docs:
-    path: /v1/api-docs
   swagger-ui:
-    path: /v1/swagger-ui.html
-    config-url: /v1/api-docs/swagger-config
-    url: /v1/api-docs
+    path: /swagger-ui
+    config-url: /api-docs/swagger-config
     tags-sorter: alpha
     operations-sorter: alpha
+  api-docs:
+    path: /api-docs
   cache:
     disabled: true
 
