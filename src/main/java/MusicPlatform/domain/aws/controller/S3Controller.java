@@ -1,7 +1,7 @@
-package MusicPlatform.domain.s3.controller;
+package MusicPlatform.domain.aws.controller;
 
-import MusicPlatform.domain.s3.service.S3ImageService;
-import MusicPlatform.domain.s3.service.S3MusicService;
+import MusicPlatform.domain.aws.service.S3ImageService;
+import MusicPlatform.domain.aws.service.S3MusicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
