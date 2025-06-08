@@ -23,8 +23,9 @@ public class S3Controller {
     private final S3ImageService s3ImageService;
     private final S3MusicService s3MusicService;
 
+    @Deprecated
     @Operation(summary = "S3 이미지 업로드")
-    @PostMapping("/images")
+    @PostMapping("/s3images")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
         String url = s3ImageService.uploadFile(file);
         return ResponseEntity.status(HttpStatus.CREATED).body(url);
