@@ -1,8 +1,11 @@
 package MusicPlatform.global.config.aws;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.lambda.AWSLambda;
+import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class S3Config {
+public class AwsConfig {
     @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
     @Value("${cloud.aws.credentials.secret-key}")
@@ -19,11 +22,24 @@ public class S3Config {
     private String region;
 
     @Bean
-    public AmazonS3 amazonS3Client() {
-        AWSCredentials awsCredentials= new BasicAWSCredentials(accessKey, secretKey);
+    public AmazonS3 amazonS3Client(AWSCredentialsProvider awsCredentials) {
         return AmazonS3ClientBuilder.standard()
                 .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .withCredentials(awsCredentials)
                 .build();
+    }
+
+    @Bean
+    public AWSLambda awsLambda(AWSCredentialsProvider awsCredentials) {
+        return AWSLambdaClientBuilder.standard()
+                .withRegion(region)
+                .withCredentials(awsCredentials)
+                .build();
+    }
+
+    @Bean
+    public AWSCredentialsProvider awsCredentialsProvider() {
+        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+        return new AWSStaticCredentialsProvider(awsCredentials);
     }
 }

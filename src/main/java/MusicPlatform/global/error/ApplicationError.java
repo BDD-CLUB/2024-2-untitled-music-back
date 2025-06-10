@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum ApplicationError {
 
     METHOD_ARGUMENT_NOT_VALID(HttpStatus.BAD_REQUEST, "잘못된 요청입니다"),
+    LAMBDA_NOT_VALID(HttpStatus.BAD_REQUEST, "접근할 수 없는 람다입니다."),
     ;
 
     private final HttpStatus httpStatus;
