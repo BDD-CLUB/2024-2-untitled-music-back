@@ -90,4 +90,9 @@ server:
   api: http://localhost:8080
   error-page: http://localhost:3000
   login-page: http://localhost:3000
-  
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
