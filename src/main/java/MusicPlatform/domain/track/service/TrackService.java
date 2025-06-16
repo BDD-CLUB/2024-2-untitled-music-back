@@ -4,8 +4,6 @@ import static MusicPlatform.global.error.BusinessError.NOT_FOUND_TRACK;
 
 import MusicPlatform.domain.album.entity.Album;
 import MusicPlatform.domain.album.service.AlbumService;
-import MusicPlatform.domain.artist.entity.Artist;
-import MusicPlatform.domain.artist.service.ArtistService;
 import MusicPlatform.domain.track.entity.Track;
 import MusicPlatform.domain.track.repository.TrackRepository;
 import MusicPlatform.domain.track.service.dto.request.TrackRequestDto;
@@ -14,9 +12,9 @@ import MusicPlatform.domain.track.service.dto.response.TrackFullResponseDto;
 import MusicPlatform.global.error.BusinessException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class TrackService {
     private final TrackRepository trackRepository;
     private final AlbumService albumService;
-    private final ArtistService artistService;
 
     @Transactional(readOnly = true)
     public Track findByUuid(String uuid) {
@@ -56,15 +53,14 @@ public class TrackService {
     @Transactional(readOnly = true)
     public List<TrackFullResponseDto> getAll(int pageNo, int pageSize, String sortBy, String direction) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.fromString(direction), sortBy));
-        Page<Track> tracks = trackRepository.findAll(pageable);
+        Slice<Track> tracks = trackRepository.findAllBySlice(pageable);
         return tracks.getContent().stream().map(TrackFullResponseDto::from).toList();
     }
 
     @Transactional(readOnly = true)
     public List<TrackFullResponseDto> getAllByArtist(String artistUuid, int pageNo, int pageSize, String sortBy, String direction) {
-        Artist artist = artistService.findByUuid(artistUuid);
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.fromString(direction), sortBy));
-        Page<Track> tracks = trackRepository.findAllByArtist(artist, pageable);
+        Slice<Track> tracks = trackRepository.findAllByArtist(artistUuid, pageable);
         return tracks.stream()
                 .map(TrackFullResponseDto::from)
                 .toList();

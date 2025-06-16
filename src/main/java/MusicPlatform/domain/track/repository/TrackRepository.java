@@ -1,23 +1,28 @@
 package MusicPlatform.domain.track.repository;
 
-import MusicPlatform.domain.album.entity.Album;
-import MusicPlatform.domain.artist.entity.Artist;
 import MusicPlatform.domain.track.entity.Track;
-import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TrackRepository extends JpaRepository<Track, Long> {
 
+    @Query("SELECT t FROM Track t "
+            + "JOIN FETCH t.album a "
+            + "JOIN FETCH a.artist at "
+            + "WHERE t.uuid = :uuid")
     Optional<Track> findByUuid(String uuid);
 
     @Query("SELECT t FROM Track t "
-            + "JOIN t.album.artist a "
-            + "WHERE a = :artist")
-    Page<Track> findAllByArtist(Artist artist, Pageable pageable);
+            + "JOIN FETCH t.album a "
+            + "JOIN FETCH a.artist at "
+            + "ON a.uuid = :artistUuid")
+    Slice<Track> findAllByArtist(String artistUuid, Pageable pageable);
 
-    Page<Track> findAllByAlbum(Album album, Pageable pageable);
+    @Query("SELECT t FROM Track t "
+            + "JOIN FETCH t.album a "
+            + "JOIN FETCH a.artist at ")
+    Slice<Track> findAllBySlice(Pageable pageable);
 }
