@@ -98,6 +98,10 @@ server:
   api: https://soundforest.kro.kr/v1
   error-page: https://soundforest.kro.kr/error
   login-page: https://soundforest.kro.kr
+  # actuator
+  tomcat:
+    mbeanregistry:
+      enabled: true
 
 # actuator
 management:
@@ -105,3 +109,4 @@ management:
     web:
       exposure:
         include: "*"
+

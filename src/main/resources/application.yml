@@ -90,7 +90,12 @@ server:
   api: http://localhost:8080
   error-page: http://localhost:3000
   login-page: http://localhost:3000
+  # actuator
+  tomcat:
+    mbeanregistry:
+      enabled: true
 
+# actuator
 management:
   endpoints:
     web:
