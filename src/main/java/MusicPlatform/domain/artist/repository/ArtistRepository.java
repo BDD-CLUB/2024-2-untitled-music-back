@@ -15,12 +15,12 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
     // Artist가 팔로하고 있는 모든 회원를 구한다.
     @Query("SELECT a FROM Artist a "
             + "Join Follow f on a = f.following "
-            + "WHERE f.follower = :artist ")
-    Page<Artist> findAllByFollowerIsArtist(Artist artist, Pageable pageable);
+            + "WHERE f.follower.uuid = :artistUuid ")
+    Page<Artist> findAllByFollowerIsArtist(String artistUuid, Pageable pageable);
 
     // Artist를 팔로하고있는 모든 회원을 구한다.
     @Query("SELECT a FROM Artist a "
             + "Join Follow f on a = f.follower "
-            + "WHERE f.following = :artist ")
-    Page<Artist> findAllByFollowingIsArtist(Artist artist, Pageable pageable);
+            + "WHERE f.following.uuid = :artistUuid ")
+    Page<Artist> findAllByFollowingIsArtist(String artistUuid, Pageable pageable);
 }
