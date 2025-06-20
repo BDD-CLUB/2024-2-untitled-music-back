@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/playlists")
+@RequestMapping
 @Tag(name = "플레이리스트 (Playlist)")
 public class PlaylistController {
     private final PlaylistService playlistService;
@@ -33,7 +33,7 @@ public class PlaylistController {
     //생성
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "플레이리스트 생성")
-    @PostMapping
+    @PostMapping("/playlists")
     public ResponseEntity<Void> createPlaylist(@RequestBody @Valid PlaylistRequestDto requestDto) {
         playlistService.save(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -42,7 +42,7 @@ public class PlaylistController {
     //수정
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "플레이리스트 수정")
-    @PutMapping("/{uuid}")
+    @PutMapping("/playlists/{uuid}")
     public ResponseEntity<Void> updatePlaylist(@AuthenticationPrincipal String artistUuid,
                                                @PathVariable String uuid,
                                                @RequestBody @Valid PlaylistRequestDto requestDto) {
@@ -52,7 +52,7 @@ public class PlaylistController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "플레이리스트 커버 이미지 수정")
-    @PutMapping("/{uuid}/cover-image")
+    @PutMapping("/playlists/{uuid}/cover-image")
     public ResponseEntity<Void> updatePlaylistCoverImage(@AuthenticationPrincipal String artistUuid,
                                                          @PathVariable String uuid,
                                                          String coverImageLink) {
@@ -62,7 +62,7 @@ public class PlaylistController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "플레이리스트 내 트랙 추가 및 삭제")
-    @PutMapping("/{uuid}/tracks")
+    @PutMapping("/playlists/{uuid}/tracks")
     public ResponseEntity<Void> updatePlaylistTrack(@AuthenticationPrincipal String artistUuid,
                                                     @PathVariable String uuid,
                                                     @RequestBody @Valid PlaylistItemUpdateRequestDto requestDto) {
@@ -72,7 +72,7 @@ public class PlaylistController {
 
     //조회
     @Operation(summary = "플레이리스트 조회")
-    @GetMapping("/{uuid}")
+    @GetMapping("/playlists/{uuid}")
     public ResponseEntity<PlaylistFullResponseDto> getPlaylist(
             @PathVariable String uuid,
             @RequestParam(value = "itemPage", required = false, defaultValue = "0") int pageNo,
@@ -82,7 +82,7 @@ public class PlaylistController {
     }
 
     @Operation(summary = "플레이리스트 목록 조회")
-    @GetMapping
+    @GetMapping("/playlists")
     public ResponseEntity<List<PlaylistFullResponseDto>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
@@ -100,7 +100,7 @@ public class PlaylistController {
     //삭제
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @Operation(summary = "플레이리스트 삭제")
-    @DeleteMapping("/{uuid}")
+    @DeleteMapping("/playlists/{uuid}")
     public ResponseEntity<Void> deletePlaylist(@AuthenticationPrincipal String artistUuid, @PathVariable String uuid) {
         playlistService.deletePlaylist(artistUuid, uuid);
         return ResponseEntity.noContent().build();
