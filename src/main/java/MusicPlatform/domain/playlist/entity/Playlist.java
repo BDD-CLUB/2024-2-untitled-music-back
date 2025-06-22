@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -41,6 +42,7 @@ public class Playlist extends UuidEntity {
     @JoinColumn(name = "ARTIST_ID")
     private Artist artist;
 
+    @BatchSize(size = 10)
     @OneToMany(mappedBy = "playlist", orphanRemoval = true)
     private List<PlaylistItem> playlistItems;
 

@@ -107,9 +107,8 @@ public class PlaylistService {
     }
 
     @Transactional(readOnly = true)
-    public List<PlaylistFullResponseDto> getAllByArtist(String uuid) {
-        Artist artist = artistService.findByUuid(uuid);
-        List<Playlist> playlists = playlistRepository.findAllByArtist(artist);
+    public List<PlaylistFullResponseDto> getAllByArtist(String artistUuid) {
+        List<Playlist> playlists = playlistRepository.findAllByArtistUuid(artistUuid);
         Pageable itemPageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 
         return playlists.stream()
