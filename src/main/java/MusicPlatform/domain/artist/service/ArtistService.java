@@ -13,9 +13,9 @@ import MusicPlatform.global.helper.AuthorizationHelper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,30 +67,27 @@ public class ArtistService {
 
     public List<ArtistResponseDto> getAll(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createdAt").descending());
-        Page<Artist> artist = artistRepository.findAll(pageable);
+        Slice<Artist> artist = artistRepository.findAll(pageable);
         return artist.stream().map(ArtistResponseDto::from).toList();
     }
 
     //artist를 팔로하고 있는 모든(최근 20명) 회원을 구한다.
     @Transactional(readOnly = true)
-    public List<ArtistResponseDto> findAllFollower(String uuid) {
-        Artist artist = findByUuid(uuid);
+    public List<ArtistResponseDto> findAllFollower(String artistUuid) {
         Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt").descending());
-        Page<Artist> artists = artistRepository.findAllByFollowingIsArtist(artist, pageable);
+        Slice<Artist> artists = artistRepository.findAllByFollowingIsArtist(artistUuid, pageable);
         return artists.stream().map(ArtistResponseDto::from).toList();
     }
 
     //artist가 팔로하고 있는 모든(최근 20명) 회원을 구한다.
     @Transactional(readOnly = true)
-    public List<ArtistResponseDto> findAllFollowing(String uuid) {
-        Artist artist = findByUuid(uuid);
+    public List<ArtistResponseDto> findAllFollowing(String artistUuid) {
         Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt").descending());
-        Page<Artist> artists = artistRepository.findAllByFollowerIsArtist(artist, pageable);
+        Slice<Artist> artists = artistRepository.findAllByFollowerIsArtist(artistUuid, pageable);
         return artists.stream().map(ArtistResponseDto::from).toList();
     }
 
     public ArtistResponseDto changeArtistImage(String newImage) {
-
         String uuid = authorizationHelper.getMyUuid();
         Artist artist = findByUuid(uuid);
         artist.updateImage(newImage);
