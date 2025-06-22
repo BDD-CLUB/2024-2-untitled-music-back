@@ -18,7 +18,7 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     @Query("SELECT t FROM Track t "
             + "JOIN FETCH t.album a "
             + "JOIN FETCH a.artist at "
-            + "ON a.uuid = :artistUuid")
+            + "WHERE a.uuid = :artistUuid")
     Slice<Track> findAllByArtist(String artistUuid, Pageable pageable);
 
     @Query("SELECT t FROM Track t "

@@ -20,6 +20,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     @Query("SELECT a FROM Album a "
             + "JOIN FETCH a.artist at "
-            + "ON at.uuid = :artistUuid")
+            + "WHERE at.uuid = :artistUuid")
     Slice<Album> findAllByArtistUuid(String artistUuid, Pageable pageable);
 }
