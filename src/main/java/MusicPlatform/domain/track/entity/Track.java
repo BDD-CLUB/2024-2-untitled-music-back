@@ -6,6 +6,7 @@ import MusicPlatform.global.entity.UuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -19,10 +20,12 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
-@Table(name = "track")
 //@SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE track SET is_deleted = true where id = ?")
+@Table(name = "track", indexes = {
+        @Index(name = "created_deleted_track_index", columnList = "created_at, is_deleted"),
+})
 public class Track extends UuidEntity {
 
     //todo: 앨범 내 노래 순서 설정?
