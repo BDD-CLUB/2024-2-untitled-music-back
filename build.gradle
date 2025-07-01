@@ -55,8 +55,10 @@ dependencies {
 	//implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	//aws
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")
 	implementation 'com.amazonaws:aws-java-sdk-lambda:1.12.700'
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
 
 	//jasypt
 	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5"
