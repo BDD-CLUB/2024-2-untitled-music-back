@@ -71,6 +71,9 @@ cloud:
   aws:
     region:
       static: ap-northeast-2
+    sqs:
+      queue:
+        name: ImageLambdaQueue
     s3:
       bucket: soundflyer
     stack:

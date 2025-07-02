@@ -39,7 +39,8 @@ public abstract class S3Service {
     }
 
     public String getFileKey(String originalFilename) {
-        return "resources/" + getFolder() + "/" + UUID.randomUUID() + "_" + originalFilename;
+        // 현재 압축된 상태 x, lambda webp 압축 후 동일한 key를 사용해서 덮어씌움
+        return "resources/" + getFolder() + "/" + UUID.randomUUID() + "_" + originalFilename.split("\\.")[0] + ".webp";
     }
 
     protected abstract String getFolder();
