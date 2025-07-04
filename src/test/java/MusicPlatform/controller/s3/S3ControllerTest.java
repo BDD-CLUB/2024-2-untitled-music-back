@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 
 @cleanData
@@ -26,7 +27,7 @@ public class S3ControllerTest extends ApiTestHelper {
     @BeforeEach
     public void setUp() throws IOException {
         byte[] imageBytes = Files.readAllBytes(Paths.get(TEST_IMAGE_URL));
-        String fileName = "file_upload_test_image";
+        String fileName = "file_upload_test_image.jpg";
         file = new MockMultipartFile(
                 "file",
                 fileName,
@@ -34,12 +35,14 @@ public class S3ControllerTest extends ApiTestHelper {
                 imageBytes);
     }
 
+    // ~/.aws 파일로 자격증명 읽음
     @Test
     @Disabled
     @DisplayName("이미지를 업로드 할 수 있다.")
+    @WithMockUser(username = "testUser", roles = {"USER"})
     public void 이미지를_업로드_할_수_있다() throws Exception {
         //when
-        MvcResult result = mockMvc.perform(multipart("/upload/images")
+        MvcResult result = mockMvc.perform(multipart("/uploads/images")
                         .file(file))
                 .andExpect(status().isCreated())
                 .andReturn();
