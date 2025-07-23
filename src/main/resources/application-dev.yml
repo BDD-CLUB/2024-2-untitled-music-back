@@ -18,12 +18,11 @@ spring:
             redirect-uri: https://soundforest.kro.kr/v1/login/oauth2/code/google
 
   datasource:
-    url: jdbc:mysql://soundflyer-db:3306/soundflyer
-    username: ENC(P4wzO9GTjJwQp7fOh2wzuB2rVwsblwS9dVlps7kFyYU=)
+    url: jdbc:mysql://sofo-rds.chcoowo08lt5.ap-northeast-2.rds.amazonaws.com:3306/sofo_mysql
+    username: ENC(vYB9h2QEVtuoUb+B69KeyOaSQMIN+VpW)
     password: ENC(qhubAFmvwAlxinSmFJ+UMCqaAZVN2azeBV7a1BEaFEo=)
     hikari:
       maximum-pool-size: 10
-
 
   #pageable
   data:
