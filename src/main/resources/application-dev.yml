@@ -15,7 +15,7 @@ spring:
             client-id: ENC(s3G2fjTX8UpUzU0pyV43hyPBnq8LM2f59A2xm1Ne7rrrAlY65OyqFWljlCmNIrP2NfX0Imr7CFL6/R5dU/Rns7/2pvKbRV6iR8WxBxhusJx5anb4olCXwK68i0kitggL)
             client-secret: ENC(p81Kq6PKL87766UmgGokPRvnfnl3Dp54fuytKjpFl2G32VuunC08J1PT2LB+flj+RcUhsgKKgR4=)
             scope: profile, email
-            redirect-uri: https://soundforest.kro.kr/v1/login/oauth2/code/google
+            redirect-uri: https://soundsforest.com/v1/login/oauth2/code/google
 
   datasource:
     url: jdbc:mysql://sofo-rds.chcoowo08lt5.ap-northeast-2.rds.amazonaws.com:3306/sofo_mysql
@@ -45,7 +45,7 @@ logging:
 
 cors:
   allow:
-    origins: http://localhost:3000, https://untitled-a.vercel.app/, https://soundforest.kro.kr/
+    origins: http://localhost:3000, https://untitled-a.vercel.app/, https://soundsforest.com/
     methods: GET, POST, PUT, DELETE, PATCH, OPTION
 
 
@@ -54,7 +54,7 @@ jwt:
   secret: ENC(AZvoDf/asAWYXziKuttJ5UgS3eQNzC1Kn5NF30mezA3kzJE+JqS0FWsbmOrwNmsqJszBf1kt2o8=)
 
 cookie:
-  domain: soundforest.kro.kr
+  domain: soundsforest.com
   max-age: 604800  # 60*60*24*7, 7일
 
 # swagger
@@ -93,10 +93,10 @@ jasypt:
     password: ${JASYPT_KEY}
 
 server:
-  front: https://soundforest.kro.kr
-  api: https://soundforest.kro.kr/v1
-  error-page: https://soundforest.kro.kr/error
-  login-page: https://soundforest.kro.kr
+  front: https://soundsforest.com
+  api: https://soundsforest.com/v1
+  error-page: https://soundsforest.com/error
+  login-page: https://soundsforest.com
   # actuator
   tomcat:
     mbeanregistry:

@@ -40,7 +40,7 @@ logging:
 
 cors:
   allow:
-    origins: http://localhost:3000, https://untitled-a.vercel.app/, https://soundforest.kro.kr/
+    origins: http://localhost:3000, https://untitled-a.vercel.app/, https://soundsforest.com/
     methods: GET, POST, PUT, DELETE, PATCH, OPTION
 
 
