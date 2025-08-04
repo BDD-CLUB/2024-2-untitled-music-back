@@ -93,6 +93,8 @@ jasypt:
     password: ${JASYPT_KEY}
 
 server:
+  servlet:
+    context-path: /v1
   front: https://soundsforest.com
   api: https://soundsforest.com/v1
   error-page: https://soundsforest.com/error
