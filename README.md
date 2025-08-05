@@ -1,5 +1,5 @@
 # 2024-2-untitled-music-back
 
-front: https://soundforest.kro.kr  
-api: https://soundforest.kro.kr/v1  
-documents: https://soundforest.kro.kr/v1/swagger-ui/index.html  
+front: https://soundsforest.com
+api: https://soundsforest.com/v1  
+documents: https://soundsforest.com/v1/swagger-ui/index.html  
