@@ -1,11 +1,11 @@
 package MusicPlatform.domain.aws.service;
 
-import com.amazonaws.services.s3.AmazonS3;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.s3.S3Client;
 
 @Service
 public class S3MusicService extends S3Service{
-    public S3MusicService(AmazonS3 amazonS3Client) {
+    public S3MusicService(S3Client amazonS3Client) {
         super(amazonS3Client);
     }
 

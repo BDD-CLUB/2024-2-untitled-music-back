@@ -1,40 +1,46 @@
 package MusicPlatform.domain.aws.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.exception.SdkException;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
 @RequiredArgsConstructor
 public abstract class S3Service {
 
-    private final AmazonS3 amazonS3Client;
+    private final S3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
     public String uploadFile(MultipartFile file) throws IOException {
-        ObjectMetadata metadata = getObjectMetadata(file);
-        String path = getFilePath(file.getOriginalFilename());
-        amazonS3Client.putObject(new PutObjectRequest(bucketName, path, file.getInputStream(), metadata));
-        return amazonS3Client.getUrl(bucketName, path).toString();
+        try {
+            String key = getFileKey(file.getOriginalFilename());
+            amazonS3Client.putObject(
+                    PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(key)
+                            .contentLength(file.getSize())
+                            .contentType(file.getContentType())
+                            .build(),
+                    RequestBody.fromInputStream(file.getInputStream(), file.getSize())
+            );
+            return "s3://" + bucketName + "/" + key;
+        } catch (SdkException e) {
+            throw new IOException("S3 업로드 실패: " + e.getMessage(), e);
+        }
     }
 
-    protected ObjectMetadata getObjectMetadata(MultipartFile multipartFile) {
-        final ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(multipartFile.getSize());
-        metadata.setContentType(multipartFile.getContentType());
-        return metadata;
-    }
-
-    public String getFilePath(String originalFilename) {
-        return "resources/" + getFolder() + "/" + UUID.randomUUID() + "_" + originalFilename;
+    public String getFileKey(String originalFilename) {
+        // 현재 압축된 상태 x, lambda webp 압축 후 동일한 key를 사용해서 덮어씌움
+        return "resources/" + getFolder() + "/" + UUID.randomUUID() + "_" + originalFilename.split("\\.")[0] + ".webp";
     }
 
     protected abstract String getFolder();

@@ -78,13 +78,13 @@ cloud:
   aws:
     region:
       static: ap-northeast-2
+    sqs:
+      queue:
+        name: ImageLambdaQueue
     s3:
       bucket: soundflyer
     stack:
       auto: false
-    credentials:
-      access-key: ENC(Bo04VecppItSjKHcXL+YKbPwf7T9ZqAtTL6n/hWzj1mvl+uvA1T7SQ==)
-      secret-key: ENC(u1nVyQgKMfYATTcI1lgcmQT324RGGcLQGGskzYTNkyYH556ZfAB/NqI1WAhtsmN/LbkVc6WFKvgKjki7m5ZXEQ==)
 
 # jasypt
 jasypt:

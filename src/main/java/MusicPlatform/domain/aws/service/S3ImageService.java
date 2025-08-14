@@ -1,12 +1,26 @@
 package MusicPlatform.domain.aws.service;
 
-import com.amazonaws.services.s3.AmazonS3;
+import jakarta.transaction.Transactional;
+import java.io.IOException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3Client;
 
 @Service
-public class S3ImageService extends S3Service{
-    public S3ImageService(AmazonS3 amazonS3Client) {
+@Transactional
+public class S3ImageService extends S3Service {
+    private final SqsService sqsService;
+
+    public S3ImageService(S3Client amazonS3Client, SqsService sqsService) {
         super(amazonS3Client);
+        this.sqsService = sqsService;
+    }
+
+    @Override
+    public String uploadFile(MultipartFile file) throws IOException {
+        String url = super.uploadFile(file);
+        sqsService.sqsSender(url);
+        return url;
     }
 
     @Override
