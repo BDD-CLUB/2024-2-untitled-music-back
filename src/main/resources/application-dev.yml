@@ -90,7 +90,6 @@ cloud:
 jasypt:
   encryptor:
     algorithm: PBEWithMD5AndDES
-    password: ${JASYPT_KEY}
 
 server:
   servlet:
