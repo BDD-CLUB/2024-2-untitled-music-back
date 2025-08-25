@@ -100,6 +100,7 @@ jobs:
         sed -i "s|<CONTAINER_NAME>|${CONTAINER_NAME}|g" task-definition.json
         sed -i "s|<TAG>|${GITHUB_SHA}|g" task-definition.json
         sed -i "s|<JASYPT_KEY_NAME>|${JASYPT_KEY_NAME}|g" task-definition.json
+        sed -i "s|<AWS_REGION>|${AWS_REGION}|g" task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
