@@ -17,7 +17,8 @@ env:
   TASK_ROLE: ${{ secrets.TASK_ROLE }}
   EXECUTION_ROLE: ${{ secrets.EXECUTION_ROLE }}
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-
+  JASYPT_KEY_NAME: ${{ secrets.JASYPT_KEY_NAME}}
+  
 permissions:
   id-token: write # OIDC 토큰 사용한 AWS 인증
   contents: read
@@ -98,6 +99,7 @@ jobs:
         sed -i "s|<TASK_FAMILY>|${TASK_FAMILY}|g" task-definition.json
         sed -i "s|<CONTAINER_NAME>|${CONTAINER_NAME}|g" task-definition.json
         sed -i "s|<TAG>|${GITHUB_SHA}|g" task-definition.json
+        sed -i "s|<JASYPT_KEY_NAME>|${JASYPT_KEY_NAME}|g" task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
