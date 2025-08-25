@@ -19,6 +19,7 @@ env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
 permissions:
+  id-token: write # OIDC 토큰 사용한 AWS 인증
   contents: read
 
 jobs:
