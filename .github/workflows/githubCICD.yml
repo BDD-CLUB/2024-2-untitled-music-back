@@ -139,9 +139,9 @@ jobs:
               chmod +x ./deploy_back.sh                 
               sudo -E ./deploy_back.sh ${GITHUB_SHA::8} dev
 
-  # Push시 실행
+  # 실행X
   discord_alert:
-    if: github.event_name == 'push' || github.event.inputs.alert == 'true'
+    if: false
     needs: [ deploy ]
     runs-on: ubuntu-22.04
     timeout-minutes: 10
