@@ -26,6 +26,22 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -utest -ptest"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
     - name: Checkout
@@ -43,6 +59,9 @@ jobs:
         arguments: clean build
       env:
         JASYPT_KEY: ${{ secrets.JASYPT_KEY }}
+        SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/testdb
+        SPRING_DATASOURCE_USERNAME: test
+        SPRING_DATASOURCE_PASSWORD: test
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
