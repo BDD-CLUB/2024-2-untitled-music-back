@@ -1,9 +1,9 @@
 name: CICD
 on:
-  push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+  # push:
+  #   branches: [ "develop" ]
+  # pull_request:
+  #   branches: [ "develop" ]
   workflow_dispatch:
     inputs:
       type:
